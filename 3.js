@@ -1,10 +1,11 @@
 /*
  * @Author: Li Jian
  * @Date: 2021-12-09 14:05:32
- * @LastEditTime: 2021-12-09 17:01:06
+ * @LastEditTime: 2021-12-10 09:27:21
  * @LastEditors: Li Jian
  */
 import * as THREE from './node_modules/three/build/three.module.js'
+import { GUI } from './node_modules/three/examples/jsm/libs/lil-gui.module.min.js'
 
 function main() {
   const objects = []
@@ -39,8 +40,8 @@ function main() {
   camera.up.set(0, 0, 1)
   camera.lookAt(0, 0, 0)
 
-  let cameraHelper = new THREE.CameraHelper(camera)
-  scene.add(cameraHelper)
+  // let cameraHelper = new THREE.CameraHelper(camera)
+  // scene.add(cameraHelper)
 
   {
     const light = new THREE.PointLight(0xffffff, 3)
@@ -85,6 +86,45 @@ function main() {
   moonOribit.add(moonMesh)
   objects.push(moonMesh)
 
+  class AxisGridHelper {
+    constructor(node, units = 10) {
+      const axes = new THREE.AxesHelper()
+      axes.material.depthTest = false
+      axes.renderOrder = 2 // after the grid
+      node.add(axes)
+
+      const grid = new THREE.GridHelper(units, units)
+      grid.material.depthTest = false
+      grid.renderOrder = 1
+      node.add(grid)
+
+      this.grid = grid
+      this.axes = axes
+      this.visible = false
+    }
+    get visible() {
+      return this._visible
+    }
+    set visible(v) {
+      this._visible = v
+      this.grid.visible = v
+      this.axes.visible = v
+    }
+  }
+
+  const gui = new GUI()
+  function makeAxisGrid(node, label, units) {
+    const helper = new AxisGridHelper(node, units)
+    gui.add(helper, 'visible').name(label)
+  }
+
+  makeAxisGrid(solarSystem, 'solarSystem', 26)
+  makeAxisGrid(sunMesh, 'sunMesh')
+  makeAxisGrid(earthOrbit, 'earthOrbit')
+  makeAxisGrid(earthMesh, 'earthMesh')
+  // makeAxisGrid(moonOrbit, 'moonOrbit')
+  makeAxisGrid(moonMesh, 'moonMesh')
+
   function resizeRendererToDisplaySize(renderer) {
     const canvas = renderer.domElement
     const width = canvas.clientWidth
@@ -104,10 +144,10 @@ function main() {
       camera.updateProjectionMatrix()
     }
     objects.forEach((object) => {
-      const axes = new THREE.AxesHelper()
-      axes.material.depthTest = false
-      axes.renderOrder = 1
-      object.add(axes)
+      // const axes = new THREE.AxesHelper()
+      // axes.material.depthTest = false
+      // axes.renderOrder = 1
+      // object.add(axes)
       object.rotation.y = time
     })
     renderer.render(scene, camera)
@@ -118,83 +158,3 @@ function main() {
 }
 
 main()
-
-function main1() {
-  const canvas = document.querySelector('#c')
-  const renderer = new THREE.WebGLRenderer({ canvas })
-
-  const fov = 40
-  const aspect = 2 // the canvas default
-  const near = 0.1
-  const far = 1000
-  const camera = new THREE.PerspectiveCamera(fov, aspect, near, far)
-  camera.position.set(0, 150, 0)
-  camera.up.set(0, 0, 1)
-  camera.lookAt(0, 0, 0)
-
-  const scene = new THREE.Scene()
-
-  {
-    const color = 0xffffff
-    const intensity = 3
-    const light = new THREE.PointLight(color, intensity)
-    scene.add(light)
-  }
-
-  const objects = []
-
-  const radius = 1
-  const widthSegments = 6
-  const heightSegments = 6
-  const sphereGeometry = new THREE.SphereGeometry(
-    radius,
-    widthSegments,
-    heightSegments
-  )
-
-  const sunMaterial = new THREE.MeshPhongMaterial({ emissive: 0xffff00 })
-  const sunMesh = new THREE.Mesh(sphereGeometry, sunMaterial)
-  sunMesh.scale.set(5, 5, 5)
-  scene.add(sunMesh)
-  objects.push(sunMesh)
-
-  const earthMaterial = new THREE.MeshPhongMaterial({
-    color: 0x2233ff,
-    emissive: 0x112244,
-  })
-  const earthMesh = new THREE.Mesh(sphereGeometry, earthMaterial)
-  earthMesh.position.x = 10
-  sunMesh.add(earthMesh)
-  objects.push(earthMesh)
-
-  function resizeRendererToDisplaySize(renderer) {
-    const canvas = renderer.domElement
-    const width = canvas.clientWidth
-    const height = canvas.clientHeight
-    const needResize = canvas.width !== width || canvas.height !== height
-    if (needResize) {
-      renderer.setSize(width, height, false)
-    }
-    return needResize
-  }
-
-  function render(time) {
-    time *= 0.001
-
-    if (resizeRendererToDisplaySize(renderer)) {
-      const canvas = renderer.domElement
-      camera.aspect = canvas.clientWidth / canvas.clientHeight
-      camera.updateProjectionMatrix()
-    }
-
-    objects.forEach((obj) => {
-      obj.rotation.y = time
-    })
-
-    renderer.render(scene, camera)
-
-    requestAnimationFrame(render)
-  }
-
-  requestAnimationFrame(render)
-}

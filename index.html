@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2021-12-08 10:11:21
- * @LastEditTime: 2021-12-09 14:06:52
+ * @LastEditTime: 2021-12-10 11:37:21
  * @LastEditors: Li Jian
 -->
 <!DOCTYPE html>
@@ -13,7 +13,8 @@
     <title>3d</title>
     <!-- <script type="module" src="./1.js"></script> -->
     <!-- <script type="module" src="./2.js"></script> -->
-    <script type="module" src="./3.js"></script>
+    <!-- <script type="module" src="./3.js"></script> -->
+    <script type="module" src="./4.js"></script>
     <style>
       html,
       body {
@@ -26,9 +27,19 @@
         height: 100%;
         display: block;
       }
+      #info {
+        position: absolute;
+        left: 1em;
+        top: 1em;
+        background: rgba(0, 0, 0, 0.8);
+        padding: 0.5em;
+        color: white;
+        font-family: monospace;
+      }
     </style>
   </head>
   <body>
     <canvas id="c" width="600" height="300"></canvas>
+    <div id="info"></div>
   </body>
 </html>
