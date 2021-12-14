@@ -1,11 +1,12 @@
 /*
  * @Author: Li Jian
  * @Date: 2021-12-14 08:31:33
- * @LastEditTime: 2021-12-14 16:55:38
+ * @LastEditTime: 2021-12-14 22:00:01
  * @LastEditors: Li Jian
  */
 import * as THREE from './node_modules/three/build/three.module.js'
 import { OrbitControls } from './node_modules/three/examples/jsm/controls/OrbitControls.js'
+// import { CinematicCamera } from './node_modules/three/examples/jsm/cameras/CinematicCamera.js'
 
 // 摄像机
 const makeCamera = (canvas, fov = 40) => {
@@ -13,6 +14,7 @@ const makeCamera = (canvas, fov = 40) => {
   const near = 0.1
   const far = 100
   return new THREE.PerspectiveCamera(fov, aspect, near, far)
+  // return new CinematicCamera(fov, aspect, near, far)
 }
 
 // 光源
@@ -178,19 +180,8 @@ const buildHouse = (scene) => {
   makeHouseMesh(scene, { width: 1.3, height: 5 }, { x: 10, z: 13 })
 }
 
-// 切换视角
-// const switchPerspective = (canvas, renderer, scene, render) => {
-//   const camera = makeCamera(canvas, 40)
-
-//   camera.position.set(5, 0, 5)
-//   camera.lookAt(new THREE.Vector3())
-//   camera.updateProjectionMatrix()
-//   renderer.render(scene, camera)
-//   console.log(camera, renderer)
-//   render()
-// }
-
 let tapZ, tapW, tapA, tapS, tapD
+let mouse = new THREE.Vector2()
 const makeEvents = (canvas, renderer, scene, render) => {
   window.addEventListener('keydown', (event) => {
     switch (event.key) {
@@ -217,12 +208,66 @@ const makeEvents = (canvas, renderer, scene, render) => {
         break
     }
   })
+
+  window.addEventListener('mousemove', (event) => {
+    event.preventDefault()
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1
+  })
+}
+
+// 自定义控制指令
+// w: 前进 a: 左 s: 后退 d: 右 z: 切换视角
+const makeCustomControl = (camera) => {
+  const playerDirection = new THREE.Vector3()
+  if (tapZ) {
+    tapZ = false
+    camera.position.set(10, 2, 20)
+    camera.lookAt(0, 0, 0)
+    camera.updateProjectionMatrix()
+  }
+  function getForwardVector() {
+    camera.getWorldDirection(playerDirection)
+    playerDirection.y = 0
+    playerDirection.normalize()
+    return playerDirection
+  }
+  function getSideVector() {
+    camera.getWorldDirection(playerDirection)
+    playerDirection.y = 0
+    playerDirection.normalize()
+    playerDirection.cross(camera.up)
+    return playerDirection
+  }
+  if (tapW) {
+    tapW = false
+    getForwardVector().multiplyScalar(0.5)
+    camera.position.add(playerDirection)
+  }
+  if (tapS) {
+    tapS = false
+    getForwardVector().multiplyScalar(-0.5)
+    camera.position.add(playerDirection)
+  }
+  if (tapA) {
+    tapA = false
+    getSideVector().multiplyScalar(-0.5)
+    camera.position.add(playerDirection)
+  }
+  if (tapD) {
+    tapD = false
+    getSideVector().multiplyScalar(0.5)
+    camera.position.add(playerDirection)
+  }
 }
 
 const main = () => {
   const canvas = document.querySelector('#c')
   const renderer = new THREE.WebGLRenderer({ canvas })
   renderer.shadowMap.enabled = true
+
+  const raycaster = new THREE.Raycaster()
+  let INTERSECTED
 
   const camera = makeCamera(canvas, 70)
   camera.position.set(8, 4, 10).multiplyScalar(3)
@@ -245,54 +290,41 @@ const main = () => {
   makeControls(camera, canvas)
 
   const render = (time) => {
-    // time *= 0.001
+    raycaster.setFromCamera(mouse, camera)
+    const intersects = raycaster.intersectObjects(scene.children)
+    console.log(intersects)
+    if (intersects.length > 0) {
+      const targetDistance = intersects[0].distance
+      if (INTERSECTED) {
+        if (INTERSECTED.distance > targetDistance) {
+          INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex)
+          INTERSECTED = intersects[0].object
+          INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex()
+          INTERSECTED.material.emissive.setHex(0xff0000)
+        }
+      } else {
+        INTERSECTED = intersects[0].object
+        INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex()
+        INTERSECTED.material.emissive.setHex(0xff0000)
+      }
+    } else {
+      if (INTERSECTED) {
+        INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex)
+      }
+      INTERSECTED = null
+    }
+
+    //   camera.focusAt(targetDistance) // using Cinematic camera focusAt method
+
     if (resizeRendererToDisplaySize(renderer)) {
       const canvas = renderer.domElement
       camera.aspect = canvas.clientWidth / canvas.clientHeight
       camera.updateProjectionMatrix()
     }
-    console.log(tapZ, tapW, tapA, tapS, tapD)
-    if (tapZ) {
-      tapZ = false
-      camera.position.set(10, 2, 20)
-      camera.lookAt(0, 0, 0)
-      camera.updateProjectionMatrix()
-    }
-    const playerDirection = new THREE.Vector3()
-    function getForwardVector() {
-      camera.getWorldDirection(playerDirection)
-      playerDirection.y = 0
-      playerDirection.normalize()
-      return playerDirection
-    }
-    function getSideVector() {
-      camera.getWorldDirection(playerDirection)
-      playerDirection.y = 0
-      playerDirection.normalize()
-      playerDirection.cross(camera.up)
+    // console.log(tapZ, tapW, tapA, tapS, tapD)
 
-      return playerDirection
-    }
-    if (tapW) {
-      tapW = false
-      getForwardVector().multiplyScalar(0.5)
-      camera.position.add(playerDirection)
-    }
-    if (tapS) {
-      tapS = false
-      getForwardVector().multiplyScalar(-0.5)
-      camera.position.add(playerDirection)
-    }
-    if (tapA) {
-      tapA = false
-      getSideVector().multiplyScalar(-0.5)
-      camera.position.add(playerDirection)
-    }
-    if (tapD) {
-      tapD = false
-      getSideVector().multiplyScalar(0.5)
-      camera.position.add(playerDirection)
-    }
+    makeCustomControl(camera)
+
     renderer.render(scene, camera)
     requestAnimationFrame(render)
   }
