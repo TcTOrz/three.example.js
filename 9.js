@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2021-12-14 08:31:33
- * @LastEditTime: 2021-12-15 16:50:08
+ * @LastEditTime: 2021-12-15 21:58:17
  * @LastEditors: Li Jian
  */
 import * as THREE from './node_modules/three/build/three.module.js'
@@ -40,7 +40,7 @@ const makeLight = (scene, color, intensity) => {
     light.shadow.camera.right = d
     light.shadow.camera.top = d
     light.shadow.camera.bottom = -d
-    light.shadow.camera.far = 50
+    light.shadow.camera.far = 100
     light.shadow.bias = 0.001
     light.shadow.near = 1
   }
@@ -379,39 +379,56 @@ const main = () => {
   const scene = new THREE.Scene()
 
   // TODO ----正射场景
-  let texture, sprite, cameraOrtho
-  const width = window.innerWidth
-  const height = window.innerHeight
-  const vector = new THREE.Vector3()
-  cameraOrtho = new THREE.OrthographicCamera(
-    -width / 2,
-    width / 2,
-    height / 2,
-    -height / 2,
-    0.1,
-    100
-  )
-  cameraOrtho.position.set(20, 20, 10)
-  const dpr = window.devicePixelRatio
-  const textureSize = 128 * dpr
-  const sceneOrtho = new THREE.Scene()
-  texture = new THREE.DataTexture('', textureSize, textureSize, THREE.RGBFormat)
-  const spriteMaterial = new THREE.SpriteMaterial({ map: texture })
-  sprite = new THREE.Sprite(spriteMaterial)
-  sprite.scale.set(textureSize, textureSize, 1)
-  sceneOrtho.add(sprite)
-  updateSpritePosition()
-  function updateSpritePosition() {
-    const halfWidth = window.innerWidth / 2
-    const halfHeight = window.innerHeight / 2
-    const halfImageWidth = textureSize / 2
-    const halfImageHeight = textureSize / 2
-    sprite.position.set(
-      halfWidth - halfImageWidth,
-      halfHeight - halfImageHeight,
-      1
-    )
-  }
+  // let texture, sprite, cameraOrtho
+  // const width = window.innerWidth
+  // const height = window.innerHeight
+  // const vector = new THREE.Vector3()
+  // cameraOrtho = new THREE.OrthographicCamera(
+  //   -width / 2,
+  //   width / 2,
+  //   height / 2,
+  //   -height / 2,
+  //   0.1,
+  //   100
+  // )
+  // cameraOrtho.position.copy(camera.position)
+  // const dpr = window.devicePixelRatio
+  // const textureSize = 128 * dpr * 1.5
+  // const sceneOrtho = new THREE.Scene()
+  // texture = new THREE.DataTexture('', textureSize, textureSize, THREE.RGBFormat)
+  // const spriteMaterial = new THREE.SpriteMaterial({ map: texture })
+  // sprite = new THREE.Sprite(spriteMaterial)
+  // sprite.scale.set(textureSize, textureSize, 1)
+  // sceneOrtho.add(sprite)
+  // updateSpritePosition()
+  // function updateSpritePosition() {
+  //   const halfWidth = window.innerWidth / 2
+  //   const halfHeight = window.innerHeight / 2
+  //   const halfImageWidth = textureSize / 2
+  //   const halfImageHeight = textureSize / 2
+  //   sprite.position.set(
+  //     halfWidth - halfImageWidth,
+  //     halfHeight - halfImageHeight,
+  //     1
+  //   )
+  // }
+  // ----
+  // TODO ----透视场景
+  // const camera2 = new THREE.PerspectiveCamera(
+  //   70,
+  //   window.innerWidth / window.innerHeight,
+  //   0.1,
+  //   100
+  // )
+  const camera2 = new THREE.OrthographicCamera(-20, 20, 20, -20, 0.1, 100)
+  camera2.position.copy(camera.position)
+  camera2.quaternion.copy(camera.quaternion)
+  // camera2.position.copy(camera.position)
+  // camera2.position.set(0, 10, 0)
+  camera2.rotateX(-Math.PI / 2)
+  camera2.rotateY(0)
+  camera2.rotateZ(0)
+  // camera2.lookAt(0, 0, 0)
   // ----
 
   // 搭建地板
@@ -440,16 +457,39 @@ const main = () => {
     makeCustomControl(camera)
 
     // renderer.clear()
+    renderer.setViewport(0, 0, window.innerWidth, window.innerHeight)
     renderer.render(scene, camera)
 
     // TODO ----
-    vector.x = (window.innerWidth * dpr) / 2 - textureSize / 2
-    vector.y = (window.innerHeight * dpr) / 2 - textureSize / 2
-    vector.z = 0
+    // vector.x = (window.innerWidth * dpr) / 2 - textureSize / 2
+    // vector.y = (window.innerHeight * dpr) / 2 - textureSize / 2
+    // vector.z = 0
 
-    renderer.copyFramebufferToTexture(vector, texture)
+    // renderer.copyFramebufferToTexture(vector, texture)
+    // renderer.clearDepth()
+    // renderer.render(sceneOrtho, cameraOrtho)
+    // ----
+    // ----
+    renderer.setClearColor(0x222222, 1)
     renderer.clearDepth()
-    renderer.render(sceneOrtho, cameraOrtho)
+    renderer.setScissorTest(true)
+    renderer.shadowMap.enabled = false
+    renderer.setScissor(20, 20, window.innerHeight / 2, window.innerHeight / 2)
+    renderer.setViewport(20, 20, window.innerHeight / 2, window.innerHeight / 2)
+    camera2.position.copy(camera.position)
+    camera2.quaternion.copy(camera.quaternion)
+    // camera2.rotateY(0)
+    // camera2.position.set(0, 10, 0)
+    // camera2.rotateY(Math.PI / -3)
+    // camera2.updateProjectionMatrix()
+    // console.log(camera2.quaternion)
+    // console.log(camera.quaternion)
+    // camera2.position.set(0, 10, 0)
+    // camera2.rotateX(0)
+    // camera2.rotateY(0)
+    // camera2.rotateZ(0)
+    renderer.render(scene, camera2)
+    renderer.setScissorTest(false)
     // ----
 
     requestAnimationFrame(render)
