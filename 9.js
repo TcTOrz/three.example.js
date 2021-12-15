@@ -1,12 +1,13 @@
 /*
  * @Author: Li Jian
  * @Date: 2021-12-14 08:31:33
- * @LastEditTime: 2021-12-14 22:00:01
+ * @LastEditTime: 2021-12-15 16:50:08
  * @LastEditors: Li Jian
  */
 import * as THREE from './node_modules/three/build/three.module.js'
 import { OrbitControls } from './node_modules/three/examples/jsm/controls/OrbitControls.js'
 // import { CinematicCamera } from './node_modules/three/examples/jsm/cameras/CinematicCamera.js'
+import * as GeometryUtils from './node_modules/three/examples/jsm/utils/GeometryUtils.js'
 
 // 摄像机
 const makeCamera = (canvas, fov = 40) => {
@@ -48,8 +49,16 @@ const makeLight = (scene, color, intensity) => {
 // 控制器
 const makeControls = (camera, canvas) => {
   const controls = new OrbitControls(camera, canvas)
-  // controls.target.set(0, 5, 0)
   controls.enableDamping = true
+  // 视野距离
+  // controls.minDistance = 5
+  controls.maxDistance = 50
+  // 垂直角度
+  controls.maxPolarAngle = (Math.PI / 8) * 3
+  controls.minPolarAngle = Math.PI / 3
+  // 水平旋转角度
+  // controls.maxAzimuthAngle = Math.PI / 2
+  // controls.minAzimuthAngle = -Math.PI / 3
 }
 
 // 雾
@@ -93,6 +102,13 @@ const makeGroundMesh = (scene) => {
 // { x, z }: 房屋坐标
 const makeHouseMesh = (scene, { width, height }, { x, z }) => {
   const house = new THREE.Object3D()
+  house.customObject = {
+    name: '我点击了一个房子',
+    width,
+    height,
+    x,
+    z,
+  }
   scene.add(house)
   const houseBodyGeometry = new THREE.CylinderBufferGeometry(
     width,
@@ -122,10 +138,17 @@ const makeHouseMesh = (scene, { width, height }, { x, z }) => {
 // 围墙
 const makeFence = (scene, { x, z }, rotateY) => {
   const fence = new THREE.Object3D()
-  const fenceNext = new THREE.Object3D()
-  fenceNext.add(fence)
-  fenceNext.position.set(x, 0, z)
-  scene.add(fenceNext)
+
+  fence.customObject = {
+    name: '这是墙壁',
+    width: 0,
+    height: 0,
+    x,
+    z,
+  }
+
+  fence.position.set(x, 0, z)
+  scene.add(fence)
 
   const thinWallGeometry = new THREE.BoxBufferGeometry(0.2, 2, 3)
   const thinWallMaterial = new THREE.MeshPhongMaterial({
@@ -209,7 +232,7 @@ const makeEvents = (canvas, renderer, scene, render) => {
     }
   })
 
-  window.addEventListener('mousemove', (event) => {
+  window.addEventListener('click', (event) => {
     event.preventDefault()
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1
     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1
@@ -261,13 +284,93 @@ const makeCustomControl = (camera) => {
   }
 }
 
+// 渲染点击事件，点击Object3d时，改变其颜色
+let INTERSECTED
+const renderEvents = (mouse, camera, raycaster, scene) => {
+  // mouse默认是Vector2(0, 0)，所以需要去除这种特殊情况
+  if (mouse.x !== 0 || mouse.y !== 0) {
+    raycaster.setFromCamera(mouse, camera)
+    const intersects = raycaster.intersectObjects(scene.children)
+    // intersects索引最后一位必定是最远的，这里就是groundMesh
+    // intersects.length !== 1去除地面阴影
+    if (intersects.length > 0 && intersects.length !== 1) {
+      if (INTERSECTED) {
+        // 新旧值比较，不相同说明需要更新当前点击的对象，
+        // 先还原就值
+        if (INTERSECTED.uuid !== intersects[0].uuid) {
+          if (INTERSECTED.parent.type === 'Object3D') {
+            handleCustomDom()
+            INTERSECTED.parent.children.map((obj) => {
+              obj.material.emissive.setHex(obj.currentHex)
+            })
+          } else {
+            INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex)
+          }
+          INTERSECTED = intersects[0].object
+        }
+        // 更新当前点击的对象的颜色
+        if (INTERSECTED.parent.type === 'Object3D') {
+          handleCustomDom(INTERSECTED.parent?.customObject)
+          INTERSECTED.parent.children.map((obj, idx) => {
+            obj.material.emissive.setHex(obj.currentHex)
+            obj.currentHex = obj.material.emissive.getHex()
+            obj.material.emissive.setHex(0xff0000)
+          })
+        } else {
+          INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex)
+          INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex()
+          INTERSECTED.material.emissive.setHex(0xff0000)
+        }
+      } else {
+        // 第一次点击时，更新当前点击的对象
+        INTERSECTED = intersects[0].object
+        if (INTERSECTED.parent.type === 'Object3D') {
+          handleCustomDom(INTERSECTED.parent?.customObject)
+          INTERSECTED.parent.children.map((obj) => {
+            obj.currentHex = obj.material.emissive.getHex()
+            obj.material.emissive.setHex(0xff0000)
+          })
+        } else {
+          INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex()
+          INTERSECTED.material.emissive.setHex(0xff0000)
+        }
+      }
+    } else {
+      // 没有点击到对象时，还原上一次点击的对象
+      if (INTERSECTED) {
+        if (INTERSECTED.parent.type === 'Object3D') {
+          handleCustomDom()
+          INTERSECTED.parent.children.map((obj) => {
+            obj.material.emissive.setHex(obj.currentHex)
+          })
+        } else {
+          INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex)
+        }
+      }
+      INTERSECTED = null
+    }
+  }
+}
+
+const handleCustomDom = (customObject) => {
+  if (customObject) {
+    const { name, width, height, x, z } = customObject
+    const info = `${name}, 长: ${width}, 高: ${height}, 平面位置: x轴: ${x}, z轴: ${z}`
+    document.querySelector('#info2').innerHTML = info
+  } else {
+    document.querySelector('#info2').innerHTML = ''
+  }
+}
+
 const main = () => {
   const canvas = document.querySelector('#c')
   const renderer = new THREE.WebGLRenderer({ canvas })
+  renderer.setPixelRatio(window.devicePixelRatio)
+  renderer.setSize(window.innerWidth, window.innerHeight)
+  renderer.autoClear = false
   renderer.shadowMap.enabled = true
 
   const raycaster = new THREE.Raycaster()
-  let INTERSECTED
 
   const camera = makeCamera(canvas, 70)
   camera.position.set(8, 4, 10).multiplyScalar(3)
@@ -275,9 +378,44 @@ const main = () => {
 
   const scene = new THREE.Scene()
 
+  // TODO ----正射场景
+  let texture, sprite, cameraOrtho
+  const width = window.innerWidth
+  const height = window.innerHeight
+  const vector = new THREE.Vector3()
+  cameraOrtho = new THREE.OrthographicCamera(
+    -width / 2,
+    width / 2,
+    height / 2,
+    -height / 2,
+    0.1,
+    100
+  )
+  cameraOrtho.position.set(20, 20, 10)
+  const dpr = window.devicePixelRatio
+  const textureSize = 128 * dpr
+  const sceneOrtho = new THREE.Scene()
+  texture = new THREE.DataTexture('', textureSize, textureSize, THREE.RGBFormat)
+  const spriteMaterial = new THREE.SpriteMaterial({ map: texture })
+  sprite = new THREE.Sprite(spriteMaterial)
+  sprite.scale.set(textureSize, textureSize, 1)
+  sceneOrtho.add(sprite)
+  updateSpritePosition()
+  function updateSpritePosition() {
+    const halfWidth = window.innerWidth / 2
+    const halfHeight = window.innerHeight / 2
+    const halfImageWidth = textureSize / 2
+    const halfImageHeight = textureSize / 2
+    sprite.position.set(
+      halfWidth - halfImageWidth,
+      halfHeight - halfImageHeight,
+      1
+    )
+  }
+  // ----
+
   // 搭建地板
   makeGroundMesh(scene)
-
   // 搭建房屋
   buildHouse(scene)
   // 搭建围墙
@@ -290,31 +428,7 @@ const main = () => {
   makeControls(camera, canvas)
 
   const render = (time) => {
-    raycaster.setFromCamera(mouse, camera)
-    const intersects = raycaster.intersectObjects(scene.children)
-    console.log(intersects)
-    if (intersects.length > 0) {
-      const targetDistance = intersects[0].distance
-      if (INTERSECTED) {
-        if (INTERSECTED.distance > targetDistance) {
-          INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex)
-          INTERSECTED = intersects[0].object
-          INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex()
-          INTERSECTED.material.emissive.setHex(0xff0000)
-        }
-      } else {
-        INTERSECTED = intersects[0].object
-        INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex()
-        INTERSECTED.material.emissive.setHex(0xff0000)
-      }
-    } else {
-      if (INTERSECTED) {
-        INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex)
-      }
-      INTERSECTED = null
-    }
-
-    //   camera.focusAt(targetDistance) // using Cinematic camera focusAt method
+    renderEvents(mouse, camera, raycaster, scene)
 
     if (resizeRendererToDisplaySize(renderer)) {
       const canvas = renderer.domElement
@@ -325,7 +439,19 @@ const main = () => {
 
     makeCustomControl(camera)
 
+    // renderer.clear()
     renderer.render(scene, camera)
+
+    // TODO ----
+    vector.x = (window.innerWidth * dpr) / 2 - textureSize / 2
+    vector.y = (window.innerHeight * dpr) / 2 - textureSize / 2
+    vector.z = 0
+
+    renderer.copyFramebufferToTexture(vector, texture)
+    renderer.clearDepth()
+    renderer.render(sceneOrtho, cameraOrtho)
+    // ----
+
     requestAnimationFrame(render)
   }
   requestAnimationFrame(render)

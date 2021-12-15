@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2021-12-08 10:11:21
- * @LastEditTime: 2021-12-14 15:02:22
+ * @LastEditTime: 2021-12-15 10:51:14
  * @LastEditors: Li Jian
 -->
 <!DOCTYPE html>
@@ -41,10 +41,22 @@
         color: white;
         font-family: monospace;
       }
+      #info2 {
+        position: absolute;
+        left: 1em;
+        top: 4em;
+        background: rgba(0, 0, 0, 0.8);
+        padding: 0.5em;
+        color: white;
+        font-family: monospace;
+      }
     </style>
   </head>
   <body>
     <canvas id="c" width="600" height="300"></canvas>
-    <div id="info"></div>
+    <div id="info">
+      w: 前进 a: 左 s: 后退 d: 右 z: 切换视角 点击: 切换建筑物
+    </div>
+    <div id="info2"></div>
   </body>
 </html>
