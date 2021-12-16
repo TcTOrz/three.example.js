@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2021-12-14 08:31:33
- * @LastEditTime: 2021-12-16 11:51:44
+ * @LastEditTime: 2021-12-16 16:43:23
  * @LastEditors: Li Jian
  */
 import * as THREE from './node_modules/three/build/three.module.js'
@@ -77,7 +77,7 @@ const makeFog = (scene) => {
   {
     const near = 1
     const far = 100
-    const color = 'white'
+    const color = 0xffffff
     scene.fog = new THREE.Fog(color, near, far)
     scene.background = new THREE.Color(color)
   }
@@ -365,29 +365,23 @@ const renderEvents = (mouse, camera, raycaster, scene) => {
 
 // 渲染小地图
 const renderSmallMap = (renderer, scene, camera, smallMapCamera, controls) => {
+  const width = window.innerWidth
+  const height = window.innerHeight
+  const smallWidth = width / 3
+  const smallHeight = height / 3
+  const x = smallWidth * 2
+  const y = smallHeight * 2
   renderer.clearDepth()
   renderer.setScissorTest(true)
-  renderer.setScissor(
-    (window.innerWidth / 3) * 2,
-    (window.innerHeight / 3) * 2,
-    window.innerWidth / 3,
-    window.innerHeight / 3
-  )
-  renderer.setViewport(
-    (window.innerWidth / 3) * 2,
-    (window.innerHeight / 3) * 2,
-    window.innerWidth / 3,
-    window.innerHeight / 3
-  )
+  renderer.setScissor(x, y, smallWidth, smallHeight)
+  renderer.setViewport(x, y, smallWidth, smallHeight)
   // 摄像机为Y轴正上方往下(xz)面看
   smallMapCamera.position.set(0, camera.position.y, 0)
   smallMapCamera.lookAt(-camera.position.x, 0, -camera.position.z)
   // 获取控制器垂直偏移角度，并计算获取正下方x轴需要旋转的值
   smallMapCamera.rotateX(-controls.getPolarAngle())
-
   // 当canmera为<<透视相机>>才可生效
   smallMapCamera.position.set(0, controls.getDistance(), 0)
-
   renderer.render(scene, smallMapCamera)
   renderer.setScissorTest(false)
 }
