@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2021-12-14 08:31:33
- * @LastEditTime: 2021-12-15 21:58:17
+ * @LastEditTime: 2021-12-16 11:38:53
  * @LastEditors: Li Jian
  */
 import * as THREE from './node_modules/three/build/three.module.js'
@@ -16,6 +16,16 @@ const makeCamera = (canvas, fov = 40) => {
   const far = 100
   return new THREE.PerspectiveCamera(fov, aspect, near, far)
   // return new CinematicCamera(fov, aspect, near, far)
+}
+
+// 小地图相机初始化，默认为透视相机
+const makeSmallMapCamera = (canvas, fov = 40, type = 'perspective') => {
+  // 透视相机
+  if (type === 'perspective') {
+    return makeCamera(canvas, fov)
+  }
+  // 正交相机
+  return new THREE.OrthographicCamera(-25, 25, 25, -25, 0.1, 100)
 }
 
 // 光源
@@ -47,8 +57,9 @@ const makeLight = (scene, color, intensity) => {
 }
 
 // 控制器
+let controls
 const makeControls = (camera, canvas) => {
-  const controls = new OrbitControls(camera, canvas)
+  controls = new OrbitControls(camera, canvas)
   controls.enableDamping = true
   // 视野距离
   // controls.minDistance = 5
@@ -352,6 +363,35 @@ const renderEvents = (mouse, camera, raycaster, scene) => {
   }
 }
 
+// 渲染小地图
+const renderSmallMap = (renderer, scene, camera, smallMapCamera, controls) => {
+  renderer.clearDepth()
+  renderer.setScissorTest(true)
+  renderer.setScissor(
+    (window.innerWidth / 3) * 2,
+    (window.innerHeight / 3) * 2,
+    window.innerWidth / 3,
+    window.innerHeight / 3
+  )
+  renderer.setViewport(
+    (window.innerWidth / 3) * 2,
+    (window.innerHeight / 3) * 2,
+    window.innerWidth / 3,
+    window.innerHeight / 3
+  )
+  // 摄像机为Y轴正上方往下(xz)面看
+  smallMapCamera.position.set(0, camera.position.y, 0)
+  smallMapCamera.lookAt(camera.position.x, 0, camera.position.z)
+  // 获取控制器垂直偏移角度，并计算获取正下方x轴需要旋转的值
+  smallMapCamera.rotateX(Math.PI * 2 - controls.getPolarAngle())
+
+  // 当canmera为<<透视相机>>才可生效
+  smallMapCamera.position.set(0, controls.getDistance(), 0)
+
+  renderer.render(scene, smallMapCamera)
+  renderer.setScissorTest(false)
+}
+
 const handleCustomDom = (customObject) => {
   if (customObject) {
     const { name, width, height, x, z } = customObject
@@ -368,134 +408,57 @@ const main = () => {
   renderer.setPixelRatio(window.devicePixelRatio)
   renderer.setSize(window.innerWidth, window.innerHeight)
   renderer.autoClear = false
-  renderer.shadowMap.enabled = true
+  // renderer.shadowMap.enabled = true
 
   const raycaster = new THREE.Raycaster()
 
   const camera = makeCamera(canvas, 70)
-  camera.position.set(8, 4, 10).multiplyScalar(3)
+  camera.position.set(0, 4, 10).multiplyScalar(3)
   camera.lookAt(0, 0, 0)
 
   const scene = new THREE.Scene()
 
-  // TODO ----正射场景
-  // let texture, sprite, cameraOrtho
-  // const width = window.innerWidth
-  // const height = window.innerHeight
-  // const vector = new THREE.Vector3()
-  // cameraOrtho = new THREE.OrthographicCamera(
-  //   -width / 2,
-  //   width / 2,
-  //   height / 2,
-  //   -height / 2,
-  //   0.1,
-  //   100
-  // )
-  // cameraOrtho.position.copy(camera.position)
-  // const dpr = window.devicePixelRatio
-  // const textureSize = 128 * dpr * 1.5
-  // const sceneOrtho = new THREE.Scene()
-  // texture = new THREE.DataTexture('', textureSize, textureSize, THREE.RGBFormat)
-  // const spriteMaterial = new THREE.SpriteMaterial({ map: texture })
-  // sprite = new THREE.Sprite(spriteMaterial)
-  // sprite.scale.set(textureSize, textureSize, 1)
-  // sceneOrtho.add(sprite)
-  // updateSpritePosition()
-  // function updateSpritePosition() {
-  //   const halfWidth = window.innerWidth / 2
-  //   const halfHeight = window.innerHeight / 2
-  //   const halfImageWidth = textureSize / 2
-  //   const halfImageHeight = textureSize / 2
-  //   sprite.position.set(
-  //     halfWidth - halfImageWidth,
-  //     halfHeight - halfImageHeight,
-  //     1
-  //   )
-  // }
-  // ----
-  // TODO ----透视场景
-  // const camera2 = new THREE.PerspectiveCamera(
-  //   70,
-  //   window.innerWidth / window.innerHeight,
-  //   0.1,
-  //   100
-  // )
-  const camera2 = new THREE.OrthographicCamera(-20, 20, 20, -20, 0.1, 100)
-  camera2.position.copy(camera.position)
-  camera2.quaternion.copy(camera.quaternion)
-  // camera2.position.copy(camera.position)
-  // camera2.position.set(0, 10, 0)
-  camera2.rotateX(-Math.PI / 2)
-  camera2.rotateY(0)
-  camera2.rotateZ(0)
-  // camera2.lookAt(0, 0, 0)
-  // ----
-
+  // 小地图 默认为透视相机，也可以传第三个参数，变为正交相机
+  const smallMapCamera = makeSmallMapCamera(canvas, 70)
   // 搭建地板
   makeGroundMesh(scene)
   // 搭建房屋
   buildHouse(scene)
   // 搭建围墙
   buildFence(scene)
-
+  // 灯光
   makeLight(scene, 0xffffff, 1)
-
+  // 雾
   makeFog(scene)
-
+  // 基本控制
   makeControls(camera, canvas)
 
   const render = (time) => {
+    // 事件渲染
     renderEvents(mouse, camera, raycaster, scene)
 
+    // 渲染器显示调整
     if (resizeRendererToDisplaySize(renderer)) {
       const canvas = renderer.domElement
       camera.aspect = canvas.clientWidth / canvas.clientHeight
       camera.updateProjectionMatrix()
     }
-    // console.log(tapZ, tapW, tapA, tapS, tapD)
 
+    // 自定义事件
     makeCustomControl(camera)
 
-    // renderer.clear()
+    // 主地图渲染
     renderer.setViewport(0, 0, window.innerWidth, window.innerHeight)
     renderer.render(scene, camera)
 
-    // TODO ----
-    // vector.x = (window.innerWidth * dpr) / 2 - textureSize / 2
-    // vector.y = (window.innerHeight * dpr) / 2 - textureSize / 2
-    // vector.z = 0
-
-    // renderer.copyFramebufferToTexture(vector, texture)
-    // renderer.clearDepth()
-    // renderer.render(sceneOrtho, cameraOrtho)
-    // ----
-    // ----
-    renderer.setClearColor(0x222222, 1)
-    renderer.clearDepth()
-    renderer.setScissorTest(true)
-    renderer.shadowMap.enabled = false
-    renderer.setScissor(20, 20, window.innerHeight / 2, window.innerHeight / 2)
-    renderer.setViewport(20, 20, window.innerHeight / 2, window.innerHeight / 2)
-    camera2.position.copy(camera.position)
-    camera2.quaternion.copy(camera.quaternion)
-    // camera2.rotateY(0)
-    // camera2.position.set(0, 10, 0)
-    // camera2.rotateY(Math.PI / -3)
-    // camera2.updateProjectionMatrix()
-    // console.log(camera2.quaternion)
-    // console.log(camera.quaternion)
-    // camera2.position.set(0, 10, 0)
-    // camera2.rotateX(0)
-    // camera2.rotateY(0)
-    // camera2.rotateZ(0)
-    renderer.render(scene, camera2)
-    renderer.setScissorTest(false)
-    // ----
+    // 小地图渲染
+    renderSmallMap(renderer, scene, camera, smallMapCamera, controls)
 
     requestAnimationFrame(render)
   }
   requestAnimationFrame(render)
 
+  // 事件声明
   makeEvents(canvas, renderer, scene, render)
 }
 
