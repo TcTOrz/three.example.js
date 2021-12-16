@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2021-12-14 08:31:33
- * @LastEditTime: 2021-12-16 11:38:53
+ * @LastEditTime: 2021-12-16 11:51:44
  * @LastEditors: Li Jian
  */
 import * as THREE from './node_modules/three/build/three.module.js'
@@ -381,9 +381,9 @@ const renderSmallMap = (renderer, scene, camera, smallMapCamera, controls) => {
   )
   // 摄像机为Y轴正上方往下(xz)面看
   smallMapCamera.position.set(0, camera.position.y, 0)
-  smallMapCamera.lookAt(camera.position.x, 0, camera.position.z)
+  smallMapCamera.lookAt(-camera.position.x, 0, -camera.position.z)
   // 获取控制器垂直偏移角度，并计算获取正下方x轴需要旋转的值
-  smallMapCamera.rotateX(Math.PI * 2 - controls.getPolarAngle())
+  smallMapCamera.rotateX(-controls.getPolarAngle())
 
   // 当canmera为<<透视相机>>才可生效
   smallMapCamera.position.set(0, controls.getDistance(), 0)
