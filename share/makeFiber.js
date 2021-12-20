@@ -1,20 +1,20 @@
 /*
  * @Author: Li Jian
  * @Date: 2021-12-20 14:18:22
- * @LastEditTime: 2021-12-20 16:30:37
+ * @LastEditTime: 2021-12-20 21:11:24
  * @LastEditors: Li Jian
  * @Description: 光缆
  */
 import * as THREE from '../node_modules/three/build/three.module.js'
 function makeFiber(scene) {
   const point = new THREE.Vector3()
-  let splinePointsLength = 5
+  let splinePointsLength = 3
   let positions = [
-    new THREE.Vector3(-50, 30, -50),
-    new THREE.Vector3(-30, 10, -10),
-    new THREE.Vector3(0, 20, 0),
-    new THREE.Vector3(5, 10, 1),
-    new THREE.Vector3(25, 50, 15),
+    new THREE.Vector3(0, 14.512294006347657 * 2, -4.5),
+    new THREE.Vector3(25, 14.512294006347657 * 1.8, -4.5),
+    new THREE.Vector3(50, 14.512294006347657 * 2, -4.5),
+    // new THREE.Vector3(5, 10, 1),
+    // new THREE.Vector3(25, 50, 15),
   ]
   const splineHelperObjects = []
   const ARC_SEGMENTS = 200
@@ -108,13 +108,13 @@ function makeFiber(scene) {
     //   positions[i].copy(new_positions[i])
     // }
     positions = new_positions
-    console.log(positions)
+    // console.log(positions)
 
     updateSplineOutline()
   }
 
   function updateSplineOutline() {
-    console.log(splines)
+    // console.log(splines)
     for (const k in splines) {
       const spline = splines[k]
 
