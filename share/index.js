@@ -1,11 +1,16 @@
 /*
  * @Author: Li Jian
  * @Date: 2021-12-17 14:54:59
- * @LastEditTime: 2021-12-17 15:57:19
+ * @LastEditTime: 2021-12-20 10:23:43
  * @LastEditors: Li Jian
  */
 import resizeRendererToDisplaySize from './resizeRendererToDisplaySize.js'
-import { makePerspectiveCamera, makeOrthographicCamera } from './makeCamera.js'
+import {
+  makePerspectiveCamera,
+  makeOrthographicCamera,
+  makeThumbCamera,
+} from './makeCamera.js'
+import renderThumbMap from './renderThumbMap.js'
 import makeControls from './makeControls.js'
 import {
   makeDirectionalLight,
@@ -14,6 +19,7 @@ import {
 } from './makeLights.js'
 import makePlane from './makePlane.js'
 import makeTower from './makeTower.js'
+import makeFiber from './makeFiber.js'
 
 export {
   // 调整渲染器大小到屏幕大小，防止canvas变形
@@ -21,6 +27,8 @@ export {
   // 相机
   makePerspectiveCamera,
   makeOrthographicCamera,
+  makeThumbCamera,
+  renderThumbMap,
   // 控制器
   makeControls,
   // 灯光
@@ -31,4 +39,6 @@ export {
   makePlane,
   // 铁塔
   makeTower,
+  // 光缆
+  makeFiber,
 }

@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2021-12-08 10:11:21
- * @LastEditTime: 2021-12-17 09:24:53
+ * @LastEditTime: 2021-12-20 11:22:54
  * @LastEditors: Li Jian
 -->
 <!DOCTYPE html>
@@ -52,13 +52,21 @@
         color: white;
         font-family: monospace;
       }
+      #thumbLine {
+        border: 2px solid black;
+        position: absolute;
+        top: 0;
+        right: 0;
+      }
     </style>
   </head>
   <body>
+    <!-- <img src="./微信图片_20211220094232.png" alt="" /> -->
     <canvas id="c" width="600" height="300"></canvas>
     <div id="info">
       w: 前进 a: 左 s: 后退 d: 右 z: 切换视角 点击: 切换建筑物
     </div>
     <div id="info2"></div>
+    <div id="thumbLine"></div>
   </body>
 </html>
