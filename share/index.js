@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2021-12-17 14:54:59
- * @LastEditTime: 2021-12-20 10:23:43
+ * @LastEditTime: 2021-12-21 22:04:23
  * @LastEditors: Li Jian
  */
 import resizeRendererToDisplaySize from './resizeRendererToDisplaySize.js'
@@ -20,6 +20,7 @@ import {
 import makePlane from './makePlane.js'
 import makeTower from './makeTower.js'
 import makeFiber from './makeFiber.js'
+import renderEvents from './makeEvents.js'
 
 export {
   // 调整渲染器大小到屏幕大小，防止canvas变形
@@ -41,4 +42,6 @@ export {
   makeTower,
   // 光缆
   makeFiber,
+  // 事件
+  renderEvents,
 }

@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2021-12-17 09:24:48
- * @LastEditTime: 2021-12-21 15:42:26
+ * @LastEditTime: 2021-12-21 22:05:50
  * @LastEditors: Li Jian
  */
 import * as THREE from './node_modules/three/build/three.module.js'
@@ -21,6 +21,7 @@ import {
   makeTower,
   renderThumbMap,
   makeFiber,
+  renderEvents,
 } from './share/index.js'
 
 import basic from './data/basic.js'
@@ -108,6 +109,10 @@ const main = () => {
       camera.aspect = canvas.clientWidth / canvas.clientHeight
       camera.updateProjectionMatrix()
     }
+
+    // 渲染事件
+    renderEvents(camera, scene)
+
     renderer.setViewport(0, 0, window.innerWidth, window.innerHeight)
     renderer.render(scene, camera)
 

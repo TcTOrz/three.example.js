@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2021-12-20 14:18:22
- * @LastEditTime: 2021-12-21 15:27:39
+ * @LastEditTime: 2021-12-21 21:20:30
  * @LastEditors: Li Jian
  * @Description: 光缆
  */
@@ -75,6 +75,7 @@ function renderFiber(scene, positions) {
     })
   )
   curve.mesh.castShadow = true
+  curve.mesh.name = 'Fiber' // 增加名字
   splines.chordal = curve
 
   for (const k in splines) {
