@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2021-12-17 10:00:22
- * @LastEditTime: 2021-12-20 10:50:10
+ * @LastEditTime: 2021-12-21 09:37:58
  * @LastEditors: Li Jian
  * @Description: 摄像机
  */
@@ -21,7 +21,17 @@ function makePerspectiveCamera(
 }
 
 // 正交相机
-function makeOrthographicCamera() {}
+function makeOrthographicCamera(left, right, top, bottom, near, far) {
+  const camera = new THREE.OrthographicCamera(
+    left,
+    right,
+    top,
+    bottom,
+    near,
+    far
+  )
+  return camera
+}
 
 // 缩略图相机
 // 默认为透视相机,也可以传最后一个参数变为正交相机
@@ -38,7 +48,7 @@ function makeThumbCamera(
   if (type === 'perspective') {
     return makePerspectiveCamera(fov, aspect, near, far, position)
   }
-  return new THREE.OrthographicCamera(
+  return makeOrthographicCamera(
     -width / 2,
     width / 2,
     height / 2,

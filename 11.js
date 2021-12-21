@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2021-12-17 09:24:48
- * @LastEditTime: 2021-12-20 16:31:03
+ * @LastEditTime: 2021-12-21 15:42:26
  * @LastEditors: Li Jian
  */
 import * as THREE from './node_modules/three/build/three.module.js'
@@ -12,6 +12,7 @@ import { MTLLoader } from './node_modules/three/examples/jsm/loaders/MTLLoader.j
 import {
   resizeRendererToDisplaySize,
   makePerspectiveCamera,
+  makeOrthographicCamera,
   makeThumbCamera,
   makeControls,
   makeDirectionalLight,
@@ -22,27 +23,21 @@ import {
   makeFiber,
 } from './share/index.js'
 
+import basic from './data/basic.js'
+import user from './data/user.js'
+
 // 设置全局值
 let canvas, renderer, scene, camera, thumbCamera
-
 // 天空颜色
-let skyColor = 0xb5c8db
-
+let { skyColor } = basic.color
 // 全局参数, 相机参数
-let fov = 70,
-  aspect = (canvas) => canvas.width / canvas.height,
-  near = 0.1,
-  far = 1000,
-  position = [0, 70, 50]
-
+let { fov, aspect, near, far, position } = basic.camera
 // 全局参数, 地面大小
-let plainSizeWidth = 300,
-  plainSizeHeight = 200,
-  // loaderUrl = '../static/images/checker.png'
-  loaderUrl = '../static/images/grass.jpg'
+let { plainSizeWidth, plainSizeHeight } = user.plane
+let { imgUrl: loaderUrl } = basic.plane
 
 const main = () => {
-  canvas = document.querySelector('#c')
+  canvas = document.querySelector(basic.canvas)
   renderer = new THREE.WebGLRenderer({ canvas })
   camera = makePerspectiveCamera(fov, aspect(canvas), near, far, position)
   scene = new THREE.Scene()
@@ -58,7 +53,7 @@ const main = () => {
     position,
     plainSizeWidth,
     plainSizeHeight,
-    'perspective'
+    'orthographic' // 正交相机
   )
 
   // 地面
@@ -67,36 +62,45 @@ const main = () => {
   scene.add(plane)
 
   // 灯光
-  // {
-  //   const skyColor = 0xb1e1ff // light blue
-  //   const groundColor = 0xb97a20 // brownish orange
-  //   const intensity = 1
-  //   const light = makeHemisphereLight(skyColor, groundColor, intensity)
-  //   scene.add(light)
-  // }
   {
-    const color = 0xffffff
-    const intensity = 1
-    const light = makeDirectionalLight(color, intensity, [0, 10, 0], [-5, 0, 0])
+    const { color, intensity, position, targetPosition } =
+      basic.lights.directionalLight
+    const light = makeDirectionalLight(
+      color,
+      intensity,
+      position,
+      targetPosition
+    )
     scene.add(light)
     scene.add(light.target)
   }
 
-  makeTower(
-    scene,
-    '../blender/tower/corset-power-transmission-tower.mtl',
-    '../blender/tower/corset-power-transmission-tower.obj',
-    [0, 0, 0]
-  )
-  makeTower(
-    scene,
-    '../blender/tower/corset-power-transmission-tower.mtl',
-    '../blender/tower/corset-power-transmission-tower.obj',
-    [50, 0, 0]
-  )
+  // 杆塔 / 光缆
+  {
+    const { mtl, obj, scaler } = basic.tower
+    const { towers } = user
+    const towersPromise = []
+    towers.map((info) => {
+      towersPromise.push(makeTower(scene, mtl, obj, scaler, info))
+    })
+    Promise.all(towersPromise)
+      .then((groups) => {
+        // 光缆
+        groups.map((group) => {
+          makeFiber(scene, groups, group)
+        })
+      })
+      .catch((err) => {
+        console.log('杆塔', err)
+      })
+  }
 
-  // 光缆
-  makeFiber(scene)
+  // test
+  const boxGeometry = new THREE.BoxGeometry(10, 10, 10)
+  const boxMaterial = new THREE.MeshPhongMaterial({ color: 0x3f3f3f })
+  const box = new THREE.Mesh(boxGeometry, boxMaterial)
+  box.position.set(0, 5, 0)
+  scene.add(box)
 
   const render = () => {
     if (resizeRendererToDisplaySize(renderer)) {
