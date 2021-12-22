@@ -1,13 +1,10 @@
 /*
  * @Author: Li Jian
  * @Date: 2021-12-17 09:24:48
- * @LastEditTime: 2021-12-21 22:05:50
+ * @LastEditTime: 2021-12-22 16:19:46
  * @LastEditors: Li Jian
  */
 import * as THREE from './node_modules/three/build/three.module.js'
-// import { OrbitControls } from './node_modules/three/examples/jsm/controls/OrbitControls.js'
-import { OBJLoader } from './node_modules/three/examples/jsm/loaders/OBJLoader.js'
-import { MTLLoader } from './node_modules/three/examples/jsm/loaders/MTLLoader.js'
 
 import {
   resizeRendererToDisplaySize,
@@ -81,9 +78,13 @@ const main = () => {
     const { mtl, obj, scaler } = basic.tower
     const { towers } = user
     const towersPromise = []
+    // const loadManager = new THREE.LoadingManager()
+
     towers.map((info) => {
       towersPromise.push(makeTower(scene, mtl, obj, scaler, info))
     })
+
+    // loadManager.onLoad = () => {
     Promise.all(towersPromise)
       .then((groups) => {
         // 光缆
@@ -94,6 +95,22 @@ const main = () => {
       .catch((err) => {
         console.log('杆塔', err)
       })
+    // }
+
+    // const loadingElem = document.querySelector('#loading')
+    // const progressBarElem = loadingElem.querySelector('.progressbar')
+    // loadManager.onProgress = (urlOfLastItemLoaded, itemsLoaded, itemsTotal) => {
+    //   const progress = itemsLoaded / itemsTotal
+    //   // loadingElem.style.display = 'none'
+    //   console.log(progress, urlOfLastItemLoaded, itemsLoaded, itemsTotal)
+    // }
+    // loadManager.onStart = () => {
+    //   // progressBarElem.style.transform = `scaleX(0)`
+    //   console.log('开始')
+    // }
+    // loadManager.onEnd = () => {
+    //   loadingElem.style.display = 'none'
+    // }
   }
 
   // test
@@ -103,15 +120,15 @@ const main = () => {
   box.position.set(0, 5, 0)
   scene.add(box)
 
+  // 渲染自定义点击事件
+  renderEvents(camera, scene)
+
   const render = () => {
     if (resizeRendererToDisplaySize(renderer)) {
       const canvas = renderer.domElement
       camera.aspect = canvas.clientWidth / canvas.clientHeight
       camera.updateProjectionMatrix()
     }
-
-    // 渲染事件
-    renderEvents(camera, scene)
 
     renderer.setViewport(0, 0, window.innerWidth, window.innerHeight)
     renderer.render(scene, camera)
