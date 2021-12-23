@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2021-12-20 14:18:22
- * @LastEditTime: 2021-12-21 21:20:30
+ * @LastEditTime: 2021-12-23 23:01:57
  * @LastEditors: Li Jian
  * @Description: 光缆
  */
@@ -128,7 +128,8 @@ function makeFiber(scene, groups, group) {
       .clone()
       .multiplyScalar(scaler)
       .add(group.position)
-    toVector3.z = toVector3.z - idx * distance
+    toVector3.z = (toVector3.z - idx * distance) * 0.22 // TODO
+    toVector3.y = toVector3.y + 19.8 // TODO
     // groups中接收的电缆
     const fromVector3 = to.userData.from
       .clone()
@@ -136,7 +137,8 @@ function makeFiber(scene, groups, group) {
       .add(to.position)
     // const toIdx = to.userData.info.fiber.from.findIndex((id) => id === id)
     // fromVector3.z = fromVector3.z - toIdx * distance
-    fromVector3.z = fromVector3.z - idx * distance
+    fromVector3.z = (fromVector3.z - idx * distance) * 0.22 // TODO
+    fromVector3.y = fromVector3.y + 19.8 // TODO
 
     const middleVector3 = fromVector3.clone().add(toVector3).divideScalar(2)
     // const random = Math.random() * 0.2 + 1 // 下摆幅度 1-1.2

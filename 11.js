@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2021-12-17 09:24:48
- * @LastEditTime: 2021-12-23 16:37:09
+ * @LastEditTime: 2021-12-23 21:28:30
  * @LastEditors: Li Jian
  */
 import * as THREE from './node_modules/three/build/three.module.js'
@@ -77,13 +77,13 @@ const main = () => {
 
   // 杆塔 / 光缆
   {
-    const { mtl, obj, scaler } = basic.tower
+    const { mtl, obj, glb, scaler } = basic.tower
     const { towers } = user
     const towersPromise = []
     // const loadManager = new THREE.LoadingManager()
 
     towers.map((info) => {
-      towersPromise.push(makeTower(scene, mtl, obj, scaler, info))
+      towersPromise.push(makeTower(scene, mtl, obj, glb, scaler, info))
     })
 
     // loadManager.onLoad = () => {

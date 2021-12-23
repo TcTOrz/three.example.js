@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2021-12-21 08:58:38
- * @LastEditTime: 2021-12-21 15:53:04
+ * @LastEditTime: 2021-12-23 21:21:05
  * @LastEditors: Li Jian
  * @Description: 加载数据-动态
  */
@@ -40,15 +40,6 @@ export default {
       position: [50, 0, 0],
       fiber: {
         from: [2, 2, 2, 2, 2, 2],
-        to: [4, 4, 4, 4, 4, 4],
-      },
-    },
-    {
-      id: 4,
-      name: '杆塔4',
-      position: [75, 0, -25],
-      fiber: {
-        from: [3, 3, 3, 3, 3, 3],
         to: [],
       },
     },

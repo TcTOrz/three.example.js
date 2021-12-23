@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2021-12-21 08:58:21
- * @LastEditTime: 2021-12-21 10:15:35
+ * @LastEditTime: 2021-12-23 21:13:21
  * @LastEditors: Li Jian
  * @Description: 基础数据-静态
  */
@@ -35,6 +35,7 @@ export default {
     // 杆塔
     mtl: '../blender/tower/corset-power-transmission-tower.mtl', // 杆塔模型mtl文件地址
     obj: '../blender/tower/corset-power-transmission-tower.obj', // 杆塔模型obj文件地址
+    glb: '../blender/tower/corset-power-transmission-tower.glb', // 杆塔模型glb文件地址
     scaler: 0.4, // 杆塔缩放比例
   },
 }
