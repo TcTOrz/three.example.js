@@ -1,15 +1,17 @@
 /*
  * @Author: Li Jian
  * @Date: 2021-12-21 21:54:53
- * @LastEditTime: 2021-12-22 10:50:39
+ * @LastEditTime: 2021-12-23 11:29:05
  * @LastEditors: Li Jian
  */
 import * as THREE from '../node_modules/three/build/three.module.js'
 
+let INTERSECTED // 当前被选中的对象
+
 function renderEvents(camera, scene) {
   const raycaster = new THREE.Raycaster()
   const mouse = new THREE.Vector2()
-  let INTERSECTED // 当前被选中的对象
+  // let INTERSECTED // 当前被选中的对象
   function onMouseClick(event) {
     event.preventDefault()
     event.stopPropagation()
@@ -37,3 +39,5 @@ function renderEvents(camera, scene) {
 }
 
 export default renderEvents
+
+export { INTERSECTED }

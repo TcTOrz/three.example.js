@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2021-12-17 14:54:59
- * @LastEditTime: 2021-12-22 16:37:41
+ * @LastEditTime: 2021-12-23 11:23:14
  * @LastEditors: Li Jian
  */
 import resizeRendererToDisplaySize from './resizeRendererToDisplaySize.js'
@@ -20,8 +20,9 @@ import {
 import makePlane from './makePlane.js'
 import makeTower from './makeTower.js'
 import makeFiber from './makeFiber.js'
-import renderEvents from './makeEvents.js'
+import renderEvents, { INTERSECTED } from './makeEvents.js'
 import { makeLoading, onProgress } from './makeLoading.js'
+import renderTextInfo from './renderTextInfo.js'
 
 export {
   // 调整渲染器大小到屏幕大小，防止canvas变形
@@ -45,7 +46,10 @@ export {
   makeFiber,
   // 事件
   renderEvents,
+  INTERSECTED,
   // 加载
   makeLoading,
   onProgress,
+  // 文字显示渲染
+  renderTextInfo,
 }

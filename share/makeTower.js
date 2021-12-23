@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2021-12-17 15:47:33
- * @LastEditTime: 2021-12-22 16:38:22
+ * @LastEditTime: 2021-12-23 09:50:58
  * @LastEditors: Li Jian
  * @Description: 铁塔模型
  */
@@ -21,7 +21,6 @@ function makeTower(scene, mtlUrl, objUrl, scaler, info) {
         objUrl,
         (obj) => {
           obj.scale.set(scaler, scaler, scaler)
-
           const box = new THREE.Box3().setFromObject(obj)
           const boxSize = box.getSize(new THREE.Vector3()).length() // 大小
           const boxCenter = box.getCenter(new THREE.Vector3()) // 中心

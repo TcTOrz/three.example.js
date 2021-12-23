@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2021-12-08 10:11:21
- * @LastEditTime: 2021-12-22 22:12:22
+ * @LastEditTime: 2021-12-23 16:31:54
  * @LastEditors: Li Jian
 -->
 <!DOCTYPE html>
@@ -22,6 +22,7 @@
     <!-- <script type="module" src="./9.js"></script> -->
     <!-- <script type="module" src="./10.js"></script> -->
     <script type="module" src="./11.js"></script>
+    <!-- <script type="module" src="./12.js"></script> -->
     <style>
       html,
       body {
@@ -33,6 +34,31 @@
         width: 100%;
         height: 100%;
         display: block;
+      }
+      #container {
+        width: 100%;
+        height: 100%;
+        display: relative;
+        overflow: hidden;
+      }
+      #labels {
+        position: absolute;
+        color: white;
+        left: 0;
+        top: 0;
+      }
+      #labels > div {
+        position: absolute;
+        left: 0;
+        top: 0;
+        cursor: pointer;
+        user-select: none;
+        /* text-shadow: -1px -1px 0 #000, 0 -1px 0 #000, 1px -1px 0 #000,
+          1px 0 0 #000, 1px 1px 0 #000, 0 1px 0 #000, -1px 1px 0 #000,
+          -1px 0 0 #000; */
+      }
+      #labels > div:hover {
+        color: red;
       }
       #info {
         position: absolute;
@@ -91,7 +117,10 @@
   </head>
   <body>
     <!-- <img src="./微信图片_20211220094232.png" alt="" /> -->
-    <canvas id="c" width="600" height="300"></canvas>
+    <div id="container">
+      <canvas id="c" width="600" height="300"></canvas>
+      <div id="labels"></div>
+    </div>
     <!-- <div id="info">
       w: 前进 a: 左 s: 后退 d: 右 z: 切换视角 点击: 切换建筑物
     </div>

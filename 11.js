@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2021-12-17 09:24:48
- * @LastEditTime: 2021-12-22 16:19:46
+ * @LastEditTime: 2021-12-23 16:37:09
  * @LastEditors: Li Jian
  */
 import * as THREE from './node_modules/three/build/three.module.js'
@@ -19,6 +19,7 @@ import {
   renderThumbMap,
   makeFiber,
   renderEvents,
+  renderTextInfo,
 } from './share/index.js'
 
 import basic from './data/basic.js'
@@ -51,7 +52,8 @@ const main = () => {
     position,
     plainSizeWidth,
     plainSizeHeight,
-    'orthographic' // 正交相机
+    //'orthographic' // 正交相机
+    'perspective'
   )
 
   // 地面
@@ -135,6 +137,8 @@ const main = () => {
 
     // 缩略图渲染
     renderThumbMap(renderer, scene, camera, thumbCamera, controls)
+    // 渲染文字信息
+    renderTextInfo(canvas, camera)
 
     requestAnimationFrame(render)
   }

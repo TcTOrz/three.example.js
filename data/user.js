@@ -40,6 +40,15 @@ export default {
       position: [50, 0, 0],
       fiber: {
         from: [2, 2, 2, 2, 2, 2],
+        to: [4, 4, 4, 4, 4, 4],
+      },
+    },
+    {
+      id: 4,
+      name: '杆塔4',
+      position: [75, 0, -25],
+      fiber: {
+        from: [3, 3, 3, 3, 3, 3],
         to: [],
       },
     },
