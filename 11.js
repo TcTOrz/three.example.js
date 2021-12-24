@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2021-12-17 09:24:48
- * @LastEditTime: 2021-12-24 11:10:39
+ * @LastEditTime: 2021-12-24 16:27:17
  * @LastEditors: Li Jian
  */
 import * as THREE from './node_modules/three/build/three.module.js'
@@ -107,12 +107,16 @@ const main = () => {
   // 渲染自定义点击事件
   renderEvents(camera, scene)
 
-  const render = () => {
+  const render = (time) => {
+    scene.rotation.y = (-time * 0.001) / 5
+
     if (resizeRendererToDisplaySize(renderer)) {
       const canvas = renderer.domElement
       camera.aspect = canvas.clientWidth / canvas.clientHeight
       camera.updateProjectionMatrix()
     }
+
+    controls.update() // only required if controls.enableDamping = true, or if controls.autoRotate = true
 
     renderer.setViewport(0, 0, window.innerWidth, window.innerHeight)
     renderer.render(scene, camera)
