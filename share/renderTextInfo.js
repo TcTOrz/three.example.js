@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2021-12-23 11:19:21
- * @LastEditTime: 2021-12-23 14:07:46
+ * @LastEditTime: 2021-12-24 09:45:38
  * @LastEditors: Li Jian
  * @Description: 渲染文本数据
  */
@@ -13,7 +13,7 @@ function renderTextInfo(canvas, camera) {
   if (INTERSECTED) {
     const labels = document.querySelector('#labels')
     const elem = document.createElement('div')
-    if (INTERSECTED.name === 'Tower') {
+    if (INTERSECTED.name.startsWith('Tower')) {
       // 显示塔杆信息
       elem.textContent = INTERSECTED.parent.userData.info.name
       const children = labels.children

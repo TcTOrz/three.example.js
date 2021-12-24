@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2021-12-20 14:18:22
- * @LastEditTime: 2021-12-23 23:01:57
+ * @LastEditTime: 2021-12-24 11:08:18
  * @LastEditors: Li Jian
  * @Description: 光缆
  */
@@ -107,38 +107,35 @@ function renderFiber(scene, positions) {
 let distance // 电缆之间的间距
 function fiberDistance(group, scaler) {
   if (distance) return distance
-  distance = (group.userData.from.z * 2 * scaler) / 5
+  distance = (Math.abs(group.userData.from.z * scaler) * 2) / 5
   return distance
 }
 
 function makeFiber(scene, groups, group) {
-  // console.log(groups, group)
   const { scaler } = basic.tower
   fiberDistance(group, scaler)
 
   const { userData } = group
   const toIds = userData.info.fiber.to
+  const length = toIds.length
   toIds.map((id, idx) => {
-    // console.log(id, idx)
     const to = groups.find((g) => g.userData.info.id === id)
     if (to.length === 0) return // 没有匹配,说明数据有问题
-    // console.log(distance)
     // 从group出发电缆
     const toVector3 = userData.to
       .clone()
       .multiplyScalar(scaler)
       .add(group.position)
-    toVector3.z = (toVector3.z - idx * distance) * 0.22 // TODO
-    toVector3.y = toVector3.y + 19.8 // TODO
+    // 这里需要结合blender看,他们的起始位置是相反的
+    // toVector3.z = toVector3.z + (length - idx - 1) * distance
+    toVector3.z = toVector3.z + (length - idx - 1) * distance
     // groups中接收的电缆
     const fromVector3 = to.userData.from
       .clone()
       .multiplyScalar(scaler)
       .add(to.position)
-    // const toIdx = to.userData.info.fiber.from.findIndex((id) => id === id)
-    // fromVector3.z = fromVector3.z - toIdx * distance
-    fromVector3.z = (fromVector3.z - idx * distance) * 0.22 // TODO
-    fromVector3.y = fromVector3.y + 19.8 // TODO
+    // 这里需要结合blender看,他们的起始位置是相反的
+    fromVector3.z = fromVector3.z - idx * distance
 
     const middleVector3 = fromVector3.clone().add(toVector3).divideScalar(2)
     // const random = Math.random() * 0.2 + 1 // 下摆幅度 1-1.2

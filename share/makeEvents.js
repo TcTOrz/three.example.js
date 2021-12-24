@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2021-12-21 21:54:53
- * @LastEditTime: 2021-12-23 23:00:10
+ * @LastEditTime: 2021-12-24 09:44:41
  * @LastEditors: Li Jian
  */
 import * as THREE from '../node_modules/three/build/three.module.js'
@@ -28,13 +28,13 @@ function renderEvents(camera, scene) {
       if (INTERSECTED) {
         INTERSECTED.material.color.set(INTERSECTED.currentColor)
       }
-      console.log(INTERSECTED)
       INTERSECTED = intersect.object
       INTERSECTED.currentColor = INTERSECTED.material.color
       INTERSECTED.material.color = new THREE.Color(0xff0000)
     }
     if (intersect?.object.name.startsWith('Tower')) {
-      // TODO
+      // 塔杆暂时不加颜色
+      INTERSECTED = intersect.object
     }
   }
 

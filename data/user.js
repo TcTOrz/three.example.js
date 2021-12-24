@@ -1,16 +1,40 @@
 /*
  * @Author: Li Jian
  * @Date: 2021-12-21 08:58:38
- * @LastEditTime: 2021-12-23 21:21:05
+ * @LastEditTime: 2021-12-24 08:49:49
  * @LastEditors: Li Jian
  * @Description: 加载数据-动态
  */
+// let datum = []
+// let from = []
+// let to = []
+// for (var i = 0; i < 3; i++) {
+//   if (i === 0) {
+//     from = []
+//   } else if (i === 9) {
+//     to = []
+//   } else {
+//     from = [i, i, i, i, i, i]
+//     to = [i + 1, i + 1, i + 1, i + 1, i + 1, i + 1]
+//   }
+//   datum.push({
+//     id: i,
+//     name: '杆塔' + i,
+//     position: [-50 + i * 10, 0, 0],
+//     fiber: {
+//       from,
+//       to,
+//     },
+//   })
+// }
+// console.log(datum)
 export default {
   plane: {
     // 地面-面积
     plainSizeWidth: 300, // 地面宽度(x轴)
     plainSizeHeight: 200, // 地面高度(z轴)
   },
+  // towers: datum,
   towers: [
     // 杆塔数组
     {

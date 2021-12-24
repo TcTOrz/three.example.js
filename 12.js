@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2021-12-23 16:20:34
- * @LastEditTime: 2021-12-23 16:30:55
+ * @LastEditTime: 2021-12-24 11:20:24
  * @LastEditors: Li Jian
  */
 import * as THREE from './node_modules/three/build/three.module.js'
@@ -16,6 +16,7 @@ function main() {
   const near = 0.1
   const far = 100
   const camera = new THREE.PerspectiveCamera(fov, aspect, near, far)
+  // 摄像机默认指向Z轴负方向，上方向朝向Y轴正方向。我们将会把立方体放置在坐标原点，所以我们需要往后移一下摄像机才能显示出物体。
   camera.position.set(0, 0, 2)
 
   const geometry = new THREE.BoxGeometry(1, 1, 1)
