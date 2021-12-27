@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2021-12-17 09:24:48
- * @LastEditTime: 2021-12-24 16:27:17
+ * @LastEditTime: 2021-12-27 11:18:43
  * @LastEditors: Li Jian
  */
 import * as THREE from './node_modules/three/build/three.module.js'
@@ -17,10 +17,11 @@ import {
   makePlane,
   makeTower,
   renderThumbMap,
-  makeFiber,
   renderEvents,
   renderTextInfo,
 } from './share/index.js'
+
+import Stats from './node_modules/three/examples/jsm/libs/stats.module.js'
 
 import basic from './data/basic.js'
 import user from './data/user.js'
@@ -34,6 +35,8 @@ let { fov, aspect, near, far, position } = basic.camera
 // 全局参数, 地面大小
 let { plainSizeWidth, plainSizeHeight } = user.plane
 let { imgUrl: loaderUrl } = basic.plane
+// Stats
+let stats
 
 const main = () => {
   canvas = document.querySelector(basic.canvas)
@@ -42,6 +45,9 @@ const main = () => {
   scene = new THREE.Scene()
   scene.background = new THREE.Color(skyColor)
   const controls = makeControls(camera, canvas)
+
+  stats = new Stats()
+  document.body.appendChild(stats.dom)
 
   // 缩略图
   thumbCamera = makeThumbCamera(
@@ -81,20 +87,7 @@ const main = () => {
     const { towers } = user
     const towersPromise = []
 
-    towers.map((info) => {
-      towersPromise.push(makeTower(scene, /*mtl, obj,*/ glb, scaler, info))
-    })
-
-    Promise.all(towersPromise)
-      .then((groups) => {
-        // 光缆
-        groups.map((group) => {
-          makeFiber(scene, groups, group)
-        })
-      })
-      .catch((err) => {
-        console.log('杆塔', err)
-      })
+    makeTower(scene, /*mtl, obj,*/ glb, towers, scaler)
   }
 
   // test
@@ -108,6 +101,8 @@ const main = () => {
   renderEvents(camera, scene)
 
   const render = (time) => {
+    stats.update()
+
     scene.rotation.y = (-time * 0.001) / 5
 
     if (resizeRendererToDisplaySize(renderer)) {

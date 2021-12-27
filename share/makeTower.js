@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2021-12-17 15:47:33
- * @LastEditTime: 2021-12-24 11:10:17
+ * @LastEditTime: 2021-12-27 11:18:32
  * @LastEditors: Li Jian
  * @Description: 铁塔模型
  */
@@ -10,15 +10,30 @@ import * as THREE from '../node_modules/three/build/three.module.js'
 // import { MTLLoader } from '../node_modules/three/examples/jsm/loaders/MTLLoader.js'
 import { makeLoading, onProgress } from './makeLoading.js'
 import { GLTFLoader } from '../node_modules/three/examples/jsm/loaders/GLTFLoader.js'
+import makeFiber from './makeFiber.js'
 
-function makeTower(scene, /* mtlUrl, objUrl,*/ glbUrl, scaler, info) {
+function makeTower(
+  scene,
+  /* mtlUrl, objUrl,*/ glbUrl,
+  towers,
+  scaler /*, info*/
+) {
   const loader = new GLTFLoader(makeLoading())
-  return new Promise((resolve, reject) => {
-    loader.load(
-      glbUrl,
-      (gltf) => {
-        const { scene: gltfScene } = gltf
-        gltfScene.traverse((child) => {
+  loader.load(
+    glbUrl,
+    (gltf) => {
+      // scenes<Array> 默认是有一个值的,其值为scene
+      const { scene: towerScene, scenes: towerScenes } = gltf
+      let moreTowerScene
+      towers.map((tower, index) => {
+        if (index === 0) {
+          moreTowerScene = towerScene
+          moreTowerScene.position.set(...tower.position)
+        } else {
+          moreTowerScene = towerScene.clone()
+          towerScenes.push(moreTowerScene)
+        }
+        moreTowerScene.traverse((child) => {
           if (child.isMesh) {
             child.material = new THREE.MeshStandardMaterial({
               color: 0xffffff,
@@ -29,28 +44,30 @@ function makeTower(scene, /* mtlUrl, objUrl,*/ glbUrl, scaler, info) {
             })
           }
         })
-        gltfScene.scale.set(scaler, scaler, scaler)
-        gltfScene.position.set(...info.position)
-
-        const box = new THREE.Box3().setFromObject(gltfScene)
+        moreTowerScene.scale.set(scaler, scaler, scaler)
+        moreTowerScene.position.set(...tower.position)
+        const box = new THREE.Box3().setFromObject(moreTowerScene)
         const boxSize = box.getSize(new THREE.Vector3()) // 大小
         const boxCenter = box.getCenter(new THREE.Vector3()) // 中心
-        gltfScene.children.map((_, idx) => {
-          gltfScene.children[idx].name = `Tower_${gltfScene.children[idx].name}`
+        moreTowerScene.children.map((_, idx) => {
+          moreTowerScene.children[
+            idx
+          ].name = `Tower_${moreTowerScene.children[idx].name}`
         })
-        gltfScene.userData.boxSize = boxSize
-        gltfScene.userData.boxCenter = boxCenter
-        gltfScene.userData.info = info
+        moreTowerScene.userData.boxSize = boxSize
+        moreTowerScene.userData.boxCenter = boxCenter
+        moreTowerScene.userData.info = tower
         // 为什么是下标12,13而不是其他，需要结合blender模型查看
-        gltfScene.userData.from = gltfScene.children[12].position
-        gltfScene.userData.to = gltfScene.children[13].position
-        scene.add(gltfScene)
-
-        resolve(gltfScene)
-      },
-      onProgress
-    )
-  })
+        moreTowerScene.userData.from = moreTowerScene.children[12].position
+        moreTowerScene.userData.to = moreTowerScene.children[13].position
+        scene.add(moreTowerScene)
+      })
+      towerScenes.map((group) => {
+        makeFiber(scene, towerScenes, group)
+      })
+    },
+    onProgress
+  )
   // obj模型写法
   // const objLoader = new OBJLoader(makeLoading())
   // const mtlLoader = new MTLLoader()
