@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2021-12-21 08:58:21
- * @LastEditTime: 2021-12-23 21:13:21
+ * @LastEditTime: 2021-12-27 11:48:06
  * @LastEditors: Li Jian
  * @Description: 基础数据-静态
  */
@@ -27,8 +27,7 @@ export default {
       // 方向光
       color: 0xffffff, // 颜色
       intensity: 1, // 强度
-      position: [0, 10, 0], // 位置
-      targetPosition: [-5, 0, 0], // 照向位置
+      position: [0, 50, 0], // 位置
     },
   },
   tower: {

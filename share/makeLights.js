@@ -1,17 +1,17 @@
 /*
  * @Author: Li Jian
  * @Date: 2021-12-17 14:36:18
- * @LastEditTime: 2021-12-17 14:54:47
+ * @LastEditTime: 2021-12-27 11:48:46
  * @LastEditors: Li Jian
  * @Description: 灯光
  */
 import * as THREE from '../node_modules/three/build/three.module.js'
 
 // 方向光
-function makeDirectionalLight(color, intensity, position, targetPosition) {
+function makeDirectionalLight(color, intensity, position) {
   const light = new THREE.DirectionalLight(color, intensity)
   light.position.set(...position)
-  light.target.position.set(...targetPosition)
+  // light.target.position.set(...targetPosition)
   return light
 }
 

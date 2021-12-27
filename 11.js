@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2021-12-17 09:24:48
- * @LastEditTime: 2021-12-27 11:18:43
+ * @LastEditTime: 2021-12-27 11:50:40
  * @LastEditors: Li Jian
  */
 import * as THREE from './node_modules/three/build/three.module.js'
@@ -35,13 +35,18 @@ let { fov, aspect, near, far, position } = basic.camera
 // 全局参数, 地面大小
 let { plainSizeWidth, plainSizeHeight } = user.plane
 let { imgUrl: loaderUrl } = basic.plane
+// light
+let light
 // Stats
 let stats
+// enviroment
+const enviroment = 'development'
 
 const main = () => {
   canvas = document.querySelector(basic.canvas)
   renderer = new THREE.WebGLRenderer({ canvas })
   camera = makePerspectiveCamera(fov, aspect(canvas), near, far, position)
+
   scene = new THREE.Scene()
   scene.background = new THREE.Color(skyColor)
   const controls = makeControls(camera, canvas)
@@ -71,14 +76,9 @@ const main = () => {
   {
     const { color, intensity, position, targetPosition } =
       basic.lights.directionalLight
-    const light = makeDirectionalLight(
-      color,
-      intensity,
-      position,
-      targetPosition
-    )
+    light = makeDirectionalLight(color, intensity, position, targetPosition)
     scene.add(light)
-    scene.add(light.target)
+    // scene.add(light.target)
   }
 
   // 杆塔 / 光缆
@@ -99,6 +99,13 @@ const main = () => {
 
   // 渲染自定义点击事件
   renderEvents(camera, scene)
+
+  if (enviroment === 'development') {
+    const cameraPerspectiveHelper = new THREE.CameraHelper(camera)
+    scene.add(cameraPerspectiveHelper)
+    const lightDirectionalHelper = new THREE.DirectionalLightHelper(light, 5)
+    scene.add(lightDirectionalHelper)
+  }
 
   const render = (time) => {
     stats.update()
