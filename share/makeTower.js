@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2021-12-17 15:47:33
- * @LastEditTime: 2021-12-27 11:18:32
+ * @LastEditTime: 2021-12-27 16:08:13
  * @LastEditors: Li Jian
  * @Description: 铁塔模型
  */
@@ -22,6 +22,8 @@ function makeTower(
   loader.load(
     glbUrl,
     (gltf) => {
+      // gltf.scene.position.set(0, 20, 0)
+      // scene.add(gltf.scene)
       // scenes<Array> 默认是有一个值的,其值为scene
       const { scene: towerScene, scenes: towerScenes } = gltf
       let moreTowerScene
