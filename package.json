@@ -4,15 +4,21 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "prepare": "husky install"
   },
   "dependencies": {
     "three": "^0.136.0",
     "vue": "^3.2.25"
   },
   "devDependencies": {
+    "@commitlint/cli": "^16.0.1",
+    "@commitlint/config-conventional": "^16.0.0",
     "@types/three": "^0.136.0",
     "@vitejs/plugin-vue": "^2.0.0",
+    "git-format-staged": "^2.1.3",
+    "husky": "^7.0.0",
+    "pretty-quick": "^3.1.3",
     "typescript": "^4.4.4",
     "vite": "^2.7.2",
     "vue-tsc": "^0.29.8"
