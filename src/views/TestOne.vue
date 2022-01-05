@@ -1,13 +1,14 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-01-04 20:10:14
- * @LastEditTime: 2022-01-04 21:07:52
+ * @LastEditTime: 2022-01-05 10:47:51
  * @LastEditors: Li Jian
 -->
 <script setup lang="ts">
 import { onMounted } from '@vue/runtime-core'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+
 onMounted(() => {
   function main() {
     const canvas: HTMLCanvasElement | null = document.querySelector('#c')
@@ -21,12 +22,7 @@ onMounted(() => {
       (canvas as HTMLCanvasElement).width / (canvas as HTMLCanvasElement).height
     const near: number = 0.1
     const far: number = 100
-    const camera: THREE.PerspectiveCamera = new THREE.PerspectiveCamera(
-      fov,
-      aspect,
-      near,
-      far
-    )
+    const camera: THREE.PerspectiveCamera = new THREE.PerspectiveCamera(fov, aspect, near, far)
     // 摄像机默认指向Z轴负方向，上方向朝向Y轴正方向。我们将会把立方体放置在坐标原点，所以我们需要往后移一下摄像机才能显示出物体。
     camera.position.set(0, 0, 2)
 
@@ -47,10 +43,7 @@ onMounted(() => {
 
     scene.add(cube)
 
-    const controls: OrbitControls = new OrbitControls(
-      camera,
-      canvas as HTMLCanvasElement
-    )
+    const controls: OrbitControls = new OrbitControls(camera, canvas as HTMLCanvasElement)
     controls.target.set(0, 0, 0)
     controls.maxDistance = 200 // 视野距离
     // 垂直角度
@@ -76,12 +69,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <canvas
-    id="c"
-    width="600"
-    height="300"
-    style="width: 600px; height: 300px"
-  ></canvas>
+  <canvas id="c" width="600" height="300" style="width: 600px; height: 300px"></canvas>
 </template>
 
 <style>
