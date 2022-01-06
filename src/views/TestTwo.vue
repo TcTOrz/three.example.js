@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-01-05 14:31:04
- * @LastEditTime: 2022-01-05 16:51:31
+ * @LastEditTime: 2022-01-05 20:13:45
  * @LastEditors: Li Jian
 -->
 <script setup lang="ts">
@@ -20,13 +20,34 @@ onMounted(() => {
     }
 
     // https://developer.mozilla.org/zh-CN/docs/Web/API/WebGL_API/Tutorial/Adding_2D_content_to_a_WebGL_context
+    // https://www.jianshu.com/p/d26d512169dc
+    // https://blog.csdn.net/qq_37338983/article/details/78556107
+    // 逆时针旋转
     // Vertex shader program - 顶点着色器程序
+    // const vsSource = `
+    //   // 平移
+    //   attribute vec4 aVertexPosition;
+    //   vec4 translation = vec4(2.0, 0.0, 0.0, 0.0); // 平移
+    //   uniform mat4 uModelViewMatrix;
+    //   uniform mat4 uProjectionMatrix;
+    //   void main() {
+    //     gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition + translation;
+    //   }
+    // `
     const vsSource = `
+      // 绕z轴旋转30度, 逆时针
       attribute vec4 aVertexPosition;
+      float angle = radians(30.0);
+      float sinB = sin(angle);
+      float cosB = cos(angle);
       uniform mat4 uModelViewMatrix;
       uniform mat4 uProjectionMatrix;
       void main() {
         gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
+        gl_Position.x = aVertexPosition.x*cosB - aVertexPosition.y*sinB;
+        gl_Position.y = aVertexPosition.y*cosB + aVertexPosition.x*sinB;
+        gl_Position.z = aVertexPosition.z;
+        // gl_Position.w = 1.0;
       }
     `
 
