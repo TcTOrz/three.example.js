@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-01-06 15:50:59
- * @LastEditTime: 2022-01-06 16:53:43
+ * @LastEditTime: 2022-01-06 19:37:06
  * @LastEditors: Li Jian
 -->
 <script setup lang="ts">
@@ -41,6 +41,7 @@ onMounted(() => {
 
     const program = webglUtils.createProgramFromSources(gl, [vsSource, fsSource])
 
+    // 获取attribute变量的存储位置
     const positionAttributeLocation = gl.getAttribLocation(program, 'a_position')
     const colorAttributeLocation = gl.getAttribLocation(program, 'a_color')
 
@@ -128,13 +129,17 @@ onMounted(() => {
     // gl.clearColor(0, 0, 0, 1)
     gl.clear(gl.COLOR_BUFFER_BIT)
     gl.useProgram(program)
-    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer)
+
+    // 这个命令是告诉WebGL我们想从缓冲中提供数据。
     gl.enableVertexAttribArray(positionAttributeLocation)
+    // 这个命令是将缓冲绑定到 ARRAY_BUFFER 绑定点，它是WebGL内部的一个全局变量。
+    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer)
+    // 这个命令告诉WebGL从 ARRAY_BUFFER 绑定点当前绑定的缓冲获取数据。
     gl.vertexAttribPointer(positionAttributeLocation, 2, gl.FLOAT, false, 0, 0)
     setGeometry(gl)
 
-    gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer)
     gl.enableVertexAttribArray(colorAttributeLocation)
+    gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer)
     gl.vertexAttribPointer(colorAttributeLocation, 4, gl.FLOAT, false, 0, 0)
     setColors(gl)
 
