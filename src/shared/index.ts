@@ -1,11 +1,21 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-01-07 10:39:37
- * @LastEditTime: 2022-01-07 10:40:53
+ * @LastEditTime: 2022-01-07 15:32:48
  * @LastEditors: Li Jian
  */
-const main = () => {
-  console.log('hello')
-}
+import resizeRendererToDisplaySize from './resizeRendererToDisplaySize'
+import { makePerspectiveCamera } from './makeCamera'
+import { makeDirectionalLight, makeAmbientLight, makeHemisphereLight } from './makeLight'
+import { loadModel } from './loadModel'
+import { makeControl } from './makeControl'
 
-export default main
+export {
+  resizeRendererToDisplaySize,
+  makePerspectiveCamera,
+  makeDirectionalLight,
+  makeAmbientLight,
+  makeHemisphereLight,
+  loadModel,
+  makeControl,
+}
