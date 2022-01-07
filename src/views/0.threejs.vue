@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-01-04 20:10:14
- * @LastEditTime: 2022-01-05 10:47:51
+ * @LastEditTime: 2022-01-07 10:35:47
  * @LastEditors: Li Jian
 -->
 <script setup lang="ts">
@@ -11,7 +11,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
 onMounted(() => {
   function main() {
-    const canvas: HTMLCanvasElement | null = document.querySelector('#c')
+    const canvas: HTMLCanvasElement | null = document.querySelector('#c0')
     const renderer: THREE.WebGLRenderer = new THREE.WebGLRenderer({
       canvas: canvas as HTMLCanvasElement,
     })
@@ -69,7 +69,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <canvas id="c" width="600" height="300" style="width: 600px; height: 300px"></canvas>
+  <canvas id="c0" width="600" height="300" style="width: 600px; height: 300px"></canvas>
 </template>
 
 <style>

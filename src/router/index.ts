@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-01-05 10:03:52
- * @LastEditTime: 2022-01-06 15:51:14
+ * @LastEditTime: 2022-01-07 10:37:28
  * @LastEditors: Li Jian
  */
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
@@ -9,43 +9,52 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    name: 'TestOne',
-    component: () => import(/* webpackChunkName: "TestOne" */ '@views/TestOne.vue'),
+    redirect: '/0',
   },
   {
-    path: '/testTwo',
-    name: 'TestTwo',
-    component: () => import(/* webpackChunkName: "TestTwo" */ '@views/TestTwo.vue'),
+    path: '/0',
+    name: '0',
+    component: () => import(/* webpackChunkName: "0" */ '@views/0.threejs.vue'),
   },
   {
-    path: '/testThree',
-    name: 'TestThree',
-    component: () => import(/* webpackChunkName: "TestThree" */ '@views/TestThree.vue'),
+    path: '/1',
+    name: '1',
+    component: () => import(/* webpackChunkName: "1" */ '@views/1.webgl.vue'),
   },
   {
-    path: '/testFour',
-    name: 'TestFour',
-    component: () => import(/* webpackChunkName: "TestFour" */ '@views/TestFour.vue'),
+    path: '/2',
+    name: '2',
+    component: () => import(/* webpackChunkName: "2" */ '@views/2.webgl.vue'),
   },
   {
-    path: '/testFive',
-    name: 'TestFive',
-    component: () => import(/* webpackChunkName: "TestFive" */ '@views/TestFive.vue'),
+    path: '/3',
+    name: '3',
+    component: () => import(/* webpackChunkName: "3" */ '@views/3.webgl.vue'),
   },
   {
-    path: '/testSix',
-    name: 'TestSix',
-    component: () => import(/* webpackChunkName: "TestSix" */ '@views/TestSix.vue'),
+    path: '/4',
+    name: '4',
+    component: () => import(/* webpackChunkName: "4" */ '@views/4.webgl.vue'),
   },
   {
-    path: '/testSeven',
-    name: 'TestSeven',
-    component: () => import(/* webpackChunkName: "TestSeven" */ '@views/TestSeven.vue'),
+    path: '/5',
+    name: '5',
+    component: () => import(/* webpackChunkName: "5" */ '@views/5.webgl.vue'),
   },
   {
-    path: '/testPinia',
-    name: 'TestPinia',
-    component: () => import(/* webpackChunkName: "TestPinia" */ '@views/TestPinia.vue'),
+    path: '/6',
+    name: '6',
+    component: () => import(/* webpackChunkName: "6" */ '@views/6.webgl.vue'),
+  },
+  {
+    path: '/7',
+    name: '7',
+    component: () => import(/* webpackChunkName: "7" */ '@views/7.pinia.vue'),
+  },
+  {
+    path: '/8',
+    name: '8',
+    component: () => import(/* webpackChunkName: "8" */ '@views/8.threejs.vue'),
   },
 ]
 

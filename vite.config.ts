@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-01-05 08:50:19
- * @LastEditTime: 2022-01-06 10:50:14
+ * @LastEditTime: 2022-01-07 10:50:39
  * @LastEditors: Li Jian
  */
 import { defineConfig } from 'vite'
@@ -19,6 +19,7 @@ export default defineConfig({
       '@router': '/src/router',
       '@store': '/src/store',
       '@utils': '/src/utils',
+      '@shared': '/src/shared',
     },
   },
 })
