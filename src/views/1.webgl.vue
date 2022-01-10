@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-01-05 14:31:04
- * @LastEditTime: 2022-01-05 20:13:45
+ * @LastEditTime: 2022-01-10 21:20:24
  * @LastEditors: Li Jian
 -->
 <script setup lang="ts">
@@ -11,8 +11,8 @@ onMounted(() => {
   main()
 
   function main() {
-    const canvas: HTMLCanvasElement | null = document.querySelector('#c1')
-    const gl = canvas?.getContext('webgl')
+    const canvas: canvasType = document.querySelector('#c1')
+    const gl: glType = canvas?.getContext('webgl')
 
     if (!gl) {
       alert('Unable to initialize WebGL. Your browser or machine may not support it.')
@@ -61,7 +61,10 @@ onMounted(() => {
     // Initialize a shader program; this is where all the lighting
     // for the vertices and so forth is established.
     // 初始化着色器
-    const shaderProgram = initShaderProgram(gl, vsSource, fsSource)
+    const shaderProgram: WebGLProgram | null = initShaderProgram(gl, vsSource, fsSource)
+    if (!shaderProgram) {
+      return
+    }
 
     // Collect all the info needed to use the shader program.
     // Look up which attribute our shader program is using
@@ -91,7 +94,10 @@ onMounted(() => {
   // Initialize the buffers we'll need. For this demo, we just
   // have one object -- a simple two-dimensional square.
   //
-  function initBuffers(gl) {
+  function initBuffers(gl: glType) {
+    if (!gl) {
+      return
+    }
     // Create a buffer for the square's positions.
 
     const positionBuffer = gl.createBuffer()
@@ -119,7 +125,8 @@ onMounted(() => {
   //
   // Draw the scene.
   //
-  function drawScene(gl, programInfo, buffers) {
+  function drawScene(gl: glType, programInfo, buffers) {
+    if (!gl) return
     gl.clearColor(0.0, 0.0, 0.0, 1.0) // Clear to black, fully opaque
     gl.clearDepth(1.0) // Clear everything
     gl.enable(gl.DEPTH_TEST) // Enable depth testing

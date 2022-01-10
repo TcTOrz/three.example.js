@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-01-06 15:50:59
- * @LastEditTime: 2022-01-06 19:37:06
+ * @LastEditTime: 2022-01-10 19:40:05
  * @LastEditors: Li Jian
 -->
 <script setup lang="ts">
@@ -9,8 +9,8 @@ import { onMounted } from 'vue-demi'
 
 onMounted(() => {
   function main() {
-    const canvas: HTMLCanvasElement | null = document.querySelector('#c6')
-    const gl = canvas?.getContext('webgl')
+    const canvas: canvasType = document.querySelector('#c6')
+    const gl: glType = canvas?.getContext('webgl')
     if (!gl) {
       alert('WebGL not supported')
       return
@@ -48,8 +48,8 @@ onMounted(() => {
     const positionBuffer = gl.createBuffer()
     // gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer)
     // setGeometry(gl)
-    function setGeometry(gl) {
-      gl.bufferData(
+    function setGeometry(gl: glType) {
+      gl?.bufferData(
         gl.ARRAY_BUFFER,
         new Float32Array([0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0]),
         gl.STATIC_DRAW
@@ -59,14 +59,14 @@ onMounted(() => {
     const colorBuffer = gl.createBuffer()
     // gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer)
     // setColors(gl)
-    function setColors(gl) {
+    function setColors(gl: glType) {
       const r1 = Math.random()
       const g1 = Math.random()
       const b1 = Math.random()
       const r2 = Math.random()
       const g2 = Math.random()
       const b2 = Math.random()
-      gl.bufferData(
+      gl?.bufferData(
         gl.ARRAY_BUFFER,
         new Float32Array([
           Math.random(),
