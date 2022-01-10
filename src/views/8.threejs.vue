@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-01-07 10:35:02
- * @LastEditTime: 2022-01-10 16:25:56
+ * @LastEditTime: 2022-01-10 16:58:17
  * @LastEditors: Li Jian
 -->
 <script setup lang="ts">
@@ -33,13 +33,13 @@ function main(): void {
 
   makeControl(camera, renderer)
 
-  // {
-  //   const skyColor = 0xb1e1ff // light blue
-  //   const groundColor = 0xb97a20 // brownish orange
-  //   const intensity = 1
-  //   const light = new THREE.HemisphereLight(skyColor, groundColor, intensity)
-  //   scene.add(light)
-  // }
+  {
+    const skyColor = 0xb1e1ff // light blue
+    const groundColor = 0xb97a20 // brownish orange
+    const intensity = 1
+    const light = new THREE.HemisphereLight(skyColor, groundColor, intensity)
+    scene.add(light)
+  }
 
   // {
   //   const color = 0xffffff

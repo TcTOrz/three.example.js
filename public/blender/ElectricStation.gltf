@@ -14,11 +14,11 @@
             "lights" : [
                 {
                     "color" : [
-                        1,
-                        1,
-                        1
+                        0.3658578097820282,
+                        0.3435068130493164,
+                        0.3672424554824829
                     ],
-                    "intensity" : 5,
+                    "intensity" : 1.9900000095367432,
                     "type" : "directional",
                     "name" : "Sun"
                 }
@@ -137,9 +137,9 @@
                 0.9796164035797119
             ],
             "translation" : [
-                0,
-                10.231866836547852,
-                -6.874156951904297
+                -0.43549492955207825,
+                9.298860549926758,
+                -7.2292375564575195
             ]
         },
         {
@@ -814,8 +814,22 @@
             }
         },
         {
+            "emissiveFactor" : [
+                0,
+                0,
+                0
+            ],
             "name" : "Metal.003",
-            "pbrMetallicRoughness" : {}
+            "pbrMetallicRoughness" : {
+                "baseColorFactor" : [
+                    0.800000011920929,
+                    0.800000011920929,
+                    0.800000011920929,
+                    1
+                ],
+                "metallicFactor" : 0,
+                "roughnessFactor" : 0
+            }
         },
         {
             "doubleSided" : true,
