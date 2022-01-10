@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-01-07 10:35:02
- * @LastEditTime: 2022-01-07 16:32:13
+ * @LastEditTime: 2022-01-10 16:25:56
  * @LastEditors: Li Jian
 -->
 <script setup lang="ts">
@@ -27,28 +27,36 @@ function main(): void {
     75,
     canvas.clientWidth / canvas.clientHeight,
     0.1,
-    1000,
+    10000,
     [0, 10, 20]
   )
 
   makeControl(camera, renderer)
 
-  {
-    const skyColor = 0xb1e1ff // light blue
-    const groundColor = 0xb97a20 // brownish orange
-    const intensity = 1
-    const light = new THREE.HemisphereLight(skyColor, groundColor, intensity)
-    scene.add(light)
-  }
+  // {
+  //   const skyColor = 0xb1e1ff // light blue
+  //   const groundColor = 0xb97a20 // brownish orange
+  //   const intensity = 1
+  //   const light = new THREE.HemisphereLight(skyColor, groundColor, intensity)
+  //   scene.add(light)
+  // }
 
-  {
-    const color = 0xffffff
-    const intensity = 1
-    const light = new THREE.DirectionalLight(color, intensity)
-    light.position.set(5, 10, 2)
-    scene.add(light)
-    scene.add(light.target)
-  }
+  // {
+  //   const color = 0xffffff
+  //   const intensity = 1
+  //   const light = new THREE.DirectionalLight(color, intensity)
+  //   light.position.set(5, 10, 5)
+  //   scene.add(light)
+  //   scene.add(light.target)
+  // }
+  // {
+  //   const color = 0xffffff
+  //   const intensity = 1
+  //   const light = new THREE.DirectionalLight(color, intensity)
+  //   light.position.set(-5, -10, -5)
+  //   scene.add(light)
+  //   scene.add(light.target)
+  // }
 
   // const geometry: THREE.BoxGeometry = new THREE.BoxGeometry(1, 1, 1)
   // const material: THREE.MeshPhongMaterial = new THREE.MeshPhongMaterial({ color: 0x00ff00 })
