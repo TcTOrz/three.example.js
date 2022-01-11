@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-01-04 20:31:21
- * @LastEditTime: 2022-01-11 15:54:28
+ * @LastEditTime: 2022-01-11 21:48:42
  * @LastEditors: Li Jian
  */
 /// <reference types="vite/client" />
@@ -17,6 +17,7 @@ declare module 'three.meshline'
 
 // 全局变量
 declare var webglUtils: any
+declare var webglLessonsUI: any
 
 declare type canvasType = HTMLCanvasElement | null
 declare type glType = WebGLRenderingContext | undefined | null

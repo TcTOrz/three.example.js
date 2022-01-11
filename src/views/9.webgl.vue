@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-01-10 19:32:32
- * @LastEditTime: 2022-01-10 21:31:52
+ * @LastEditTime: 2022-01-11 19:33:43
  * @LastEditors: Li Jian
 -->
 <script setup lang="ts">
@@ -10,7 +10,7 @@ import { onMounted } from 'vue-demi'
 onMounted(() => {
   function main() {
     const image = new Image()
-    image.src = './logo.png'
+    image.src = './1.jpg'
     image.onload = function () {
       render(image)
     }
@@ -41,17 +41,28 @@ onMounted(() => {
 
       // 纹理
       uniform sampler2D u_image;
+      uniform vec2 u_textureSize;
       // 纹理坐标
       varying vec2 v_texCoord;
       void main() {
+        // 计算1像素对应的纹理坐标
+        vec2 onePixel = vec2(1.0, 1.0) / u_textureSize;
+        // 对左中右三个像素进行模糊，求平均值
+        gl_FragColor = (
+          texture2D(u_image, v_texCoord) +
+          texture2D(u_image, v_texCoord + vec2(onePixel.x, 0.0)) +
+          texture2D(u_image, v_texCoord + vec2(-onePixel.x, 0.0))
+        ) / 3.0;
+
         // gl_FragColor = vec4(1, 0, 0, 1);
-        gl_FragColor = texture2D(u_image, v_texCoord).grba; // 红色和绿色颜色互换
+        // gl_FragColor = texture2D(u_image, v_texCoord).rgba; // 红色和绿色颜色互换
       }
     `
     const program = webglUtils.createProgramFromSources(gl, [vsSource, fsSource])
 
     const positionAttributeLocation = gl.getAttribLocation(program, 'a_position')
     const texCoordLocation = gl.getAttribLocation(program, 'a_texCoord')
+    const textureSizeLocation = gl.getUniformLocation(program, 'u_textureSize')
 
     const texCoordBuffer = gl.createBuffer()
     gl.bindBuffer(gl.ARRAY_BUFFER, texCoordBuffer)
@@ -86,6 +97,8 @@ onMounted(() => {
 
     gl.enableVertexAttribArray(positionAttributeLocation)
     gl.vertexAttribPointer(positionAttributeLocation, 2, gl.FLOAT, false, 0, 0)
+
+    gl.uniform2f(textureSizeLocation, image.width, image.height)
 
     gl.clearColor(0, 0, 0, 0)
     gl.clear(gl.COLOR_BUFFER_BIT)
