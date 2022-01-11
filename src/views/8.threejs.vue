@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-01-07 10:35:02
- * @LastEditTime: 2022-01-10 16:58:17
+ * @LastEditTime: 2022-01-11 15:35:34
  * @LastEditors: Li Jian
 -->
 <script setup lang="ts">
@@ -15,6 +15,7 @@ import {
   makeHemisphereLight,
   loadModel,
   makeControl,
+  makeFiber,
 } from '@shared'
 
 function main(): void {
@@ -62,7 +63,7 @@ function main(): void {
   // const material: THREE.MeshPhongMaterial = new THREE.MeshPhongMaterial({ color: 0x00ff00 })
   // const mesh: THREE.Mesh = new THREE.Mesh(geometry, material)
   // scene.add(mesh)
-  loadModel(scene)
+  loadModel(scene, './blender/ElectricStation', makeFiber(0))
 
   const render = () => {
     requestAnimationFrame(render)

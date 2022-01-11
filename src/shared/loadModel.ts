@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-01-07 16:17:58
- * @LastEditTime: 2022-01-10 16:02:41
+ * @LastEditTime: 2022-01-11 10:51:25
  * @LastEditors: Li Jian
  */
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
@@ -9,9 +9,15 @@ import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader'
 import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader'
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader'
 
-export const loadModel = (scene: THREE.Scene) => {
+// 默认为GLTFLoader
+export const loadModel = (
+  scene: THREE.Scene,
+  url: String,
+  fn: ((scene: THREE.Scene, group: THREE.Group) => void) | undefined
+) => {
+  const gltfUrl = `${url}.gltf`
   const loader = new GLTFLoader()
-  loader.load('./blender/ElectricStation.gltf', gltf => {
+  loader.load(gltfUrl, gltf => {
     //   gltf.scene.traverse( function ( child ) {
     //     if ( child.isMesh ) {
     //           child.material.emissive =  child.material.color;
@@ -19,28 +25,32 @@ export const loadModel = (scene: THREE.Scene) => {
     //     }
     //   } );
     scene.add(gltf.scene)
-    console.log(gltf)
+    // console.log(gltf.scene)
+    fn?.(scene, gltf.scene)
   })
+}
 
-  // const fbxLoader = new FBXLoader()
-  // fbxLoader.load('./blender/ElectricStation.fbx', fbx => {
-  // //   fbx.traverse( function ( child ) {
-  // //     if ( child.isMesh ) {
-  // //           child.material.emissive =  child.material.color;
-  // // child.material.emissiveMap = child.material.map ;
-  // //     }
-  // //   } );
-  //   scene.add(fbx)
-  //   console.log(fbx);
-  // })
+// FBXLoader
+export const loadModelFromFbx = (scene: THREE.Scene, url: String) => {
+  const fbxUrl = `${url}.fbx`
+  const fbxLoader = new FBXLoader()
+  fbxLoader.load(fbxUrl, fbx => {
+    scene.add(fbx)
+    console.log(fbx)
+  })
+}
 
-  // const objLoader = new OBJLoader()
-  // const mtlLoader = new MTLLoader()
-  // mtlLoader.load('./blender/ElectricStation.mtl', materials => {
-  //   materials.preload()
-  //   objLoader.setMaterials(materials)
-  //   objLoader.load('./blender/ElectricStation.obj', object => {
-  //     scene.add(object)
-  //   })
-  // })
+// OBJLoader
+export const loadModelFromObj = (scene: THREE.Scene, url: String) => {
+  const mtlUrl = `${url}.mtl`
+  const objUrl = `${url}.obj`
+  const objLoader = new OBJLoader()
+  const mtlLoader = new MTLLoader()
+  mtlLoader.load(mtlUrl, materials => {
+    materials.preload()
+    objLoader.setMaterials(materials)
+    objLoader.load(objUrl, object => {
+      scene.add(object)
+    })
+  })
 }

@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-01-04 20:31:21
- * @LastEditTime: 2022-01-10 19:41:29
+ * @LastEditTime: 2022-01-11 15:54:28
  * @LastEditors: Li Jian
  */
 /// <reference types="vite/client" />
@@ -12,6 +12,8 @@ declare module '*.vue' {
   const component: DefineComponent<{}, {}, any>
   export default component
 }
+
+declare module 'three.meshline'
 
 // 全局变量
 declare var webglUtils: any
