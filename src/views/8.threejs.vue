@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-01-07 10:35:02
- * @LastEditTime: 2022-01-11 15:35:34
+ * @LastEditTime: 2022-01-12 11:28:52
  * @LastEditors: Li Jian
 -->
 <script setup lang="ts">
@@ -32,7 +32,7 @@ function main(): void {
     [0, 10, 20]
   )
 
-  makeControl(camera, renderer)
+  const controls = makeControl(camera, renderer)
 
   {
     const skyColor = 0xb1e1ff // light blue
@@ -68,6 +68,8 @@ function main(): void {
   const render = () => {
     requestAnimationFrame(render)
 
+    controls.update()
+
     if (resizeRendererToDisplaySize(renderer)) {
       const canvas = renderer.domElement
       camera.aspect = canvas.clientWidth / canvas.clientHeight
@@ -87,5 +89,27 @@ onMounted(() => {
 </script>
 
 <template lang="pug">
-canvas#c8(style="width: 100%; height: 100%;")
+#container
+  canvas#c8
+  #labels
 </template>
+
+<style>
+#container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+#c8 {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+#labels {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: white;
+}
+</style>
