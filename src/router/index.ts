@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-01-05 10:03:52
- * @LastEditTime: 2022-01-11 19:43:03
+ * @LastEditTime: 2022-01-12 19:43:06
  * @LastEditors: Li Jian
  */
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
@@ -65,6 +65,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/10',
     name: '10',
     component: () => import(/* webpackChunkName: "10" */ '@views/10.webgl.vue'),
+  },
+  {
+    path: '/11',
+    name: '11',
+    component: () => import(/* webpackChunkName: "11" */ '@views/11.webgl.vue'),
   },
 ]
 
