@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-01-11 09:33:14
- * @LastEditTime: 2022-01-12 11:46:42
+ * @LastEditTime: 2022-01-12 14:06:06
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -23,7 +23,7 @@ interface CatmullRomCurve3Type extends THREE.CatmullRomCurve3 {
 export const makeFiber = (type: Number) => {
   if (type === 0) {
     return function (scene: THREE.Scene, group: THREE.Group) {
-      console.log('fiber', 0, group)
+      // console.log('fiber', 0, group)
       const children: Array<THREE.Object3D<THREE.Event>> = group.children
       const obj: THREE.Object3D<THREE.Event> | undefined = children.find(
         (item: any) => item.name === 'NurbsPath008'
@@ -32,7 +32,7 @@ export const makeFiber = (type: Number) => {
       // console.log(obj?.getWorldPosition(new THREE.Vector3()),
       //   vec3Pos,
       //   obj?.applyMatrix4(new THREE.Matrix4()));
-      console.log(obj?.getWorldPosition(new THREE.Vector3()))
+      // console.log(obj?.getWorldPosition(new THREE.Vector3()))
       // console.log(obj?.matrix, new THREE.Vector3().transformDirection(obj?.matrix));
 
       // console.log(vec3Pos)

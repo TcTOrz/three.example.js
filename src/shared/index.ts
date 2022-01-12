@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-01-07 10:39:37
- * @LastEditTime: 2022-01-11 10:04:47
+ * @LastEditTime: 2022-01-12 14:30:19
  * @LastEditors: Li Jian
  */
 import resizeRendererToDisplaySize from './resizeRendererToDisplaySize'
@@ -10,6 +10,7 @@ import { makeDirectionalLight, makeAmbientLight, makeHemisphereLight } from './m
 import { loadModel } from './loadModel'
 import { makeControl } from './makeControl'
 import { makeFiber } from './makeFiber'
+import { makeText } from './makeText'
 
 export {
   resizeRendererToDisplaySize,
@@ -20,4 +21,5 @@ export {
   loadModel,
   makeControl,
   makeFiber,
+  makeText,
 }

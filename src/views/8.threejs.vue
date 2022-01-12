@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-01-07 10:35:02
- * @LastEditTime: 2022-01-12 11:28:52
+ * @LastEditTime: 2022-01-12 16:24:41
  * @LastEditors: Li Jian
 -->
 <script setup lang="ts">
@@ -16,6 +16,7 @@ import {
   loadModel,
   makeControl,
   makeFiber,
+  makeText,
 } from '@shared'
 
 function main(): void {
@@ -25,10 +26,10 @@ function main(): void {
   const scene: THREE.Scene = new THREE.Scene()
   scene.background = new THREE.Color('white')
   const camera: THREE.PerspectiveCamera = makePerspectiveCamera(
-    75,
+    40,
     canvas.clientWidth / canvas.clientHeight,
     0.1,
-    10000,
+    1000,
     [0, 10, 20]
   )
 
@@ -59,14 +60,19 @@ function main(): void {
   //   scene.add(light.target)
   // }
 
-  // const geometry: THREE.BoxGeometry = new THREE.BoxGeometry(1, 1, 1)
-  // const material: THREE.MeshPhongMaterial = new THREE.MeshPhongMaterial({ color: 0x00ff00 })
-  // const mesh: THREE.Mesh = new THREE.Mesh(geometry, material)
-  // scene.add(mesh)
-  loadModel(scene, './blender/ElectricStation', makeFiber(0))
+  loadModel(scene, './blender/ElectricStation') // , makeFiber(0) // , makeText(canvas, camera)
+
+  const labelContainerElem: Element | null = document.querySelector('#labels')
+  const elem: HTMLDivElement = document.createElement('div')
+  elem.style.fontSize = '12px'
+  elem.style.width = '30px'
+  elem.textContent = '进入'
+  labelContainerElem?.appendChild(elem)
 
   const render = () => {
     requestAnimationFrame(render)
+
+    makeText(canvas, camera, scene, elem)
 
     controls.update()
 
@@ -108,8 +114,22 @@ onMounted(() => {
 }
 #labels {
   position: absolute;
+  z-index: 0;
   top: 0;
   left: 0;
   color: white;
+}
+#labels > div {
+  position: absolute; /* let us position them inside the container */
+  left: 0; /* make their default position the top left of the container */
+  top: 0;
+  cursor: pointer; /* change the cursor to a hand when over us */
+  font-size: large;
+  user-select: none; /* don't let the text get selected */
+  text-shadow:         /* create a black outline */ -1px -1px 0 #000, 0 -1px 0 #000, 1px -1px 0 #000,
+    1px 0 0 #000, 1px 1px 0 #000, 0 1px 0 #000, -1px 1px 0 #000, -1px 0 0 #000;
+}
+#labels > div:hover {
+  color: red;
 }
 </style>
