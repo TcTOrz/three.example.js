@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-01-12 19:41:49
- * @LastEditTime: 2022-01-12 21:19:37
+ * @LastEditTime: 2022-01-13 19:19:36
  * @LastEditors: Li Jian
 -->
 <script setup lang="ts">
@@ -94,7 +94,9 @@ onMounted(() => {
       gl.enableVertexAttribArray(positionLocation)
       gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer)
       gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0)
-      gl.uniform2f(resolutionLocation, gl.canvas.width, gl.canvas.height)
+      // diff between gl.uniform2f and gl.uniform2fv
+      // gl.uniform2f(resolutionLocation, gl.canvas.width, gl.canvas.height)
+      gl.uniform2fv(resolutionLocation, [gl.canvas.width, gl.canvas.height])
       gl.uniform4fv(colorLocation, color)
       gl.uniform2fv(translationLocation, translation)
       gl.uniform2fv(rotationLocation, rotation)
