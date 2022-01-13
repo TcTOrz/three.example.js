@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-01-07 10:35:02
- * @LastEditTime: 2022-01-12 16:24:41
+ * @LastEditTime: 2022-01-13 16:40:45
  * @LastEditors: Li Jian
 -->
 <script setup lang="ts">
@@ -17,7 +17,10 @@ import {
   makeControl,
   makeFiber,
   makeText,
+  makeDom,
+  makeEvent,
 } from '@shared'
+// import { FlyControls } from 'three/examples/jsm/controls/FlyControls'
 
 function main(): void {
   const canvas: HTMLCanvasElement | null = document.querySelector('#c8')
@@ -34,6 +37,13 @@ function main(): void {
   )
 
   const controls = makeControl(camera, renderer)
+
+  // const flyControls = new FlyControls(camera, renderer.domElement)
+  // flyControls.movementSpeed = 1000
+  // flyControls.domElement = renderer.domElement
+  // flyControls.rollSpeed = Math.PI / 24
+  // flyControls.autoForward = false
+  // flyControls.dragToLook = false
 
   {
     const skyColor = 0xb1e1ff // light blue
@@ -62,19 +72,44 @@ function main(): void {
 
   loadModel(scene, './blender/ElectricStation') // , makeFiber(0) // , makeText(canvas, camera)
 
-  const labelContainerElem: Element | null = document.querySelector('#labels')
-  const elem: HTMLDivElement = document.createElement('div')
-  elem.style.fontSize = '12px'
-  elem.style.width = '30px'
-  elem.textContent = '进入'
-  labelContainerElem?.appendChild(elem)
+  const elemEnter: HTMLDivElement = makeDom({ textContent: '进入', flag: 'enter' })
+  const elemLeave: HTMLDivElement = makeDom({ textContent: '离开', flag: 'leave' })
+
+  const eventFn = (e: MouseEvent) => {
+    if ((e.target as HTMLInputElement).dataset.flag === 'enter') {
+      const group = scene.getObjectByName('ElectricHut') as THREE.Group
+      /**
+       * 摄像机位置与控制器位置不能一样，否则控制器无法控制
+       * 这里纠结了半天，摄像机的视角是控制器的范围，控制器的拖动范围是摄像机的视角
+       */
+      camera.position.set(
+        group.position.x + 0.1, // 摄像机x位置加0.1的目的是与controls的位置区分开
+        group.position.y + 1, // 摄像机与controls的y位置加1使其居中
+        group.position.z
+      )
+      controls.target.set(group.position.x, group.position.y + 1, group.position.z)
+    } else if ((e.target as HTMLInputElement).dataset.flag === 'leave') {
+      camera.position.set(0, 10, 20)
+      controls.target.set(0, 0, 0)
+    }
+  }
+
+  // use removeEvent() to remove event
+  const removeEvent = makeEvent(elemEnter, 'click', eventFn)
+  const removeEvent2 = makeEvent(elemLeave, 'click', eventFn)
+
+  // const helper = new THREE.CameraHelper(camera)
+  // scene.add(helper)
 
   const render = () => {
     requestAnimationFrame(render)
 
-    makeText(canvas, camera, scene, elem)
+    makeText(canvas, camera, scene, elemEnter)
+    makeText(canvas, camera, scene, elemLeave)
 
     controls.update()
+
+    // flyControls.update(0.1)
 
     if (resizeRendererToDisplaySize(renderer)) {
       const canvas = renderer.domElement
@@ -82,8 +117,6 @@ function main(): void {
       camera.updateProjectionMatrix()
     }
 
-    // mesh.rotation.x += 0.01
-    // mesh.rotation.y += 0.01
     renderer.render(scene, camera)
   }
   requestAnimationFrame(render)
