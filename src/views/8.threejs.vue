@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-01-07 10:35:02
- * @LastEditTime: 2022-01-14 11:43:35
+ * @LastEditTime: 2022-01-14 16:26:13
  * @LastEditors: Li Jian
 -->
 <script setup lang="ts">
@@ -10,12 +10,12 @@ import * as THREE from 'three'
 import {
   resizeRendererToDisplaySize,
   makePerspectiveCamera,
-  makeDirectionalLight,
-  makeAmbientLight,
-  makeHemisphereLight,
+  // makeDirectionalLight,
+  // makeAmbientLight,
+  // makeHemisphereLight,
   loadModel,
   makeControl,
-  makeFiber,
+  // makeFiber,
   makeText,
   makeDom,
   makeEvent,
@@ -23,7 +23,7 @@ import {
 // import { FlyControls } from 'three/examples/jsm/controls/FlyControls'
 import Stats from 'three/examples/jsm/libs/stats.module'
 
-function main(): void {
+async function main() {
   const canvas: HTMLCanvasElement | null = document.querySelector('#c8')
   if (!canvas) return
   const renderer: THREE.Renderer = new THREE.WebGLRenderer({ canvas })
@@ -34,10 +34,8 @@ function main(): void {
     canvas.clientWidth / canvas.clientHeight,
     0.1,
     1000,
-    [0, 10, 20]
+    [-10, 5, 5]
   )
-
-  const controls = makeControl(camera, renderer)
 
   // const flyControls = new FlyControls(camera, renderer.domElement)
   // flyControls.movementSpeed = 1000
@@ -71,7 +69,15 @@ function main(): void {
   //   scene.add(light.target)
   // }
 
-  loadModel(scene, './blender/场景/ElectricStation') // , makeFiber(0) // , makeText(canvas, camera)
+  // const helper = new THREE.CameraHelper(camera)
+  // scene.add(helper)
+  const stats = new (Stats as any)()
+  document.body.appendChild(stats.dom)
+
+  await loadModel(scene, './blender/场景/ElectricStation') // , makeFiber(0) // , makeText(canvas, camera)
+  await loadModel(scene, './blender/柜子/scene')
+
+  const controls = makeControl(camera, renderer)
 
   const elemEnter: HTMLDivElement = makeDom({ textContent: '进入', flag: 'enter' })
   const elemLeave: HTMLDivElement = makeDom({ textContent: '离开', flag: 'leave' })
@@ -98,11 +104,6 @@ function main(): void {
   // use removeEvent() to remove event
   const removeEvent = makeEvent(elemEnter, 'click', eventFn)
   const removeEvent2 = makeEvent(elemLeave, 'click', eventFn)
-
-  // const helper = new THREE.CameraHelper(camera)
-  // scene.add(helper)
-  const stats = new (Stats as any)()
-  document.body.appendChild(stats.dom)
 
   const render = () => {
     requestAnimationFrame(render)
@@ -136,6 +137,12 @@ onMounted(() => {
 #container
   canvas#c8
   #labels
+#loading
+  .progress
+    .url
+    .img
+      .progressbar
+      .progress-number
 </template>
 
 <style>
@@ -169,5 +176,46 @@ onMounted(() => {
 }
 #labels > div:hover {
   color: red;
+}
+#loading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* display: flex; */
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+#loading .progress {
+  /* display: flex; */
+  margin: 1.5em;
+  border: 1px solid green;
+  width: 50vw;
+  /* align-items: center; */
+}
+#loading .progress .url {
+  font-size: 12px;
+  color: green;
+}
+#loading .progress .img {
+  display: flex;
+  width: inherit;
+  align-items: center;
+}
+#loading .progressbar {
+  width: inherit;
+  margin: 2px;
+  background: green;
+  height: 1em;
+  transform-origin: top left;
+  transform: scaleX(0);
+}
+#loading .progress-number {
+  /* margin: 0.5em; */
+  font-size: 1.5em;
+  font-weight: bold;
+  color: green;
 }
 </style>

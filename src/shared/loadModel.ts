@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-01-07 16:17:58
- * @LastEditTime: 2022-01-14 10:19:52
+ * @LastEditTime: 2022-01-14 15:48:24
  * @LastEditors: Li Jian
  */
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
@@ -9,18 +9,26 @@ import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader'
 import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader'
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader'
 
+import { makeLoading, onProgress } from './makeLoading'
+
+//   gltf.scene.traverse( function ( child ) {
+//     if ( child.isMesh ) {
+//           child.material.emissive =  child.material.color;
+// child.material.emissiveMap = child.material.map ;
+//     }
+//   } );
 // 默认为GLTFLoader
 export const loadModel = (scene: THREE.Scene, url: String) => {
   const gltfUrl = `${url}.gltf`
-  const loader = new GLTFLoader()
-  loader.load(gltfUrl, gltf => {
-    //   gltf.scene.traverse( function ( child ) {
-    //     if ( child.isMesh ) {
-    //           child.material.emissive =  child.material.color;
-    // child.material.emissiveMap = child.material.map ;
-    //     }
-    //   } );
-    scene.add(gltf.scene)
+  const loader = new GLTFLoader(makeLoading())
+  return new Promise((resolve, reject) => {
+    loader.load(
+      gltfUrl,
+      gltf => {
+        scene.add(gltf.scene)
+      },
+      onProgress(resolve)
+    )
   })
 }
 

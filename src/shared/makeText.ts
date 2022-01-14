@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-01-12 14:29:42
- * @LastEditTime: 2022-01-13 16:42:07
+ * @LastEditTime: 2022-01-14 14:12:02
  * @LastEditors: Li Jian
  * @Description: 渲染点击文字
  */
@@ -22,6 +22,8 @@ export const makeText = (
   } else if (elem.dataset.flag === 'leave') {
     mesh = scene.getObjectByName('房间里面点') as THREE.Group
   }
+  if (!mesh) return
+  mesh.visible = false
   const tempV = new THREE.Vector3()
   mesh?.updateWorldMatrix(true, false)
   mesh?.getWorldPosition(tempV)
