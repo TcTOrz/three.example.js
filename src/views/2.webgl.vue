@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-01-06 08:53:39
- * @LastEditTime: 2022-01-06 10:36:51
+ * @LastEditTime: 2022-01-14 12:00:04
  * @LastEditors: Li Jian
 -->
 <script setup lang="ts">
@@ -38,15 +38,19 @@ onMounted(() => {
     `
 
     // 创建着色器方法，输入参数为 渲染器上下文，着色器类型，数据源
-    function createShader(gl, type, source) {
-      const shader = gl.createShader(type) // 创建着色器
-      gl.shaderSource(shader, source) // 将着色器源码附加到着色器对象上
-      gl.compileShader(shader) // 编译着色器
-      const success = gl.getShaderParameter(shader, gl.COMPILE_STATUS) // 获取编译状态
+    function createShader(gl: glType, type: number, source: string) {
+      const shader: WebGLShader | null | undefined = gl?.createShader(type) // 创建着色器
+      if (!shader) {
+        console.error('unable to create shader')
+        return
+      }
+      gl?.shaderSource(shader, source) // 将着色器源码附加到着色器对象上
+      gl?.compileShader(shader) // 编译着色器
+      const success = gl?.getShaderParameter(shader, gl.COMPILE_STATUS) // 获取编译状态
       if (!success) {
         // 获取编译错误信息
-        console.log(gl.getShaderInfoLog(shader))
-        gl.deleteShader(shader)
+        console.log(gl?.getShaderInfoLog(shader))
+        gl?.deleteShader(shader)
         return null
       }
       return shader
@@ -56,8 +60,16 @@ onMounted(() => {
     const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fsSource)
 
     // 将两个着色器链接到一个着色器程序
-    function createProgram(gl, vertexShader, fragmentShader) {
+    function createProgram(
+      gl: WebGLRenderingContext,
+      vertexShader: WebGLShader | null | undefined,
+      fragmentShader: WebGLShader | null | undefined
+    ) {
       const program = gl.createProgram() // 创建着色器程序
+      if (!program || !vertexShader || !fragmentShader) {
+        console.error('unable to create program')
+        return
+      }
       gl.attachShader(program, vertexShader) // 将顶点着色器附加到着色器程序上
       gl.attachShader(program, fragmentShader) // 将片段着色器附加到着色器程序上
       gl.linkProgram(program) // 链接着色器程序
@@ -72,6 +84,7 @@ onMounted(() => {
 
     const program = createProgram(gl, vertexShader, fragmentShader)
 
+    if (!program) return
     // 找到唯一输入变量 a_position
     const positionAttributeLocation = gl.getAttribLocation(program, 'a_position')
 

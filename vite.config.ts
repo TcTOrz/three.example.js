@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-01-05 08:50:19
- * @LastEditTime: 2022-01-07 10:50:39
+ * @LastEditTime: 2022-01-14 13:43:13
  * @LastEditors: Li Jian
  */
 import { defineConfig } from 'vite'
@@ -21,5 +21,10 @@ export default defineConfig({
       '@utils': '/src/utils',
       '@shared': '/src/shared',
     },
+  },
+  base: '/dist/',
+  // assetsInclude: ["**/*.gltf", "**/*.bin", "**/*.fbx", "**/*.obj", "**/*.mtl"],
+  build: {
+    emptyOutDir: true,
   },
 })

@@ -1,10 +1,11 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-01-05 14:31:04
- * @LastEditTime: 2022-01-10 21:20:24
+ * @LastEditTime: 2022-01-14 12:06:19
  * @LastEditors: Li Jian
 -->
 <script setup lang="ts">
+// @ts-nocheck
 import { onMounted } from 'vue-demi'
 
 onMounted(() => {

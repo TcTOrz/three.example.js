@@ -1,10 +1,10 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-01-05 10:03:52
- * @LastEditTime: 2022-01-13 19:20:24
+ * @LastEditTime: 2022-01-14 13:41:45
  * @LastEditors: Li Jian
  */
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import { createRouter, createWebHistory, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -79,7 +79,7 @@ const routes: Array<RouteRecordRaw> = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(),
   routes,
 })
 
