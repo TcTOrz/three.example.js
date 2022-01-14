@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-01-07 16:17:58
- * @LastEditTime: 2022-01-12 15:17:24
+ * @LastEditTime: 2022-01-14 10:19:52
  * @LastEditors: Li Jian
  */
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
@@ -10,12 +10,7 @@ import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader'
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader'
 
 // 默认为GLTFLoader
-export const loadModel = (
-  scene: THREE.Scene,
-  url: String
-  // makeFiber: ((scene: THREE.Scene, group: THREE.Group) => void) | undefined,
-  // makeText: ((scene: THREE.Scene, group: THREE.Group) => void) | undefined,
-) => {
+export const loadModel = (scene: THREE.Scene, url: String) => {
   const gltfUrl = `${url}.gltf`
   const loader = new GLTFLoader()
   loader.load(gltfUrl, gltf => {
@@ -26,10 +21,6 @@ export const loadModel = (
     //     }
     //   } );
     scene.add(gltf.scene)
-    // console.log(gltf.scene)
-    // makeFiber?.(scene, gltf.scene) // 渲染光缆
-
-    // makeText?.(scene, gltf.scene) // 渲染点击文字
   })
 }
 

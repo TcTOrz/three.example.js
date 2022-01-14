@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-01-07 10:35:02
- * @LastEditTime: 2022-01-13 16:40:45
+ * @LastEditTime: 2022-01-14 10:18:08
  * @LastEditors: Li Jian
 -->
 <script setup lang="ts">
@@ -21,6 +21,7 @@ import {
   makeEvent,
 } from '@shared'
 // import { FlyControls } from 'three/examples/jsm/controls/FlyControls'
+import Stats from 'three/examples/jsm/libs/stats.module'
 
 function main(): void {
   const canvas: HTMLCanvasElement | null = document.querySelector('#c8')
@@ -70,7 +71,7 @@ function main(): void {
   //   scene.add(light.target)
   // }
 
-  loadModel(scene, './blender/ElectricStation') // , makeFiber(0) // , makeText(canvas, camera)
+  loadModel(scene, './blender/场景/ElectricStation') // , makeFiber(0) // , makeText(canvas, camera)
 
   const elemEnter: HTMLDivElement = makeDom({ textContent: '进入', flag: 'enter' })
   const elemLeave: HTMLDivElement = makeDom({ textContent: '离开', flag: 'leave' })
@@ -100,9 +101,13 @@ function main(): void {
 
   // const helper = new THREE.CameraHelper(camera)
   // scene.add(helper)
+  const stats = new (Stats as any)()
+  document.body.appendChild(stats.dom)
 
   const render = () => {
     requestAnimationFrame(render)
+
+    stats.update()
 
     makeText(canvas, camera, scene, elemEnter)
     makeText(canvas, camera, scene, elemLeave)
