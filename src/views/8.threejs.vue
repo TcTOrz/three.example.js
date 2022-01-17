@@ -1,12 +1,15 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-01-07 10:35:02
- * @LastEditTime: 2022-01-17 15:48:25
+ * @LastEditTime: 2022-01-17 19:56:47
  * @LastEditors: Li Jian
 -->
 <script setup lang="ts">
 import { onMounted } from 'vue-demi'
+import { onBeforeRouteLeave } from 'vue-router'
+import { ref, watchEffect } from 'vue'
 import * as THREE from 'three'
+import TWEEN from '@tweenjs/tween.js'
 import {
   resizeRendererToDisplaySize,
   makePerspectiveCamera,
@@ -25,8 +28,6 @@ import {
 } from '@shared'
 // import { FlyControls } from 'three/examples/jsm/controls/FlyControls'
 import Stats from 'three/examples/jsm/libs/stats.module'
-import { onBeforeRouteLeave } from 'vue-router'
-import { ref, watchEffect } from 'vue'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
 let canvas: HTMLCanvasElement
@@ -91,6 +92,8 @@ async function main() {
 
   const render = () => {
     requestAnimationFrame(render)
+
+    TWEEN.update()
 
     stats.update()
 
