@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-01-07 10:35:02
- * @LastEditTime: 2022-01-14 16:26:13
+ * @LastEditTime: 2022-01-17 15:48:25
  * @LastEditors: Li Jian
 -->
 <script setup lang="ts">
@@ -15,34 +15,45 @@ import {
   // makeHemisphereLight,
   loadModel,
   makeControl,
+  // makeKeyControl,
   // makeFiber,
   makeText,
   makeDom,
   makeEvent,
+  eventFn,
+  eventKeyDown,
 } from '@shared'
 // import { FlyControls } from 'three/examples/jsm/controls/FlyControls'
 import Stats from 'three/examples/jsm/libs/stats.module'
+import { onBeforeRouteLeave } from 'vue-router'
+import { ref, watchEffect } from 'vue'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+
+let canvas: HTMLCanvasElement
+let renderer: THREE.Renderer
+let scene: THREE.Scene
+// 相机初始位置变量定义
+const cameraPosition: THREE.Vector3Tuple = [-10, 5, 5]
+let camera: THREE.PerspectiveCamera
+let controls: OrbitControls
+// 自定义事件变量
+let removeEvent: Function, removeEvent2: Function, removeEvent3: Function
+// 标志位, 用于判断是否在房间内部
+const isInRoom = ref(false)
 
 async function main() {
-  const canvas: HTMLCanvasElement | null = document.querySelector('#c8')
+  canvas = document.querySelector('#c8') as HTMLCanvasElement
   if (!canvas) return
-  const renderer: THREE.Renderer = new THREE.WebGLRenderer({ canvas })
-  const scene: THREE.Scene = new THREE.Scene()
+  renderer = new THREE.WebGLRenderer({ canvas })
+  scene = new THREE.Scene()
   scene.background = new THREE.Color('white')
-  const camera: THREE.PerspectiveCamera = makePerspectiveCamera(
+  camera = makePerspectiveCamera(
     40,
     canvas.clientWidth / canvas.clientHeight,
     0.1,
     1000,
-    [-10, 5, 5]
+    cameraPosition
   )
-
-  // const flyControls = new FlyControls(camera, renderer.domElement)
-  // flyControls.movementSpeed = 1000
-  // flyControls.domElement = renderer.domElement
-  // flyControls.rollSpeed = Math.PI / 24
-  // flyControls.autoForward = false
-  // flyControls.dragToLook = false
 
   {
     const skyColor = 0xb1e1ff // light blue
@@ -52,58 +63,31 @@ async function main() {
     scene.add(light)
   }
 
-  // {
-  //   const color = 0xffffff
-  //   const intensity = 1
-  //   const light = new THREE.DirectionalLight(color, intensity)
-  //   light.position.set(5, 10, 5)
-  //   scene.add(light)
-  //   scene.add(light.target)
-  // }
-  // {
-  //   const color = 0xffffff
-  //   const intensity = 1
-  //   const light = new THREE.DirectionalLight(color, intensity)
-  //   light.position.set(-5, -10, -5)
-  //   scene.add(light)
-  //   scene.add(light.target)
-  // }
-
-  // const helper = new THREE.CameraHelper(camera)
-  // scene.add(helper)
   const stats = new (Stats as any)()
   document.body.appendChild(stats.dom)
 
-  await loadModel(scene, './blender/场景/ElectricStation') // , makeFiber(0) // , makeText(canvas, camera)
-  await loadModel(scene, './blender/柜子/scene')
+  await loadModel(scene, './blender/场景/ElectricStation')
+  // await loadModel(scene, './blender/柜子/scene')
 
-  const controls = makeControl(camera, renderer)
+  controls = makeControl(camera, renderer)
 
   const elemEnter: HTMLDivElement = makeDom({ textContent: '进入', flag: 'enter' })
   const elemLeave: HTMLDivElement = makeDom({ textContent: '离开', flag: 'leave' })
 
-  const eventFn = (e: MouseEvent) => {
-    if ((e.target as HTMLInputElement).dataset.flag === 'enter') {
-      const group = scene.getObjectByName('ElectricHut') as THREE.Group
-      /**
-       * 摄像机位置与控制器位置不能一样，否则控制器无法控制
-       * 这里纠结了半天，摄像机的视角是控制器的范围，控制器的拖动范围是摄像机的视角
-       */
-      camera.position.set(
-        group.position.x + 0.1, // 摄像机x位置加0.1的目的是与controls的位置区分开
-        group.position.y + 1, // 摄像机与controls的y位置加1使其居中
-        group.position.z
-      )
-      controls.target.set(group.position.x, group.position.y + 1, group.position.z)
-    } else if ((e.target as HTMLInputElement).dataset.flag === 'leave') {
-      camera.position.set(0, 10, 20)
-      controls.target.set(0, 0, 0)
-    }
-  }
-
+  // 需要存储到localStorage中的数据,
+  // 否则静态刷新无法获取到值从而影响事件的卸载。
+  // <应该只影响开发环境>
   // use removeEvent() to remove event
-  const removeEvent = makeEvent(elemEnter, 'click', eventFn)
-  const removeEvent2 = makeEvent(elemLeave, 'click', eventFn)
+  removeEvent = makeEvent(
+    elemEnter,
+    'click',
+    eventFn(isInRoom, scene, camera, controls, cameraPosition)
+  )
+  removeEvent2 = makeEvent(
+    elemLeave,
+    'click',
+    eventFn(isInRoom, scene, camera, controls, cameraPosition)
+  )
 
   const render = () => {
     requestAnimationFrame(render)
@@ -114,8 +98,6 @@ async function main() {
     makeText(canvas, camera, scene, elemLeave)
 
     controls.update()
-
-    // flyControls.update(0.1)
 
     if (resizeRendererToDisplaySize(renderer)) {
       const canvas = renderer.domElement
@@ -130,6 +112,24 @@ async function main() {
 
 onMounted(() => {
   main()
+})
+
+watchEffect(() => {
+  if (isInRoom.value) {
+    console.log('enter the room')
+    removeEvent3 = makeEvent(window, 'keydown', eventKeyDown(camera, controls))
+  } else {
+    // 清除掉之前的事件
+    console.log('leave the room')
+    removeEvent3 && removeEvent3()
+  }
+})
+
+onBeforeRouteLeave(() => {
+  console.log('before leave')
+  removeEvent && removeEvent()
+  removeEvent2 && removeEvent2()
+  removeEvent3 && removeEvent3()
 })
 </script>
 
