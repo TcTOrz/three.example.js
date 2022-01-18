@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-01-07 16:17:58
- * @LastEditTime: 2022-01-18 09:53:08
+ * @LastEditTime: 2022-01-18 15:06:54
  * @LastEditors: Li Jian
  */
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
@@ -25,6 +25,9 @@ export const loadModel = (scene: THREE.Scene, url: String) => {
     loader.load(
       gltfUrl,
       gltf => {
+        if (url === './blender/场景/ElectricStation') {
+          // console.log(gltf.scene);
+        }
         // 机柜摆放到房子里面
         if (url === './blender/柜子/scene') {
           // 柜子位置大小方向的总体调整
@@ -40,7 +43,7 @@ export const loadModel = (scene: THREE.Scene, url: String) => {
           group = gltf.scene.getObjectByName('mesh_20') as THREE.Group
           group.visible = false
           // group.scale.setZ(0.5)
-          console.log(group)
+          // console.log(group)
         }
         scene.add(gltf.scene)
       },

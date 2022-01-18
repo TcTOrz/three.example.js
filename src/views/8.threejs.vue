@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-01-07 10:35:02
- * @LastEditTime: 2022-01-18 09:14:40
+ * @LastEditTime: 2022-01-18 15:07:11
  * @LastEditors: Li Jian
 -->
 <script setup lang="ts">
@@ -45,9 +45,16 @@ const isInRoom = ref(false)
 async function main() {
   canvas = document.querySelector('#c8') as HTMLCanvasElement
   if (!canvas) return
-  renderer = new THREE.WebGLRenderer({ canvas })
+  renderer = new THREE.WebGLRenderer({ canvas, alpha: true })
   scene = new THREE.Scene()
-  scene.background = new THREE.Color('white')
+  // scene.background = new THREE.Color('white')
+  const loader = new THREE.TextureLoader()
+  const texture = loader.load('/background3.jpg', () => {
+    const rt = new THREE.WebGLCubeRenderTarget(texture.image.height)
+    rt.fromEquirectangularTexture(renderer as THREE.WebGLRenderer, texture)
+    scene.background = rt.texture
+  })
+
   camera = makePerspectiveCamera(
     40,
     canvas.clientWidth / canvas.clientHeight,
@@ -69,6 +76,7 @@ async function main() {
 
   await loadModel(scene, './blender/场景/ElectricStation')
   await loadModel(scene, './blender/柜子/scene')
+  // await loadModel(scene, './blender/地图/map')
 
   controls = makeControl(camera, renderer)
 
