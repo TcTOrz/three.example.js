@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-01-07 10:35:02
- * @LastEditTime: 2022-01-17 19:56:47
+ * @LastEditTime: 2022-01-18 09:14:40
  * @LastEditors: Li Jian
 -->
 <script setup lang="ts">
@@ -68,7 +68,7 @@ async function main() {
   document.body.appendChild(stats.dom)
 
   await loadModel(scene, './blender/场景/ElectricStation')
-  // await loadModel(scene, './blender/柜子/scene')
+  await loadModel(scene, './blender/柜子/scene')
 
   controls = makeControl(camera, renderer)
 
