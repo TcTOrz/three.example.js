@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-01-18 15:20:36
- * @LastEditTime: 2022-01-19 16:37:46
+ * @LastEditTime: 2022-01-19 19:51:58
  * @LastEditors: Li Jian
 -->
 <script setup lang="ts">
@@ -76,6 +76,20 @@ onMounted(() => {
       const mesh = new THREE.Mesh(geometry, material)
       return mesh
     }
+    // 可以内嵌到dataLoop函数中，虽然浪费了一些性能，但是这样比较清晰，更好理解
+    function addLine(obj: THREE.Object3D<THREE.Event>, d: any[]) {
+      d.map((item, index) => {
+        const points: THREE.Vector3[] = []
+        item.map((i: number[][], idx: number) => {
+          points.push(new THREE.Vector3(i[index][0], -i[index][1], 2.21))
+        })
+        const line = new THREE.Line(
+          new THREE.BufferGeometry().setFromPoints(points),
+          new THREE.LineBasicMaterial({ color: 0x000000 })
+        )
+        obj.add(line)
+      })
+    }
     function dataLoop(shape: THREE.Shape, d: any[]) {
       d.map((item, index) => {
         item.map((i: number[][], idx: number) => {
@@ -93,6 +107,7 @@ onMounted(() => {
       let shape = new THREE.Shape()
       dataLoop(shape, data)
       const mesh = addMesh(shape)
+      addLine(province, data)
       province.add(mesh)
       province.name = properties.name
       province.userData = properties
@@ -102,6 +117,7 @@ onMounted(() => {
         let shape = new THREE.Shape()
         dataLoop(shape, d)
         const mesh = addMesh(shape)
+        addLine(obj, d)
         obj.add(mesh)
       })
       province.add(obj)
