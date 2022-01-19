@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-01-18 15:20:36
- * @LastEditTime: 2022-01-19 15:46:57
+ * @LastEditTime: 2022-01-19 16:37:46
  * @LastEditors: Li Jian
 -->
 <script setup lang="ts">
@@ -43,11 +43,6 @@ onMounted(() => {
   const controls = new OrbitControls(camera, renderer.domElement)
   controls.target.set(0, 0, 0)
 
-  // const geometry = new THREE.BoxBufferGeometry(1, 1, 1)
-  // const material = new THREE.MeshPhongMaterial({ color: 0x156289 })
-  // const cube = new THREE.Mesh(geometry, material)
-  // scene.add(cube)
-
   // 打平数组
   // function recursionProvince(ary: any, mercatorTrans: any, ret: any[]) {
   //   if (ary.length === 2 && typeof ary[0] === 'number' && typeof ary[1] === 'number') {
@@ -60,7 +55,7 @@ onMounted(() => {
   // }
 
   // 原样返回数组
-  function recursionProvince(ary: any, mercatorTrans: any, ret: any) {
+  function recursionProvince(ary: any[], mercatorTrans: (arg0: any) => any, ret: any[]) {
     if (ary.length === 2 && typeof ary[0] === 'number' && typeof ary[1] === 'number') {
       ret.push(mercatorTrans(ary))
     } else if (Array.isArray(ary)) {
@@ -71,8 +66,8 @@ onMounted(() => {
     }
   }
 
-  function drawProvince(data: any, properties: any, province: any) {
-    function addMesh(shape: any) {
+  function drawProvince(data: any[], properties: any, province: THREE.Object3D<THREE.Event>) {
+    function addMesh(shape: THREE.Shape | THREE.Shape[] | undefined) {
       const extrudeSettings = {
         depth: 2,
       }
@@ -81,9 +76,9 @@ onMounted(() => {
       const mesh = new THREE.Mesh(geometry, material)
       return mesh
     }
-    function dataLoop(shape: any, d: any) {
-      d.map((item: any, index: number) => {
-        item.map((i: any, idx: number) => {
+    function dataLoop(shape: THREE.Shape, d: any[]) {
+      d.map((item, index) => {
+        item.map((i: number[][], idx: number) => {
           if (idx === 0) {
             shape.moveTo(i[index][0], -i[index][1])
           }
@@ -93,78 +88,43 @@ onMounted(() => {
     }
     // 一般数组嵌套就两种情况，没必要写递归，但是写法丑了点
     // 不是数组说明就以整块地，是数组说明有飞地。
+    // 内蒙古自治区没有飞地
     if (!Array.isArray(data[0][0][0][0])) {
       let shape = new THREE.Shape()
       dataLoop(shape, data)
       const mesh = addMesh(shape)
       province.add(mesh)
+      province.name = properties.name
+      province.userData = properties
     } else {
       const obj = new THREE.Object3D()
-      data.map((d: any, i: number) => {
+      data.map(d => {
         let shape = new THREE.Shape()
         dataLoop(shape, d)
         const mesh = addMesh(shape)
         obj.add(mesh)
       })
       province.add(obj)
+      province.name = properties.name
+      province.userData = properties
     }
-
-    // if (properties.name === '内蒙古自治区') {
-    //   let shape = new THREE.Shape()
-    //   data.map((item: any, index: number) => {
-    //     item.map((i: any, idx: number) => {
-    //       if (idx === 0) {
-    //         shape.moveTo(i[index][0], -i[index][1])
-    //       }
-    //       shape.lineTo(i[index][0], -i[index][1])
-    //     })
-    //   })
-    //   const mesh = addMesh(shape)
-    //   province.add(mesh)
-    // } else {
-    //   const obj = new THREE.Object3D()
-    //   data.map((d: any, i: number) => {
-    //     let shape = new THREE.Shape()
-    //     d.map((dd: any, ii: number) => {
-    //       dd.map((ddd: any, iii: number) => {
-    //         if (iii === 0) {
-    //           shape.moveTo(ddd[ii][0], -ddd[ii][1])
-    //         }
-    //         shape.lineTo(ddd[ii][0], -ddd[ii][1])
-    //       })
-    //     })
-    //     const mesh = addMesh(shape)
-    //     obj.add(mesh)
-    //   })
-    //   province.add(obj)
-    // }
   }
 
-  const generateGeometry = (jsonData: any) => {
+  const generateGeometry = (jsonData: { features: any[] }) => {
     const nation = new THREE.Object3D() // 国家
-
     const mercatorTrans = d3.geoMercator().center([104.0, 37.5]).scale(80).translate([0, 0])
-    // console.log(jsonData, mercatorTrans([104.0, 37.5]), mercatorTrans([105.0, 37.6]))
-    // console.log(typeof jsonData)
-    jsonData.features.map((d: any) => {
+    jsonData.features.map(d => {
       const province = new THREE.Object3D() // 省
       const { properties, geometry } = d
       const { coordinates } = geometry
-      const { name } = properties
+      // const { name } = properties
       // 第一种递归，改变数组格式并进行墨卡托投影
       // const ret: any[] = []
       // recursionProvince(coordinates, mercatorTrans, ret)
       // 第二种递归，不改变数组格式并进行墨卡托投影
-      const ret: any[] = []
+      const ret: never[] = []
       recursionProvince(coordinates, mercatorTrans, ret)
-
-      // console.log(name, ret)
-      // if (name === '台湾省') {
-      // 先只画江西省试试
       drawProvince(ret, properties, province)
-      // province.add(mesh)
-      // }
-
       nation.add(province)
     })
     scene.add(nation)
@@ -172,7 +132,6 @@ onMounted(() => {
   const loader = new THREE.FileLoader()
   loader.load('/json/china.json', data => {
     const jsonData = JSON.parse(data as string)
-    // console.log(jsonData, d3)
     generateGeometry(jsonData)
   })
 
