@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-01-18 15:20:36
- * @LastEditTime: 2022-01-19 19:51:58
+ * @LastEditTime: 2022-01-20 16:22:13
  * @LastEditors: Li Jian
 -->
 <script setup lang="ts">
@@ -12,8 +12,6 @@ import { resizeRendererToDisplaySize } from '@shared'
 import * as d3 from 'd3'
 // import chinaJson from '@assets/json/china.json'
 
-// console.log(chinaJson)
-
 let canvas: HTMLCanvasElement
 let renderer: THREE.Renderer
 let scene: THREE.Scene
@@ -22,7 +20,7 @@ onMounted(() => {
   if (!canvas) return
   renderer = new THREE.WebGLRenderer({ canvas, alpha: true })
   scene = new THREE.Scene()
-  // scene.background = new THREE.Color('black')
+  scene.background = new THREE.Color('black')
 
   const camera = new THREE.PerspectiveCamera(
     75,
@@ -42,6 +40,25 @@ onMounted(() => {
 
   const controls = new OrbitControls(camera, renderer.domElement)
   controls.target.set(0, 0, 0)
+  controls.enableDamping = true
+  controls.dampingFactor = 0.25
+  controls.rotateSpeed = 0.35
+
+  controls.addEventListener('change', () => {
+    addText(scene.getObjectByName('nation')) // 省名称
+  })
+
+  // 辅助
+  function buildAuxSystem() {
+    const axesHelper = new THREE.AxesHelper(2000)
+    scene.add(axesHelper)
+    // 红色r的线是x轴
+    // 绿色g的线是y轴
+    // 蓝色b的线是z轴
+    let gridHelper = new THREE.GridHelper(600, 60)
+    scene.add(gridHelper)
+  }
+  // buildAuxSystem()
 
   // 打平数组
   // function recursionProvince(ary: any, mercatorTrans: any, ret: any[]) {
@@ -66,13 +83,26 @@ onMounted(() => {
     }
   }
 
+  // 墨卡托坐标转换
+  function geoMercator(
+    center: number[] = [104.0, 37.5],
+    scale: number = 80,
+    translate: number[] = [0, 0]
+  ) {
+    return d3.geoMercator().center(center).scale(scale).translate(translate)
+  }
+
   function drawProvince(data: any[], properties: any, province: THREE.Object3D<THREE.Event>) {
     function addMesh(shape: THREE.Shape | THREE.Shape[] | undefined) {
       const extrudeSettings = {
         depth: 2,
       }
       const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings)
-      const material = new THREE.MeshPhongMaterial({ color: 0x00ff00 })
+      const material = new THREE.MeshPhongMaterial({
+        color: 0x1e90ff,
+        transparent: true,
+        opacity: 0.2,
+      })
       const mesh = new THREE.Mesh(geometry, material)
       return mesh
     }
@@ -85,7 +115,7 @@ onMounted(() => {
         })
         const line = new THREE.Line(
           new THREE.BufferGeometry().setFromPoints(points),
-          new THREE.LineBasicMaterial({ color: 0x000000 })
+          new THREE.LineBasicMaterial({ color: 0x445f8f })
         )
         obj.add(line)
       })
@@ -126,9 +156,76 @@ onMounted(() => {
     }
   }
 
+  function addText(data: THREE.Object3D<THREE.Event> | undefined) {
+    const mercatorTrans = geoMercator()
+    const width = window.innerWidth
+    const height = window.innerHeight
+    const canvas = document.querySelector('#provinceName') as HTMLCanvasElement
+    if (!canvas) return
+    canvas.width = width
+    canvas.height = height
+    const ctx = canvas.getContext('2d')
+    // 离屏canvas
+    const offsetCanvas = document.createElement('canvas')
+    offsetCanvas.width = width
+    offsetCanvas.height = height
+    const offsetCtx = offsetCanvas.getContext('2d')
+    if (!offsetCtx) return
+    offsetCtx.font = '12px'
+    // offsetCtx.strokeStyle = '#000'
+    offsetCtx.fillStyle = '#ccc'
+
+    const texts: any[] = []
+
+    data?.children.map(elem => {
+      if (elem.name) {
+        let { name, center } = elem.userData
+        if ('centroid' in elem.userData) {
+          center = elem.userData.centroid
+        }
+        const [x, y] = mercatorTrans(center)
+        const z = 0
+        const vector = new THREE.Vector3(x, -y, z)
+        const position = vector.project(camera)
+        const left = ((vector.x + 1) / 2) * width
+        const top = (-(vector.y - 1) / 2) * height
+        const gap = 10 // 省名显示密度
+        const text = {
+          name,
+          left,
+          top,
+          width: offsetCtx.measureText(name).width + gap,
+          height: 12 + gap,
+        }
+        let show = true
+        for (let i = 0; i < texts.length; i++) {
+          if (
+            text.left + text.width < texts[i].left ||
+            text.top + text.height < texts[i].top ||
+            texts[i].left + texts[i].width < text.left ||
+            texts[i].top + texts[i].height < text.top
+          ) {
+            show = true
+          } else {
+            show = false
+            break
+          }
+        }
+        if (show) {
+          texts.push(text)
+          offsetCtx.strokeText(name, left, top)
+          offsetCtx.fillText(name, left, top)
+        }
+      }
+    })
+    // 离屏canvas绘制到canvas中
+    ctx?.drawImage(offsetCanvas, 0, 0)
+  }
+
   const generateGeometry = (jsonData: { features: any[] }) => {
     const nation = new THREE.Object3D() // 国家
-    const mercatorTrans = d3.geoMercator().center([104.0, 37.5]).scale(80).translate([0, 0])
+    nation.name = 'nation'
+    const mercatorTrans = geoMercator()
     jsonData.features.map(d => {
       const province = new THREE.Object3D() // 省
       const { properties, geometry } = d
@@ -144,6 +241,7 @@ onMounted(() => {
       nation.add(province)
     })
     scene.add(nation)
+    addText(scene.getObjectByName('nation')) // 省名称
   }
   const loader = new THREE.FileLoader()
   loader.load('/json/china.json', data => {
@@ -169,5 +267,6 @@ onMounted(() => {
 </script>
 
 <template lang="pug">
-canvas#c13(style="width: 100vw; height: 100vh;")
+canvas#c13(style="width: 100vw; height: 100vh;  position:relative;")
+canvas#provinceName(style="pointer-events:none; z-index: 0; width: 100vw; height: 100vh; position: absolute; top: 0; left: 0;")
 </template>
