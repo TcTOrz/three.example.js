@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-01-18 15:20:36
- * @LastEditTime: 2022-01-20 16:22:13
+ * @LastEditTime: 2022-01-20 20:30:54
  * @LastEditors: Li Jian
 -->
 <script setup lang="ts">
@@ -31,11 +31,11 @@ onMounted(() => {
   camera.position.set(0, 0, 50)
 
   {
-    const skyColor = 0xb1e1ff // light blue
-    const groundColor = 0xb97a20 // brownish orange
-    const intensity = 1
-    const light = new THREE.HemisphereLight(skyColor, groundColor, intensity)
-    scene.add(light)
+    // const skyColor = 0xb1e1ff // light blue
+    // const groundColor = 0xb97a20 // brownish orange
+    // const intensity = 1
+    // const light = new THREE.HemisphereLight(skyColor, groundColor, intensity)
+    // scene.add(light)
   }
 
   const controls = new OrbitControls(camera, renderer.domElement)
@@ -99,9 +99,10 @@ onMounted(() => {
       }
       const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings)
       const material = new THREE.MeshPhongMaterial({
-        color: 0x1e90ff,
+        color: 0x2c448b,
         transparent: true,
-        opacity: 0.2,
+        opacity: 0.3,
+        emissive: 0x2c448b,
       })
       const mesh = new THREE.Mesh(geometry, material)
       return mesh
@@ -111,7 +112,7 @@ onMounted(() => {
       d.map((item, index) => {
         const points: THREE.Vector3[] = []
         item.map((i: number[][], idx: number) => {
-          points.push(new THREE.Vector3(i[index][0], -i[index][1], 2.21))
+          points.push(new THREE.Vector3(i[index][0], -i[index][1], 2))
         })
         const line = new THREE.Line(
           new THREE.BufferGeometry().setFromPoints(points),
@@ -243,6 +244,16 @@ onMounted(() => {
     scene.add(nation)
     addText(scene.getObjectByName('nation')) // 省名称
   }
+
+  // const raycaster = new THREE.Raycaster()
+  // const mouse = new THREE.Vector2()
+  // function onMouseMove(event: { clientX: number; clientY: number }) {
+  //   mouse.x = (event.clientX / window.innerWidth) * 2 - 1
+  //   mouse.y = -(event.clientY / window.innerHeight) * 2 + 1
+  //   console.log(mouse)
+  // }
+  // window.addEventListener('click', onMouseMove, false)
+
   const loader = new THREE.FileLoader()
   loader.load('/json/china.json', data => {
     const jsonData = JSON.parse(data as string)
@@ -252,6 +263,11 @@ onMounted(() => {
   const render = () => {
     requestAnimationFrame(render)
     controls.update()
+
+    // 检测鼠标点击
+    // raycaster.setFromCamera(mouse, camera)
+    // const intersectedObjects = raycaster.intersectObjects(scene.children)
+    // console.log(intersectedObjects)
 
     if (resizeRendererToDisplaySize(renderer)) {
       const canvas = renderer.domElement
