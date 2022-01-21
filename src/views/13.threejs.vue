@@ -1,14 +1,14 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-01-18 15:20:36
- * @LastEditTime: 2022-01-21 15:09:16
+ * @LastEditTime: 2022-01-21 16:49:23
  * @LastEditors: Li Jian
 -->
 <script setup lang="ts">
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { onMounted } from 'vue-demi'
-import { resizeRendererToDisplaySize, makeEvent, FlyLine } from '@shared'
+import { resizeRendererToDisplaySize, makeEvent, FlyLine, RadarController } from '@shared'
 import * as d3 from 'd3'
 import { Line2 } from 'three/examples/jsm/lines/Line2'
 import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial'
@@ -261,6 +261,23 @@ onMounted(() => {
     //
   }
 
+  function addRadar(scene: THREE.Scene, data: any[]) {
+    data.map((elem: any) => {
+      const pos = geoMercator()(elem.position)
+      elem.position = {
+        x: pos[0],
+        y: -pos[1],
+        z: 2.21,
+      }
+    })
+    // console.log(data)
+    // @ts-ignore
+    const radar = new RadarController(data)
+    scene.add(radar.group)
+    return radar
+  }
+
+  let radar: { animate: (arg0: number) => void }
   const generateGeometry = (jsonData: { features: any[] }) => {
     const nation = new THREE.Object3D() // 国家
     nation.name = 'nation'
@@ -324,6 +341,31 @@ onMounted(() => {
       },
     ]
     addCustomTexture(scene, textures)
+    // -雷达-
+    const radarData = [
+      {
+        position: [121.48941, 31.40527],
+        radius: 4,
+        color: '#0000ff',
+        opacity: 1,
+        speed: 2,
+      },
+      {
+        position: [91.13775, 29.65262],
+        radius: 3,
+        color: '#ff0000',
+        opacity: 0.5,
+        speed: 2,
+      },
+      {
+        position: [116.23128, 40.22077],
+        radius: 3,
+        color: '#ff0000',
+        opacity: 0.5,
+        speed: 2,
+      },
+    ]
+    radar = addRadar(scene, radarData)
   }
 
   const raycaster = new THREE.Raycaster()
@@ -352,9 +394,13 @@ onMounted(() => {
     generateGeometry(jsonData)
   })
 
+  const clock = new THREE.Clock()
   const render = () => {
+    const dt = clock.getDelta()
     requestAnimationFrame(render)
     controls.update()
+
+    radar && radar.animate(dt)
 
     // @ts-ignore
     if (flyLines.length) {
