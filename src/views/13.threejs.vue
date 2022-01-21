@@ -1,15 +1,18 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-01-18 15:20:36
- * @LastEditTime: 2022-01-20 20:30:54
+ * @LastEditTime: 2022-01-21 15:09:16
  * @LastEditors: Li Jian
 -->
 <script setup lang="ts">
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { onMounted } from 'vue-demi'
-import { resizeRendererToDisplaySize } from '@shared'
+import { resizeRendererToDisplaySize, makeEvent, FlyLine } from '@shared'
 import * as d3 from 'd3'
+import { Line2 } from 'three/examples/jsm/lines/Line2'
+import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial'
+import { LineGeometry } from 'three/examples/jsm/lines/LineGeometry'
 // import chinaJson from '@assets/json/china.json'
 
 let canvas: HTMLCanvasElement
@@ -223,6 +226,41 @@ onMounted(() => {
     ctx?.drawImage(offsetCanvas, 0, 0)
   }
 
+  let flyLines: FlyLine[] = []
+  function addFlyline(scene: THREE.Scene, path: any[]) {
+    const mercatorPath = path.map((elem: any) => {
+      const [x, y] = geoMercator()(elem)
+      return new THREE.Vector3(x, -y, 2.21)
+    })
+    const mx = (mercatorPath[0].x + mercatorPath[1].x) / 2
+    const my = (mercatorPath[0].y + mercatorPath[1].y) / 2
+    // const mz = Math.random() * 10 + 2.21
+    const mz = Math.sqrt(path[0][0] * path[1][0] + path[0][1] * path[1][1]) / 30 + 2.21
+    mercatorPath.splice(1, 0, new THREE.Vector3(mx, my, mz))
+    // console.log(mercatorPath)
+    const curve = new THREE.CatmullRomCurve3(mercatorPath)
+    const points = curve.getPoints(50)
+    const geometry = new LineGeometry()
+    geometry.setPositions(points.map(item => [item.x, item.y, item.z]).flat())
+    const material = new LineMaterial({
+      color: 0x0000cc,
+      linewidth: 0.002,
+    })
+    const curveObject = new Line2(geometry, material)
+    scene.add(curveObject)
+    // @ts-ignore
+    let flyLine = new FlyLine(curve, {
+      color: 0x00ffff,
+      segFlag: true,
+    })
+    scene.add(flyLine)
+    flyLines.push(flyLine)
+  }
+
+  function addCustomTexture(scene: THREE.Scene, textures: { type: string; position: number[] }[]) {
+    //
+  }
+
   const generateGeometry = (jsonData: { features: any[] }) => {
     const nation = new THREE.Object3D() // 国家
     nation.name = 'nation'
@@ -242,17 +280,71 @@ onMounted(() => {
       nation.add(province)
     })
     scene.add(nation)
-    addText(scene.getObjectByName('nation')) // 省名称
+    // -省名称-
+    addText(scene.getObjectByName('nation'))
+    // -飞线-
+    let paths = [
+      [
+        [121.48941, 31.40527],
+        [91.13775, 29.65262],
+      ],
+      [
+        [121.48941, 31.40527],
+        [116.23128, 40.22077],
+      ],
+      [
+        [121.48941, 31.40527],
+        [113.6401, 34.72468],
+      ],
+      [
+        [121.48941, 31.40527],
+        [113.88308, 22.55329],
+      ],
+      [
+        [121.48941, 31.40527],
+        [81.32416, 43.91689],
+      ],
+      [
+        [121.48941, 31.40527],
+        [126.95717, 45.54774],
+      ],
+      [
+        [121.48941, 31.40527],
+        [112.29162, 3.981086],
+      ],
+    ]
+    paths.map(path => {
+      addFlyline(scene, path)
+    })
+    // -标志贴图-未完成-
+    const textures = [
+      {
+        type: '',
+        position: [121.48941, 31.40527],
+      },
+    ]
+    addCustomTexture(scene, textures)
   }
 
-  // const raycaster = new THREE.Raycaster()
-  // const mouse = new THREE.Vector2()
-  // function onMouseMove(event: { clientX: number; clientY: number }) {
-  //   mouse.x = (event.clientX / window.innerWidth) * 2 - 1
-  //   mouse.y = -(event.clientY / window.innerHeight) * 2 + 1
-  //   console.log(mouse)
-  // }
-  // window.addEventListener('click', onMouseMove, false)
+  const raycaster = new THREE.Raycaster()
+  const mouse = new THREE.Vector2()
+  // TODO
+  function onMouseMove(raycaster: THREE.Raycaster, mouse: THREE.Vector2) {
+    return function (event: MouseEvent) {
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1
+
+      raycaster.setFromCamera(mouse, camera)
+      const intersectedObjects = raycaster.intersectObjects(scene.children)
+
+      console.log(intersectedObjects)
+      if (intersectedObjects.length) {
+        // intersectedObjects[0].object.material.emissive.setHex(0xffffff)
+      }
+    }
+  }
+  // @ts-ignore
+  // const removeEvent = makeEvent(window, 'click', onMouseMove(raycaster, mouse))
 
   const loader = new THREE.FileLoader()
   loader.load('/json/china.json', data => {
@@ -263,6 +355,13 @@ onMounted(() => {
   const render = () => {
     requestAnimationFrame(render)
     controls.update()
+
+    // @ts-ignore
+    if (flyLines.length) {
+      flyLines.map((f: { update: () => void }) => {
+        f.update()
+      })
+    }
 
     // 检测鼠标点击
     // raycaster.setFromCamera(mouse, camera)

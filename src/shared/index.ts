@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-01-07 10:39:37
- * @LastEditTime: 2022-01-17 15:28:20
+ * @LastEditTime: 2022-01-21 15:09:08
  * @LastEditors: Li Jian
  */
 import resizeRendererToDisplaySize from './resizeRendererToDisplaySize'
@@ -13,6 +13,7 @@ import { makeFiber } from './makeFiber'
 import { makeText } from './makeText'
 import { makeDom } from './makeDom'
 import { makeEvent, eventFn, eventKeyDown } from './makeEvent'
+import FlyLine from './flyLine'
 
 export {
   resizeRendererToDisplaySize,
@@ -29,4 +30,5 @@ export {
   makeEvent,
   eventFn,
   eventKeyDown,
+  FlyLine,
 }
