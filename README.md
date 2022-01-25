@@ -1,6 +1,6 @@
 ### 一些效果图
 
-- git cline
+- git clone https://....
 - npm i
 - npm run dev
 - npm run build
