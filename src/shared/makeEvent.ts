@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-01-13 09:31:45
- * @LastEditTime: 2022-01-17 20:11:13
+ * @LastEditTime: 2022-01-25 14:05:48
  * @LastEditors: Li Jian
  */
 
@@ -13,6 +13,7 @@ import * as THREE from 'three'
 
 type TypeTuples =
   | 'click'
+  | 'mousemove'
   // | 'mouseover'
   // | 'mouseout'
   // | 'mouseenter'
@@ -25,7 +26,7 @@ type TypeTuples =
 export const makeEvent = (
   elem: HTMLDivElement | Window,
   type: TypeTuples,
-  eventFn: EventListenerOrEventListenerObject
+  eventFn: any //: EventListenerOrEventListenerObject
 ) => {
   elem.addEventListener(type, eventFn)
   return () => {

@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-01-18 15:20:36
- * @LastEditTime: 2022-01-21 16:49:23
+ * @LastEditTime: 2022-01-25 16:24:32
  * @LastEditors: Li Jian
 -->
 <script setup lang="ts">
@@ -227,24 +227,25 @@ onMounted(() => {
   }
 
   let flyLines: FlyLine[] = []
-  function addFlyline(scene: THREE.Scene, path: any[]) {
-    const mercatorPath = path.map((elem: any) => {
+  function addFlyline(scene: THREE.Scene, paths: { name?: string; info?: string; path: any }) {
+    const mercatorPath = paths.path.map((elem: any) => {
       const [x, y] = geoMercator()(elem)
       return new THREE.Vector3(x, -y, 2.21)
     })
     const mx = (mercatorPath[0].x + mercatorPath[1].x) / 2
     const my = (mercatorPath[0].y + mercatorPath[1].y) / 2
     // const mz = Math.random() * 10 + 2.21
-    const mz = Math.sqrt(path[0][0] * path[1][0] + path[0][1] * path[1][1]) / 30 + 2.21
+    const mz =
+      Math.sqrt(paths.path[0][0] * paths.path[1][0] + paths.path[0][1] * paths.path[1][1]) / 30 +
+      2.21
     mercatorPath.splice(1, 0, new THREE.Vector3(mx, my, mz))
-    // console.log(mercatorPath)
     const curve = new THREE.CatmullRomCurve3(mercatorPath)
     const points = curve.getPoints(50)
     const geometry = new LineGeometry()
     geometry.setPositions(points.map(item => [item.x, item.y, item.z]).flat())
     const material = new LineMaterial({
       color: 0x0000cc,
-      linewidth: 0.002,
+      linewidth: 0.005,
     })
     const curveObject = new Line2(geometry, material)
     scene.add(curveObject)
@@ -254,11 +255,14 @@ onMounted(() => {
       segFlag: true,
     })
     scene.add(flyLine)
+    flyLine.userData = {
+      type: 'flyline',
+      path: paths.path,
+      info: paths.info,
+      name: paths.name,
+    }
+    flyLine.type = 'flyline'
     flyLines.push(flyLine)
-  }
-
-  function addCustomTexture(scene: THREE.Scene, textures: { type: string; position: number[] }[]) {
-    //
   }
 
   function addRadar(scene: THREE.Scene, data: any[]) {
@@ -270,7 +274,6 @@ onMounted(() => {
         z: 2.21,
       }
     })
-    // console.log(data)
     // @ts-ignore
     const radar = new RadarController(data)
     scene.add(radar.group)
@@ -294,6 +297,7 @@ onMounted(() => {
       const ret: never[] = []
       recursionProvince(coordinates, mercatorTrans, ret)
       drawProvince(ret, properties, province)
+      province.type = 'province'
       nation.add(province)
     })
     scene.add(nation)
@@ -301,46 +305,66 @@ onMounted(() => {
     addText(scene.getObjectByName('nation'))
     // -飞线-
     let paths = [
-      [
-        [121.48941, 31.40527],
-        [91.13775, 29.65262],
-      ],
-      [
-        [121.48941, 31.40527],
-        [116.23128, 40.22077],
-      ],
-      [
-        [121.48941, 31.40527],
-        [113.6401, 34.72468],
-      ],
-      [
-        [121.48941, 31.40527],
-        [113.88308, 22.55329],
-      ],
-      [
-        [121.48941, 31.40527],
-        [81.32416, 43.91689],
-      ],
-      [
-        [121.48941, 31.40527],
-        [126.95717, 45.54774],
-      ],
-      [
-        [121.48941, 31.40527],
-        [112.29162, 3.981086],
-      ],
+      {
+        name: '光缆0',
+        info: '一些测试信息',
+        path: [
+          [121.48941, 31.40527],
+          [91.13775, 29.65262],
+        ],
+      },
+      {
+        name: '光缆1',
+        info: '一些测试信息',
+        path: [
+          [121.48941, 31.40527],
+          [116.23128, 40.22077],
+        ],
+      },
+      {
+        name: '光缆2',
+        info: '一些测试信息',
+        path: [
+          [121.48941, 31.40527],
+          [113.6401, 34.72468],
+        ],
+      },
+      {
+        name: '光缆3',
+        info: '一些测试信息',
+        path: [
+          [121.48941, 31.40527],
+          [113.88308, 22.55329],
+        ],
+      },
+      {
+        name: '光缆4',
+        info: '一些测试信息',
+        path: [
+          [121.48941, 31.40527],
+          [81.32416, 43.91689],
+        ],
+      },
+      {
+        name: '光缆5',
+        info: '一些测试信息',
+        path: [
+          [121.48941, 31.40527],
+          [126.95717, 45.54774],
+        ],
+      },
+      {
+        name: '光缆6',
+        info: '一些测试信息',
+        path: [
+          [121.48941, 31.40527],
+          [112.29162, 3.981086],
+        ],
+      },
     ]
     paths.map(path => {
       addFlyline(scene, path)
     })
-    // -标志贴图-未完成-
-    const textures = [
-      {
-        type: '',
-        position: [121.48941, 31.40527],
-      },
-    ]
-    addCustomTexture(scene, textures)
     // -雷达-
     const radarData = [
       {
@@ -372,21 +396,50 @@ onMounted(() => {
   const mouse = new THREE.Vector2()
   // TODO
   function onMouseMove(raycaster: THREE.Raycaster, mouse: THREE.Vector2) {
-    return function (event: MouseEvent) {
+    return function (event: {
+      clientX: number
+      clientY: number
+      path: { style: { cursor: string } }[]
+    }) {
       mouse.x = (event.clientX / window.innerWidth) * 2 - 1
       mouse.y = -(event.clientY / window.innerHeight) * 2 + 1
 
       raycaster.setFromCamera(mouse, camera)
       const intersectedObjects = raycaster.intersectObjects(scene.children)
-
-      console.log(intersectedObjects)
+      // console.log(intersectedObjects)
+      let currentObj: any
+      // 这里if嵌套有些丑陋，但是目前可以接受
       if (intersectedObjects.length) {
+        const o0 = intersectedObjects[0].object
+        if (o0.type === 'province' || o0.type === 'flyline') {
+          currentObj = o0
+        } else {
+          const o1 = o0.parent
+          if (o1?.type === 'province' || o1?.type === 'flyline') {
+            currentObj = o1
+          } else {
+            const o2 = o1?.parent
+            if (o2?.type === 'province' || o2?.type === 'flyline') {
+              currentObj = o2
+            }
+          }
+        }
         // intersectedObjects[0].object.material.emissive.setHex(0xffffff)
+      }
+      if (currentObj) {
+        if (currentObj.type === 'flyline') {
+          event.path[0].style.cursor = 'pointer'
+          // console.log(currentObj)
+          // currentObj.material.emissive.setHex(0xffffff)
+        } else {
+          event.path[0].style.cursor = ''
+        }
       }
     }
   }
   // @ts-ignore
   // const removeEvent = makeEvent(window, 'click', onMouseMove(raycaster, mouse))
+  const removeMoveEvent = makeEvent(window, 'mousemove', onMouseMove(raycaster, mouse))
 
   const loader = new THREE.FileLoader()
   loader.load('/json/china.json', data => {
