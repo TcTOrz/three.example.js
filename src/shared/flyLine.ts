@@ -3,7 +3,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-01-21 10:36:09
- * @LastEditTime: 2022-01-21 14:04:30
+ * @LastEditTime: 2022-01-26 16:47:23
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -67,7 +67,7 @@ export default class FlyLine extends THREE.Object3D {
     let geo
 
     if (curveOrObject instanceof THREE.Curve) {
-      geo = new THREE.TubeBufferGeometry(curveOrObject, 10, 0.15 * radius, 4)
+      geo = new THREE.TubeBufferGeometry(curveOrObject, 10, 0.25 * radius, 4)
     } else if (
       curveOrObject instanceof THREE.Geometry ||
       curveOrObject instanceof THREE.BufferGeometry

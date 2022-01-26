@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-01-18 15:20:36
- * @LastEditTime: 2022-01-25 16:24:32
+ * @LastEditTime: 2022-01-26 16:50:49
  * @LastEditors: Li Jian
 -->
 <script setup lang="ts">
@@ -13,6 +13,7 @@ import * as d3 from 'd3'
 import { Line2 } from 'three/examples/jsm/lines/Line2'
 import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial'
 import { LineGeometry } from 'three/examples/jsm/lines/LineGeometry'
+import { Object3D } from 'three'
 // import chinaJson from '@assets/json/china.json'
 
 let canvas: HTMLCanvasElement
@@ -24,6 +25,8 @@ onMounted(() => {
   renderer = new THREE.WebGLRenderer({ canvas, alpha: true })
   scene = new THREE.Scene()
   scene.background = new THREE.Color('black')
+  // const rotateX = -Math.PI / 4
+  // scene.rotateOnAxis(new THREE.Vector3(1, 0, 0), rotateX)
 
   const camera = new THREE.PerspectiveCamera(
     75,
@@ -42,10 +45,17 @@ onMounted(() => {
   }
 
   const controls = new OrbitControls(camera, renderer.domElement)
-  controls.target.set(0, 0, 0)
+  // controls.target.set(0, 0, 0)
   controls.enableDamping = true
   controls.dampingFactor = 0.25
   controls.rotateSpeed = 0.35
+  // controls.maxAzimuthAngle = 0
+  controls.maxDistance = 50
+  controls.minDistance = 20
+  controls.maxPolarAngle = (Math.PI / 4) * 3
+  controls.minPolarAngle = Math.PI / 2
+  controls.maxAzimuthAngle = Math.PI / 4
+  controls.minAzimuthAngle = -Math.PI / 4
 
   controls.addEventListener('change', () => {
     addText(scene.getObjectByName('nation')) // 省名称
@@ -372,7 +382,7 @@ onMounted(() => {
         radius: 4,
         color: '#0000ff',
         opacity: 1,
-        speed: 2,
+        speed: 4,
       },
       {
         position: [91.13775, 29.65262],
@@ -388,6 +398,41 @@ onMounted(() => {
         opacity: 0.5,
         speed: 2,
       },
+      {
+        position: [113.6401, 34.72468],
+        radius: 3,
+        color: '#ff0000',
+        opacity: 0.5,
+        speed: 2,
+      },
+      {
+        position: [113.88308, 22.55329],
+        radius: 3,
+        color: '#ff0000',
+        opacity: 0.5,
+        speed: 2,
+      },
+      {
+        position: [81.32416, 43.91689],
+        radius: 3,
+        color: '#ff0000',
+        opacity: 0.5,
+        speed: 2,
+      },
+      {
+        position: [126.95717, 45.54774],
+        radius: 3,
+        color: '#ff0000',
+        opacity: 0.5,
+        speed: 2,
+      },
+      {
+        position: [112.29162, 3.981086],
+        radius: 3,
+        color: '#ff0000',
+        opacity: 0.5,
+        speed: 2,
+      },
     ]
     radar = addRadar(scene, radarData)
   }
@@ -396,17 +441,20 @@ onMounted(() => {
   const mouse = new THREE.Vector2()
   // TODO
   function onMouseMove(raycaster: THREE.Raycaster, mouse: THREE.Vector2) {
+    const popupObj = new Object3D()
     return function (event: {
       clientX: number
       clientY: number
       path: { style: { cursor: string } }[]
     }) {
+      popupObj.children.length && (popupObj.children.length = 0)
+      // (0 ~ 1) * 2 - 1 => -1 ~ 1
       mouse.x = (event.clientX / window.innerWidth) * 2 - 1
+      // (-1 ~ 0) * 2 + 1 => -1 ~ 1 mouse.y = -mouse.y
       mouse.y = -(event.clientY / window.innerHeight) * 2 + 1
 
-      raycaster.setFromCamera(mouse, camera)
+      raycaster.setFromCamera(mouse, camera) // mouse must range from -1 to 1
       const intersectedObjects = raycaster.intersectObjects(scene.children)
-      // console.log(intersectedObjects)
       let currentObj: any
       // 这里if嵌套有些丑陋，但是目前可以接受
       if (intersectedObjects.length) {
@@ -427,10 +475,17 @@ onMounted(() => {
         // intersectedObjects[0].object.material.emissive.setHex(0xffffff)
       }
       if (currentObj) {
+        const vec3 = intersectedObjects[0].point
         if (currentObj.type === 'flyline') {
           event.path[0].style.cursor = 'pointer'
-          // console.log(currentObj)
-          // currentObj.material.emissive.setHex(0xffffff)
+          const geometry = new THREE.BoxGeometry(4, 4, 1)
+          const material = new THREE.MeshBasicMaterial({
+            color: 'white',
+          })
+          const mesh = new THREE.Mesh(geometry, material)
+          mesh.position.set(vec3.x, vec3.y + 4, vec3.z)
+          popupObj.add(mesh)
+          scene.add(popupObj)
         } else {
           event.path[0].style.cursor = ''
         }
