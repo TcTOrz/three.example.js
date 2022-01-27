@@ -1,19 +1,21 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-01-18 15:20:36
- * @LastEditTime: 2022-01-26 16:50:49
+ * @LastEditTime: 2022-01-27 14:55:55
  * @LastEditors: Li Jian
 -->
 <script setup lang="ts">
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-import { onMounted } from 'vue-demi'
+import { createApp, onMounted } from 'vue-demi'
 import { resizeRendererToDisplaySize, makeEvent, FlyLine, RadarController } from '@shared'
 import * as d3 from 'd3'
 import { Line2 } from 'three/examples/jsm/lines/Line2'
 import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial'
 import { LineGeometry } from 'three/examples/jsm/lines/LineGeometry'
-import { Object3D } from 'three'
+import ElementPlus from '@/element-plus'
+import Popup from '@components/Popup.vue'
+// import { Object3D } from 'three'
 // import chinaJson from '@assets/json/china.json'
 
 let canvas: HTMLCanvasElement
@@ -439,15 +441,19 @@ onMounted(() => {
 
   const raycaster = new THREE.Raycaster()
   const mouse = new THREE.Vector2()
-  // TODO
   function onMouseMove(raycaster: THREE.Raycaster, mouse: THREE.Vector2) {
-    const popupObj = new Object3D()
     return function (event: {
       clientX: number
       clientY: number
       path: { style: { cursor: string } }[]
     }) {
-      popupObj.children.length && (popupObj.children.length = 0)
+      event.path[0].style.cursor = ''
+      const popElem = document.querySelector('#popInfo') as HTMLDivElement
+      if (popElem.children.length) {
+        Array.from(popElem.children).map(elem => {
+          elem.remove()
+        })
+      }
       // (0 ~ 1) * 2 - 1 => -1 ~ 1
       mouse.x = (event.clientX / window.innerWidth) * 2 - 1
       // (-1 ~ 0) * 2 + 1 => -1 ~ 1 mouse.y = -mouse.y
@@ -475,19 +481,22 @@ onMounted(() => {
         // intersectedObjects[0].object.material.emissive.setHex(0xffffff)
       }
       if (currentObj) {
-        const vec3 = intersectedObjects[0].point
+        let parDom
         if (currentObj.type === 'flyline') {
           event.path[0].style.cursor = 'pointer'
-          const geometry = new THREE.BoxGeometry(4, 4, 1)
-          const material = new THREE.MeshBasicMaterial({
-            color: 'white',
-          })
-          const mesh = new THREE.Mesh(geometry, material)
-          mesh.position.set(vec3.x, vec3.y + 4, vec3.z)
-          popupObj.add(mesh)
-          scene.add(popupObj)
-        } else {
-          event.path[0].style.cursor = ''
+
+          parDom = document.createElement('div')
+          parDom.style.color = 'white'
+          parDom.style.cursor = 'pointer'
+          parDom.style.position = 'absolute'
+          parDom.style.left = `${event.clientX}px`
+          parDom.style.top = `${event.clientY}px`
+
+          popElem.appendChild(parDom)
+
+          const popupApp = createApp(Popup, { data: currentObj.userData, el: parDom })
+          popupApp.use(ElementPlus)
+          popupApp.mount(parDom)
         }
       }
     }
@@ -538,4 +547,5 @@ onMounted(() => {
 <template lang="pug">
 canvas#c13(style="width: 100vw; height: 100vh;  position:relative;")
 canvas#provinceName(style="pointer-events:none; z-index: 0; width: 100vw; height: 100vh; position: absolute; top: 0; left: 0;")
+#popInfo(style="display: inline;")
 </template>

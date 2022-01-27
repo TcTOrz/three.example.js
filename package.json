@@ -10,9 +10,11 @@
   "dependencies": {
     "@tweenjs/tween.js": "^18.6.4",
     "d3": "^7.3.0",
+    "element-plus": "^1.3.0-beta.9",
     "pinia": "^2.0.9",
     "three": "^0.136.0",
     "three.meshline": "^1.3.0",
+    "tippy.js": "^6.3.7",
     "vue": "^3.2.25",
     "vue-router": "^4.0.12"
   },
