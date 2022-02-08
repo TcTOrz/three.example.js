@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-01-18 15:20:36
- * @LastEditTime: 2022-01-27 14:55:55
+ * @LastEditTime: 2022-02-08 15:58:43
  * @LastEditors: Li Jian
 -->
 <script setup lang="ts">
@@ -501,9 +501,54 @@ onMounted(() => {
       }
     }
   }
+
+  function onclick(raycaster: THREE.Raycaster, mouse: THREE.Vector2) {
+    return function (event: any) {
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1
+      raycaster.setFromCamera(mouse, camera)
+      const intersectedObjects = raycaster.intersectObjects(scene.children)
+      let currentObj: any
+      if (intersectedObjects.length) {
+        const o0 = intersectedObjects[0].object
+        if (o0.type === 'province' || o0.type === 'flyline') {
+          currentObj = o0
+        } else {
+          const o1 = o0.parent
+          if (o1?.type === 'province' || o1?.type === 'flyline') {
+            currentObj = o1
+          } else {
+            const o2 = o1?.parent
+            if (o2?.type === 'province' || o2?.type === 'flyline') {
+              currentObj = o2
+            }
+          }
+        }
+      }
+      if (currentObj && currentObj.type === 'flyline') {
+        // console.log(currentObj, scene)
+        scene.visible = false // 隐藏所有
+        document.querySelector('#provinceName')?.classList.add('hide')
+        // 事件清除
+        removeMoveEvent()
+        removeClickEvent()
+        // TODO 加载新的场景
+        // ...
+        setTimeout(() => {
+          scene.visible = true // 显示所有
+          document.querySelector('#provinceName')?.classList.remove('hide')
+          // 事件新增
+          removeMoveEvent = makeEvent(window, 'mousemove', onMouseMove(raycaster, mouse))
+          removeClickEvent = makeEvent(window, 'click', onclick(raycaster, mouse))
+        }, 5000)
+      }
+    }
+  }
+
   // @ts-ignore
   // const removeEvent = makeEvent(window, 'click', onMouseMove(raycaster, mouse))
-  const removeMoveEvent = makeEvent(window, 'mousemove', onMouseMove(raycaster, mouse))
+  let removeMoveEvent = makeEvent(window, 'mousemove', onMouseMove(raycaster, mouse))
+  let removeClickEvent = makeEvent(window, 'click', onclick(raycaster, mouse))
 
   const loader = new THREE.FileLoader()
   loader.load('/json/china.json', data => {
@@ -549,3 +594,9 @@ canvas#c13(style="width: 100vw; height: 100vh;  position:relative;")
 canvas#provinceName(style="pointer-events:none; z-index: 0; width: 100vw; height: 100vh; position: absolute; top: 0; left: 0;")
 #popInfo(style="display: inline;")
 </template>
+
+<style>
+.hide {
+  display: none;
+}
+</style>
