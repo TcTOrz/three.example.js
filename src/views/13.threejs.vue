@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-01-18 15:20:36
- * @LastEditTime: 2022-02-08 15:58:43
+ * @LastEditTime: 2022-02-09 10:59:13
  * @LastEditors: Li Jian
 -->
 <script setup lang="ts">
@@ -256,14 +256,14 @@ onMounted(() => {
     const geometry = new LineGeometry()
     geometry.setPositions(points.map(item => [item.x, item.y, item.z]).flat())
     const material = new LineMaterial({
-      color: 0x0000cc,
-      linewidth: 0.005,
+      color: 0x03045e,
+      linewidth: 0.002,
     })
     const curveObject = new Line2(geometry, material)
     scene.add(curveObject)
     // @ts-ignore
     let flyLine = new FlyLine(curve, {
-      color: 0x00ffff,
+      color: 0x90e0ef,
       segFlag: true,
     })
     scene.add(flyLine)
@@ -554,6 +554,28 @@ onMounted(() => {
   loader.load('/json/china.json', data => {
     const jsonData = JSON.parse(data as string)
     generateGeometry(jsonData)
+  })
+
+  loader.load('/json/chinalocation.json', data => {
+    // https://mapv.baidu.com/gl/examples/editor.html#point-china.html
+    const jsonData = JSON.parse(data as string)
+    const postions: number[] = []
+    const colors: number[] = []
+    const data2 = jsonData[2]
+    const mercatorTrans = geoMercator()
+    data2.map((v: { geoCoord: Array<number> }) => {
+      const data = v.geoCoord
+      const [x, y] = mercatorTrans(data)
+      postions.push(x, -y, 1)
+      colors.push(255, 255, 0)
+    })
+    const geometry = new THREE.BufferGeometry()
+    geometry.setAttribute('position', new THREE.Float32BufferAttribute(postions, 3))
+    geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3))
+    geometry.computeBoundingSphere()
+    const material = new THREE.PointsMaterial({ size: 0.01, vertexColors: true })
+    const points = new THREE.Points(geometry, material)
+    scene.add(points)
   })
 
   const clock = new THREE.Clock()
