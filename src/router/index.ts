@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-01-05 10:03:52
- * @LastEditTime: 2022-01-18 15:23:02
+ * @LastEditTime: 2022-02-10 16:13:12
  * @LastEditors: Li Jian
  */
 import { createRouter, createWebHistory, createWebHashHistory, RouteRecordRaw } from 'vue-router'
@@ -9,7 +9,7 @@ import { createRouter, createWebHistory, createWebHashHistory, RouteRecordRaw } 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    redirect: '/0',
+    redirect: '/14',
   },
   {
     path: '/0',
@@ -80,6 +80,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/13',
     name: '13',
     component: () => import(/* webpackChunkName: "13" */ '@views/13.threejs.vue'),
+  },
+  {
+    path: '/14',
+    name: '14',
+    component: () => import(/* webpackChunkName: "14" */ '@views/14.threejs.vue'),
   },
 ]
 

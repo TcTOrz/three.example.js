@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-01-18 15:20:36
- * @LastEditTime: 2022-02-09 10:59:13
+ * @LastEditTime: 2022-02-10 16:51:54
  * @LastEditors: Li Jian
 -->
 <script setup lang="ts">
@@ -15,8 +15,7 @@ import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial'
 import { LineGeometry } from 'three/examples/jsm/lines/LineGeometry'
 import ElementPlus from '@/element-plus'
 import Popup from '@components/Popup.vue'
-// import { Object3D } from 'three'
-// import chinaJson from '@assets/json/china.json'
+import TWEEN from '@tweenjs/tween.js'
 
 let canvas: HTMLCanvasElement
 let renderer: THREE.Renderer
@@ -47,11 +46,9 @@ onMounted(() => {
   }
 
   const controls = new OrbitControls(camera, renderer.domElement)
-  // controls.target.set(0, 0, 0)
   controls.enableDamping = true
   controls.dampingFactor = 0.25
   controls.rotateSpeed = 0.35
-  // controls.maxAzimuthAngle = 0
   controls.maxDistance = 50
   controls.minDistance = 20
   controls.maxPolarAngle = (Math.PI / 4) * 3
@@ -192,7 +189,6 @@ onMounted(() => {
     offsetCtx.fillStyle = '#ccc'
 
     const texts: any[] = []
-
     data?.children.map(elem => {
       if (elem.name) {
         let { name, center } = elem.userData
@@ -227,6 +223,8 @@ onMounted(() => {
             break
           }
         }
+        offsetCtx.strokeText('测试', 9 + Math.random() * 10, 9 + Math.random() * 10)
+        offsetCtx.fillText('测试', 9 + Math.random() * 10, 9 + Math.random() * 10)
         if (show) {
           texts.push(text)
           offsetCtx.strokeText(name, left, top)
@@ -503,12 +501,32 @@ onMounted(() => {
   }
 
   function onclick(raycaster: THREE.Raycaster, mouse: THREE.Vector2) {
+    const hideLayer = (scene: THREE.Scene, doms: HTMLDivElement[], events: any[]) => {
+      // 隐藏图层
+      scene.visible = false
+      doms.forEach(dom => {
+        dom?.classList.add('hide')
+      })
+      events.map(event => {
+        event()
+      })
+    }
+    const showLayer = (scene: THREE.Scene, doms: HTMLDivElement[]) => {
+      // 显示图层
+      scene.visible = true
+      doms.forEach(dom => {
+        dom?.classList.remove('hide')
+      })
+      // 特例-后期需要改进
+      removeMoveEvent = makeEvent(window, 'mousemove', onMouseMove(raycaster, mouse))
+      removeClickEvent = makeEvent(window, 'click', onclick(raycaster, mouse))
+    }
     return function (event: any) {
       mouse.x = (event.clientX / window.innerWidth) * 2 - 1
       mouse.y = -(event.clientY / window.innerHeight) * 2 + 1
       raycaster.setFromCamera(mouse, camera)
       const intersectedObjects = raycaster.intersectObjects(scene.children)
-      let currentObj: any
+      let currentObj
       if (intersectedObjects.length) {
         const o0 = intersectedObjects[0].object
         if (o0.type === 'province' || o0.type === 'flyline') {
@@ -526,21 +544,40 @@ onMounted(() => {
         }
       }
       if (currentObj && currentObj.type === 'flyline') {
-        // console.log(currentObj, scene)
-        scene.visible = false // 隐藏所有
-        document.querySelector('#provinceName')?.classList.add('hide')
-        // 事件清除
-        removeMoveEvent()
-        removeClickEvent()
+        const oldPos = new THREE.Vector3()
+        camera.getWorldPosition(oldPos)
+        // console.log(oldPos, event, mouse, currentObj)
+        new TWEEN.Tween({ x: oldPos.x, y: oldPos.y, z: oldPos.z })
+          .to({ x: 0, y: 0, z: 0.01 }, 1000)
+          .onUpdate(object => {
+            camera.position.set(object.x, object.y, object.z)
+          })
+          .onComplete(() => {
+            // hideLayer(
+            //   scene,
+            //   [document.querySelector('#provinceName') as HTMLDivElement],
+            //   [removeMoveEvent, removeClickEvent]
+            // )
+            // new layer
+            // let geometry = new THREE.BoxGeometry(1, 1, 1)
+            // let material = new THREE.MeshBasicMaterial({ color: 0xff0f0f })
+            // let cube = new THREE.Mesh(geometry, material)
+            // cube.position.set(0, 0, -3)
+            // scene.add(cube)
+          })
+          .easing(TWEEN.Easing.Cubic.InOut)
+          .start()
+
+        // hideLayer(
+        //   scene,
+        //   [document.querySelector('#provinceName') as HTMLDivElement],
+        //   [removeMoveEvent, removeClickEvent]
+        // )
+        // setTimeout(() => {
+        //   showLayer(scene, [document.querySelector('#provinceName') as HTMLDivElement])
+        // }, 5000)
         // TODO 加载新的场景
         // ...
-        setTimeout(() => {
-          scene.visible = true // 显示所有
-          document.querySelector('#provinceName')?.classList.remove('hide')
-          // 事件新增
-          removeMoveEvent = makeEvent(window, 'mousemove', onMouseMove(raycaster, mouse))
-          removeClickEvent = makeEvent(window, 'click', onclick(raycaster, mouse))
-        }, 5000)
       }
     }
   }
@@ -556,6 +593,7 @@ onMounted(() => {
     generateGeometry(jsonData)
   })
 
+  // 城市亮光效果
   loader.load('/json/chinalocation.json', data => {
     // https://mapv.baidu.com/gl/examples/editor.html#point-china.html
     const jsonData = JSON.parse(data as string)
@@ -583,6 +621,8 @@ onMounted(() => {
     const dt = clock.getDelta()
     requestAnimationFrame(render)
     controls.update()
+
+    TWEEN.update()
 
     radar && radar.animate(dt)
 

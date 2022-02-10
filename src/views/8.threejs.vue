@@ -45,7 +45,7 @@ const isInRoom = ref(false)
 async function main() {
   canvas = document.querySelector('#c8') as HTMLCanvasElement
   if (!canvas) return
-  renderer = new THREE.WebGLRenderer({ canvas, alpha: true })
+  renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true })
   scene = new THREE.Scene()
   // scene.background = new THREE.Color('white')
   const loader = new THREE.TextureLoader()
