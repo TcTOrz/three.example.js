@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 14:17:30
- * @LastEditTime: 2022-02-10 16:53:05
+ * @LastEditTime: 2022-02-10 20:30:04
  * @LastEditors: Li Jian
  */
 import { geoMercator } from '@shared'
@@ -17,17 +17,22 @@ export default function (ins: any) {
   const mercatorTrans = geoMercator()
   const width = window.innerWidth
   const height = window.innerHeight
+  canvas.width = width
+  canvas.height = height
   const ctx = canvas.getContext('2d')
+  ctx.clearRect(0, 0, width, height)
   // 离屏canvas
   const offsetCanvas = document.createElement('canvas')
+  offsetCanvas.style.width = width + 'px'
+  offsetCanvas.style.height = height + 'px'
+
   offsetCanvas.width = width
   offsetCanvas.height = height
+  console.log(offsetCanvas, offsetCanvas.width, offsetCanvas.height)
   const offsetCtx = offsetCanvas.getContext('2d')
   if (!offsetCtx) return
   offsetCtx.font = '12px'
-  // offsetCtx.strokeStyle = '#000'
   offsetCtx.fillStyle = '#ccc'
-
   const texts: any[] = []
   data?.children.map(
     (elem: { name: any; userData: { centroid?: any; name?: any; center?: any } }) => {
@@ -50,6 +55,7 @@ export default function (ins: any) {
           width: offsetCtx.measureText(name).width + gap,
           height: 12 + gap,
         }
+        console.log(text)
         let show = true
         for (let i = 0; i < texts.length; i++) {
           if (
@@ -64,8 +70,8 @@ export default function (ins: any) {
             break
           }
         }
-        offsetCtx.strokeText('测试', 9 + Math.random() * 10, 9 + Math.random() * 10)
-        offsetCtx.fillText('测试', 9 + Math.random() * 10, 9 + Math.random() * 10)
+        // offsetCtx.strokeText('测试',20, 30)
+        // offsetCtx.fillText('测试', 20, 30)
         if (show) {
           texts.push(text)
           offsetCtx.strokeText(name, left, top)

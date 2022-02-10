@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:20:16
- * @LastEditTime: 2022-02-10 16:46:23
+ * @LastEditTime: 2022-02-10 19:13:13
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -64,13 +64,11 @@ class Map implements MapInterface {
     controls.minAzimuthAngle = -Math.PI / 4
     controls.addEventListener('change', () => {
       ProvinceName(this) // 加载省份名称
-      //   // ProvinceName(this.provinceCvs, this.scene.getObjectByName('nation'), this.camera) // 加载省份名称
     })
   }
   async load() {
     await this.asyncMap() // 加载地图
     ProvinceName(this) // 加载省份名称
-    // ProvinceName(this.provinceCvs, this.scene.getObjectByName('nation'), this.camera) // 加载省份名称
   }
   asyncMap() {
     const loader = new THREE.FileLoader()
