@@ -1,14 +1,14 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 11:11:10
- * @LastEditTime: 2022-02-10 14:02:17
+ * @LastEditTime: 2022-02-11 10:29:34
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
 import { DrawMapInterface } from './type'
 import { geoMercator } from '@shared'
 
-class DrawMap implements DrawMapInterface {
+export default class DrawMap implements DrawMapInterface {
   scene: THREE.Scene
   jsonData: { features: any[]; type: string }
   constructor(scene: THREE.Scene, jsonData: { features: any[]; type: string }) {
@@ -108,5 +108,3 @@ class DrawMap implements DrawMapInterface {
     this.scene.add(nation)
   }
 }
-
-export default DrawMap

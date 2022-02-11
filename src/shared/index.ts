@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-01-07 10:39:37
- * @LastEditTime: 2022-02-10 14:18:39
+ * @LastEditTime: 2022-02-11 10:18:50
  * @LastEditors: Li Jian
  */
 import resizeRendererToDisplaySize from './resizeRendererToDisplaySize'
@@ -20,7 +20,10 @@ import RadarController from './radar'
 // class
 import CustomMap from './map/index'
 import DrawMap from './map/drawMap'
-import ProvinceName from './map/provinceName'
+import AddProvinceName from './map/provinceName'
+import AddFlyLine, { flyLines } from './map/flyLine'
+import AddRadar, { radar } from './map/radar'
+import AddCityLight from './map/cityLight'
 
 // func
 import geoMercator from './geoMercator'
@@ -45,6 +48,11 @@ export {
   RadarController,
   CustomMap,
   DrawMap,
-  ProvinceName,
+  AddProvinceName,
+  AddFlyLine,
+  flyLines,
+  AddRadar,
+  radar,
+  AddCityLight,
   geoMercator,
 }

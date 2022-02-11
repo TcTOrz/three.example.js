@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-01-18 15:20:36
- * @LastEditTime: 2022-02-10 16:51:54
+ * @LastEditTime: 2022-02-11 09:05:31
  * @LastEditors: Li Jian
 -->
 <script setup lang="ts">
@@ -223,8 +223,6 @@ onMounted(() => {
             break
           }
         }
-        offsetCtx.strokeText('测试', 9 + Math.random() * 10, 9 + Math.random() * 10)
-        offsetCtx.fillText('测试', 9 + Math.random() * 10, 9 + Math.random() * 10)
         if (show) {
           texts.push(text)
           offsetCtx.strokeText(name, left, top)
