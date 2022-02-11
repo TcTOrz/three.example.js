@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-01-13 09:31:45
- * @LastEditTime: 2022-01-25 14:05:48
+ * @LastEditTime: 2022-02-11 10:57:58
  * @LastEditors: Li Jian
  */
 
@@ -22,9 +22,10 @@ type TypeTuples =
   // | 'mouseup'
   // | 'dblclick'
   | 'keydown'
+  | 'change'
 
 export const makeEvent = (
-  elem: HTMLDivElement | Window,
+  elem: HTMLDivElement | Window | HTMLCanvasElement | OrbitControls,
   type: TypeTuples,
   eventFn: any //: EventListenerOrEventListenerObject
 ) => {

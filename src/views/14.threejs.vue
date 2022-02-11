@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-02-10 10:11:06
- * @LastEditTime: 2022-02-11 09:15:47
+ * @LastEditTime: 2022-02-11 11:11:33
  * @LastEditors: Li Jian
 -->
 <script setup lang="ts">
@@ -15,7 +15,8 @@ onMounted(() => {
     '#c14ProvinceName'
   ) as HTMLCanvasElement
   if (!provinceCvs) return
-  new CustomMap(canvas, provinceCvs) // 初始化地图
+  const popElem: HTMLDivElement = document.querySelector('#popInfo') as HTMLDivElement
+  new CustomMap(canvas, provinceCvs, popElem) // 初始化地图
 })
 </script>
 

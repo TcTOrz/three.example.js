@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:20:16
- * @LastEditTime: 2022-02-11 10:32:22
+ * @LastEditTime: 2022-02-11 15:09:23
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -15,22 +15,28 @@ import {
   AddRadar,
   radar,
   AddCityLight,
+  makeEvent,
+  popup,
+  popInstance,
 } from '@shared'
 import { MapInterface } from './type'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import _ from 'lodash'
 
 export default class Map implements MapInterface {
   canvas
   provinceCvs
+  popElem
   renderer!: THREE.WebGLRenderer
   scene!: THREE.Scene
   camera!: THREE.PerspectiveCamera
   control!: OrbitControls
   clock: THREE.Clock
   fileLoader: THREE.FileLoader
-  constructor(canvas: HTMLCanvasElement, provinceCvs: HTMLCanvasElement) {
+  constructor(canvas: HTMLCanvasElement, provinceCvs: HTMLCanvasElement, popElem: HTMLDivElement) {
     this.canvas = canvas
     this.provinceCvs = provinceCvs
+    this.popElem = popElem
     this.clock = new THREE.Clock()
     this.fileLoader = new THREE.FileLoader()
     this.init()
@@ -65,23 +71,20 @@ export default class Map implements MapInterface {
     )
   }
   initControl() {
-    const controls = (this.control = new OrbitControls(this.camera, this.canvas))
-    controls.enableDamping = true
-    controls.dampingFactor = 0.25
-    controls.rotateSpeed = 0.35
-    controls.maxDistance = 50
-    controls.minDistance = 20
-    controls.maxPolarAngle = (Math.PI / 4) * 3
-    controls.minPolarAngle = Math.PI / 2
-    controls.maxAzimuthAngle = Math.PI / 4
-    controls.minAzimuthAngle = -Math.PI / 4
-    controls.addEventListener('change', () => {
-      new AddProvinceName(this) // 加载省份名称
-    })
+    const control = (this.control = new OrbitControls(this.camera, this.canvas))
+    control.enableDamping = true
+    control.dampingFactor = 0.25
+    control.rotateSpeed = 0.35
+    control.maxDistance = 50
+    control.minDistance = 20
+    control.maxPolarAngle = (Math.PI / 4) * 3
+    control.minPolarAngle = Math.PI / 2
+    control.maxAzimuthAngle = Math.PI / 4
+    control.minAzimuthAngle = -Math.PI / 4
   }
   async load() {
     await this.asyncMap() // 加载地图
-    new AddProvinceName(this) // 加载省份名称
+    this.asyncProvinceName() // 加载省份名称
     this.asyncFlyLine() // 加载飞线
     this.asyncRadar() // 加载雷达
     this.asyncCityLight() // 加载城市灯光
@@ -220,6 +223,9 @@ export default class Map implements MapInterface {
       new AddFlyLine(this, flyline)
     })
   }
+  private asyncProvinceName() {
+    new AddProvinceName(this)
+  }
   private asyncMap() {
     return new Promise(resolve => {
       this.fileLoader.load('/json/china.json', data => {
@@ -229,7 +235,57 @@ export default class Map implements MapInterface {
       })
     })
   }
-  event() {}
+  event() {
+    const raycaster = new THREE.Raycaster()
+    const mouse = new THREE.Vector2()
+    let removeChangeControl = makeEvent(this.control, 'change', this.onMouseChange())
+    let removeMoveEvent = makeEvent(this.canvas, 'mousemove', this.onMouseMove(raycaster, mouse))
+  }
+  private getIntersectedObjects(raycaster: THREE.Raycaster, mouse: THREE.Vector2, event: any) {
+    // (0 ~ 1) * 2 - 1 => -1 ~ 1
+    mouse.x = (event.clientX / this.canvas.clientWidth) * 2 - 1
+    // (-1 ~ 0) * 2 + 1 => -1 ~ 1 mouse.y = -mouse.y
+    mouse.y = -(event.clientY / this.canvas.clientHeight) * 2 + 1
+    raycaster.setFromCamera(mouse, this.camera) // mouse must range from -1 to 1
+    const intersectedObjects = raycaster.intersectObjects(this.scene.children)
+    let currentObj
+    if (intersectedObjects.length) {
+      const o0 = intersectedObjects[0].object
+      if (o0.type === 'province' || o0.type === 'flyline') {
+        currentObj = o0
+      } else {
+        const o1 = o0.parent
+        if (o1?.type === 'province' || o1?.type === 'flyline') {
+          currentObj = o1
+        } else {
+          const o2 = o1?.parent
+          if (o2?.type === 'province' || o2?.type === 'flyline') {
+            currentObj = o2
+          }
+        }
+      }
+    }
+    return currentObj
+  }
+  private onMouseMove(raycaster: THREE.Raycaster, mouse: THREE.Vector2) {
+    return (event: { clientX: number; clientY: number; path: { style: { cursor: string } }[] }) => {
+      _.debounce(() => {
+        event.path[0].style.cursor = ''
+        const popElem = this.popElem
+        if (!popElem) return
+        const currentObj = this.getIntersectedObjects(raycaster, mouse, event)
+        // if (popInstance) popInstance.hide()
+        if (currentObj && currentObj.type === 'flyline') {
+          popup(event, popElem, currentObj.userData)
+        }
+      })()
+    }
+  }
+  private onMouseChange() {
+    return () => {
+      this.asyncProvinceName()
+    }
+  }
   render() {
     requestAnimationFrame(this.render.bind(this))
     if (resizeRendererToDisplaySize(this.renderer)) {

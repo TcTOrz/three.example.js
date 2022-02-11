@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-01-07 10:39:37
- * @LastEditTime: 2022-02-11 10:18:50
+ * @LastEditTime: 2022-02-11 14:41:53
  * @LastEditors: Li Jian
  */
 import resizeRendererToDisplaySize from './resizeRendererToDisplaySize'
@@ -27,6 +27,7 @@ import AddCityLight from './map/cityLight'
 
 // func
 import geoMercator from './geoMercator'
+import popup, { popInstance } from './map/popup'
 // ---
 
 export {
@@ -55,4 +56,6 @@ export {
   radar,
   AddCityLight,
   geoMercator,
+  popup,
+  popInstance,
 }
