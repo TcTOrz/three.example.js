@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-11 14:35:24
- * @LastEditTime: 2022-02-11 15:07:11
+ * @LastEditTime: 2022-02-11 16:13:27
  * @LastEditors: Li Jian
  * @Description: 弹出提示框
  */
@@ -34,13 +34,19 @@ export default function (
   parDom.style.top = `${event.clientY}px`
   popElem.appendChild(parDom)
 
+  const template = `<div>
+    ${data.name}：${data.info}
+  </div>`
   popInstance = tippy(parDom, {
-    content: `${data.name}：${data.info}`,
+    content: template,
     // trigger: 'click',
     animation: 'shift-away-extreme',
     arrow: roundArrow,
     duration: [500, 1000],
     theme: 'translucent',
+    allowHTML: true,
+    // appendTo: popElem, // 将弹出框添加到指定元素
+    // interactive: true, // 可交互
   })
   popInstance.show()
 }

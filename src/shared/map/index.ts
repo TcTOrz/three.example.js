@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:20:16
- * @LastEditTime: 2022-02-11 15:09:23
+ * @LastEditTime: 2022-02-11 16:37:18
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -268,8 +268,8 @@ export default class Map implements MapInterface {
     return currentObj
   }
   private onMouseMove(raycaster: THREE.Raycaster, mouse: THREE.Vector2) {
-    return (event: { clientX: number; clientY: number; path: { style: { cursor: string } }[] }) => {
-      _.debounce(() => {
+    return _.debounce(
+      (event: { clientX: number; clientY: number; path: { style: { cursor: string } }[] }) => {
         event.path[0].style.cursor = ''
         const popElem = this.popElem
         if (!popElem) return
@@ -278,8 +278,9 @@ export default class Map implements MapInterface {
         if (currentObj && currentObj.type === 'flyline') {
           popup(event, popElem, currentObj.userData)
         }
-      })()
-    }
+      },
+      30
+    )
   }
   private onMouseChange() {
     return () => {
