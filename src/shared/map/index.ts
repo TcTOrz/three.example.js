@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:20:16
- * @LastEditTime: 2022-02-14 11:37:00
+ * @LastEditTime: 2022-02-14 16:27:57
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -19,13 +19,14 @@ import {
   popup,
   popInstance,
   AddPoint,
+  AddPointPopup,
 } from '@shared'
 import { MapInterface } from './type'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import _ from 'lodash'
 import TWEEN from '@tweenjs/tween.js'
 
-export default class Map implements MapInterface {
+export default class CustomMap implements MapInterface {
   canvas
   provinceCvs
   popElem
@@ -35,12 +36,14 @@ export default class Map implements MapInterface {
   control!: OrbitControls
   clock: THREE.Clock
   fileLoader: THREE.FileLoader
+  recoverStates: Map<Object, Function>
   constructor(canvas: HTMLCanvasElement, provinceCvs: HTMLCanvasElement, popElem: HTMLDivElement) {
     this.canvas = canvas
     this.provinceCvs = provinceCvs
     this.popElem = popElem
     this.clock = new THREE.Clock()
     this.fileLoader = new THREE.FileLoader()
+    this.recoverStates = new Map()
     this.init()
     this.load()
     this.event()
@@ -75,11 +78,11 @@ export default class Map implements MapInterface {
   }
   initLight() {
     const light = new THREE.DirectionalLight(0xb1e1ff, 1)
-    light.position.set(1, 1, 5)
+    light.position.set(1, 1, 2)
     light.target.position.set(0, 0, 0)
     this.scene.add(light)
     const light1 = new THREE.DirectionalLight(0xb1e1ff, 1)
-    light1.position.set(-1, -1, -5)
+    light1.position.set(-1, -1, -2)
     light1.target.position.set(0, 0, 0)
     this.scene.add(light1)
   }
@@ -90,7 +93,7 @@ export default class Map implements MapInterface {
     control.rotateSpeed = 0.35
     control.maxDistance = 50
     control.minDistance = 20
-    control.maxPolarAngle = (Math.PI / 4) * 3
+    control.maxPolarAngle = Math.PI // (Math.PI / 4) * 3
     control.minPolarAngle = Math.PI / 2
     control.maxAzimuthAngle = Math.PI / 4
     control.minAzimuthAngle = -Math.PI / 4
@@ -249,6 +252,16 @@ export default class Map implements MapInterface {
       })
     })
   }
+  addRecoverState(obj: Object, func: Function) {
+    // 恢复状态保存
+    this.recoverStates.set(obj, func)
+  }
+  recoverState() {
+    // 恢复状态
+    this.recoverStates.forEach(f => {
+      f()
+    })
+  }
   event() {
     const raycaster = new THREE.Raycaster()
     const mouse = new THREE.Vector2()
@@ -263,7 +276,7 @@ export default class Map implements MapInterface {
     mouse.y = -(event.clientY / this.canvas.clientHeight) * 2 + 1
     raycaster.setFromCamera(mouse, this.camera) // mouse must range from -1 to 1
     const intersectedObjects = raycaster.intersectObjects(this.scene.children)
-    let currentObj
+    let currentObj: any
     if (intersectedObjects.length) {
       const o0 = intersectedObjects[0].object
       if (
@@ -300,8 +313,9 @@ export default class Map implements MapInterface {
   private onMouseClick(raycaster: THREE.Raycaster, mouse: THREE.Vector2) {
     return (event: any) => {
       const currentObj = this.getIntersectedObjects(raycaster, mouse, event)
-      if (currentObj) {
-        console.log(currentObj)
+      if (currentObj && currentObj.type === 'point') {
+        // console.log('point', currentObj)
+        new AddPointPopup(this, currentObj)
       }
     }
   }
@@ -311,6 +325,7 @@ export default class Map implements MapInterface {
         event.path[0].style.cursor = ''
         const popElem = this.popElem
         if (!popElem) return
+        this.recoverState() // 恢复初始状态
         const currentObj = this.getIntersectedObjects(raycaster, mouse, event)
         // if (popInstance) popInstance.hide()
         if (currentObj && currentObj.type === 'flyline') {
@@ -318,6 +333,13 @@ export default class Map implements MapInterface {
         }
         if (currentObj && currentObj.type === 'point') {
           event.path[0].style.cursor = 'pointer'
+          currentObj.userData.point = {
+            color: currentObj.material.color.getHex(),
+          }
+          this.addRecoverState(currentObj, () => {
+            currentObj.material.color.setHex(currentObj.userData.point.color)
+          })
+          currentObj.material.color = new THREE.Color('#00796a')
         }
       },
       0

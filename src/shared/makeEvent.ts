@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-01-13 09:31:45
- * @LastEditTime: 2022-02-11 10:57:58
+ * @LastEditTime: 2022-02-14 14:21:29
  * @LastEditors: Li Jian
  */
 
@@ -17,7 +17,7 @@ type TypeTuples =
   // | 'mouseover'
   // | 'mouseout'
   // | 'mouseenter'
-  // | 'mouseleave'
+  | 'mouseleave'
   // | 'mousedown'
   // | 'mouseup'
   // | 'dblclick'
