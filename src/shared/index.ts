@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-01-07 10:39:37
- * @LastEditTime: 2022-02-11 14:41:53
+ * @LastEditTime: 2022-02-14 09:40:51
  * @LastEditors: Li Jian
  */
 import resizeRendererToDisplaySize from './resizeRendererToDisplaySize'
@@ -24,6 +24,7 @@ import AddProvinceName from './map/provinceName'
 import AddFlyLine, { flyLines } from './map/flyLine'
 import AddRadar, { radar } from './map/radar'
 import AddCityLight from './map/cityLight'
+import AddPoint from './map/point'
 
 // func
 import geoMercator from './geoMercator'
@@ -58,4 +59,5 @@ export {
   geoMercator,
   popup,
   popInstance,
+  AddPoint,
 }

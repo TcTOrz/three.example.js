@@ -145,7 +145,7 @@ export default function (opts: {
   })
 
   const mesh = new THREE.Mesh(geometry, material)
-
+  mesh.type = 'radar'
   mesh.rotation.set(rotation.x, rotation.y, rotation.z)
   const vec3 = new THREE.Vector3(position.x, position.y, position.z)
   mesh.position.copy(vec3)

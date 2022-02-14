@@ -1,11 +1,12 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-11 09:52:16
- * @LastEditTime: 2022-02-11 10:29:58
+ * @LastEditTime: 2022-02-14 09:51:40
  * @LastEditors: Li Jian
  */
 import { geoMercator, RadarController } from '@shared'
 import { RadarInterface } from './type'
+import _ from 'lodash'
 
 export let radar: RadarController
 
@@ -18,7 +19,7 @@ export default class Radar implements RadarInterface {
     this.draw()
   }
   draw() {
-    const data = this.data
+    const data = _.cloneDeep(this.data)
     const mercator = geoMercator()
     data.map((elem: any) => {
       const pos = mercator(elem.position)

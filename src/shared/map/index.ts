@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:20:16
- * @LastEditTime: 2022-02-11 16:37:18
+ * @LastEditTime: 2022-02-14 11:37:00
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -18,10 +18,12 @@ import {
   makeEvent,
   popup,
   popInstance,
+  AddPoint,
 } from '@shared'
 import { MapInterface } from './type'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import _ from 'lodash'
+import TWEEN from '@tweenjs/tween.js'
 
 export default class Map implements MapInterface {
   canvas
@@ -48,6 +50,7 @@ export default class Map implements MapInterface {
     this.initRenderer() // renderer
     this.initScene() // scene
     this.initCamera() // camera
+    this.initLight() // light
     this.initControl() // control
   }
   initRenderer() {
@@ -69,6 +72,16 @@ export default class Map implements MapInterface {
       1000,
       [0, 0, 50]
     )
+  }
+  initLight() {
+    const light = new THREE.DirectionalLight(0xb1e1ff, 1)
+    light.position.set(1, 1, 5)
+    light.target.position.set(0, 0, 0)
+    this.scene.add(light)
+    const light1 = new THREE.DirectionalLight(0xb1e1ff, 1)
+    light1.position.set(-1, -1, -5)
+    light1.target.position.set(0, 0, 0)
+    this.scene.add(light1)
   }
   initControl() {
     const control = (this.control = new OrbitControls(this.camera, this.canvas))
@@ -158,6 +171,7 @@ export default class Map implements MapInterface {
       },
     ]
     new AddRadar(this, radarData)
+    new AddPoint(this, radarData)
   }
   private asyncFlyLine() {
     // 后台加载数据
@@ -240,6 +254,7 @@ export default class Map implements MapInterface {
     const mouse = new THREE.Vector2()
     let removeChangeControl = makeEvent(this.control, 'change', this.onMouseChange())
     let removeMoveEvent = makeEvent(this.canvas, 'mousemove', this.onMouseMove(raycaster, mouse))
+    let removeClickEvent = makeEvent(this.canvas, 'click', this.onMouseClick(raycaster, mouse))
   }
   private getIntersectedObjects(raycaster: THREE.Raycaster, mouse: THREE.Vector2, event: any) {
     // (0 ~ 1) * 2 - 1 => -1 ~ 1
@@ -251,21 +266,44 @@ export default class Map implements MapInterface {
     let currentObj
     if (intersectedObjects.length) {
       const o0 = intersectedObjects[0].object
-      if (o0.type === 'province' || o0.type === 'flyline') {
+      if (
+        /* o0.type === 'province' || */
+        o0.type === 'flyline' || // 飞线
+        o0.type === 'radar' || // 雷达
+        o0.type === 'point' // 点
+      ) {
         currentObj = o0
       } else {
         const o1 = o0.parent
-        if (o1?.type === 'province' || o1?.type === 'flyline') {
+        if (
+          /* o1?.type === 'province' || */
+          o1?.type === 'flyline' ||
+          o1?.type === 'radar' ||
+          o1?.type === 'point'
+        ) {
           currentObj = o1
         } else {
           const o2 = o1?.parent
-          if (o2?.type === 'province' || o2?.type === 'flyline') {
+          if (
+            /* o2?.type === 'province' || */
+            o2?.type === 'flyline' ||
+            o2?.type === 'radar' ||
+            o2?.type === 'point'
+          ) {
             currentObj = o2
           }
         }
       }
     }
     return currentObj
+  }
+  private onMouseClick(raycaster: THREE.Raycaster, mouse: THREE.Vector2) {
+    return (event: any) => {
+      const currentObj = this.getIntersectedObjects(raycaster, mouse, event)
+      if (currentObj) {
+        console.log(currentObj)
+      }
+    }
   }
   private onMouseMove(raycaster: THREE.Raycaster, mouse: THREE.Vector2) {
     return _.debounce(
@@ -278,8 +316,11 @@ export default class Map implements MapInterface {
         if (currentObj && currentObj.type === 'flyline') {
           popup(event, popElem, currentObj.userData)
         }
+        if (currentObj && currentObj.type === 'point') {
+          event.path[0].style.cursor = 'pointer'
+        }
       },
-      30
+      0
     )
   }
   private onMouseChange() {
@@ -289,6 +330,7 @@ export default class Map implements MapInterface {
   }
   render() {
     requestAnimationFrame(this.render.bind(this))
+    TWEEN.update()
     if (resizeRendererToDisplaySize(this.renderer)) {
       const canvas = this.canvas
       this.camera.aspect = canvas.clientWidth / canvas.clientHeight
