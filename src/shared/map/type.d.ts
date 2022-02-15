@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:47:23
- * @LastEditTime: 2022-02-14 11:10:12
+ * @LastEditTime: 2022-02-15 15:43:05
  * @LastEditors: Li Jian
  */
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
@@ -9,6 +9,9 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 /** 基础地图 */
 export interface MapInterface {
   canvas: HTMLCanvasElement
+  provinceCvs: HTMLCanvasElement
+  popElem: HTMLDivElement
+  // pointPopElem: HTMLDivElement
   renderer: THREE.WebGLRenderer
   scene: THREE.Scene
   camera: THREE.PerspectiveCamera

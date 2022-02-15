@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:20:16
- * @LastEditTime: 2022-02-14 16:27:57
+ * @LastEditTime: 2022-02-15 16:15:40
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -30,6 +30,7 @@ export default class CustomMap implements MapInterface {
   canvas
   provinceCvs
   popElem
+  // pointPopElem
   renderer!: THREE.WebGLRenderer
   scene!: THREE.Scene
   camera!: THREE.PerspectiveCamera
@@ -41,6 +42,7 @@ export default class CustomMap implements MapInterface {
     this.canvas = canvas
     this.provinceCvs = provinceCvs
     this.popElem = popElem
+    // this.pointPopElem = pointPopElem
     this.clock = new THREE.Clock()
     this.fileLoader = new THREE.FileLoader()
     this.recoverStates = new Map()
@@ -88,15 +90,16 @@ export default class CustomMap implements MapInterface {
   }
   initControl() {
     const control = (this.control = new OrbitControls(this.camera, this.canvas))
-    control.enableDamping = true
-    control.dampingFactor = 0.25
-    control.rotateSpeed = 0.35
-    control.maxDistance = 50
-    control.minDistance = 20
-    control.maxPolarAngle = Math.PI // (Math.PI / 4) * 3
-    control.minPolarAngle = Math.PI / 2
-    control.maxAzimuthAngle = Math.PI / 4
-    control.minAzimuthAngle = -Math.PI / 4
+    control.target.set(0, 0, 0)
+    // control.enableDamping = true
+    // control.dampingFactor = 0.25
+    // control.rotateSpeed = 0.35
+    // control.maxDistance = 50
+    // control.minDistance = 20
+    // control.maxPolarAngle = Math.PI // (Math.PI / 4) * 3
+    // control.minPolarAngle = Math.PI / 2
+    // control.maxAzimuthAngle = Math.PI / 4
+    // control.minAzimuthAngle = -Math.PI / 4
   }
   async load() {
     await this.asyncMap() // 加载地图
@@ -283,7 +286,8 @@ export default class CustomMap implements MapInterface {
         /* o0.type === 'province' || */
         o0.type === 'flyline' || // 飞线
         o0.type === 'radar' || // 雷达
-        o0.type === 'point' // 点
+        o0.type === 'point' || // 点
+        o0.type === 'pointPopup' // 点弹窗
       ) {
         currentObj = o0
       } else {
@@ -292,7 +296,8 @@ export default class CustomMap implements MapInterface {
           /* o1?.type === 'province' || */
           o1?.type === 'flyline' ||
           o1?.type === 'radar' ||
-          o1?.type === 'point'
+          o1?.type === 'point' ||
+          o1?.type === 'pointPopup'
         ) {
           currentObj = o1
         } else {
@@ -301,7 +306,8 @@ export default class CustomMap implements MapInterface {
             /* o2?.type === 'province' || */
             o2?.type === 'flyline' ||
             o2?.type === 'radar' ||
-            o2?.type === 'point'
+            o2?.type === 'point' ||
+            o2?.type === 'pointPopup'
           ) {
             currentObj = o2
           }
@@ -316,6 +322,10 @@ export default class CustomMap implements MapInterface {
       if (currentObj && currentObj.type === 'point') {
         // console.log('point', currentObj)
         new AddPointPopup(this, currentObj)
+      } else if (currentObj && currentObj.type === 'pointPopup') {
+        // router.push('/8')
+        console.log('pointPopup', currentObj, currentObj.point)
+        // currentObj.userData.instance.jump() // jump
       }
     }
   }
