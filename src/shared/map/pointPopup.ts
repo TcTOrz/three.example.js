@@ -1,12 +1,12 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-14 14:10:21
- * @LastEditTime: 2022-02-15 16:01:22
+ * @LastEditTime: 2022-02-16 16:02:49
  * @LastEditors: Li Jian
  * @description: point弹出框
  */
 import * as THREE from 'three'
-import { geoMercator } from '@shared'
+import { geoMercator, AddTween } from '@shared'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 // import { createApp } from 'vue'
 // import PointPopupApp from '@components/PointPopupApp.vue'
@@ -14,76 +14,142 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import router from '@router'
 
 export default class PointPopup {
-  // elem: HTMLDivElement
+  instance: any
   scene: THREE.Scene
   camera: THREE.PerspectiveCamera
   control: OrbitControls
-  currentObj: any
-  bounds: any // 边界检测
-  constructor(ins: any, obj: any) {
-    // this.elem = ins.pointPopElem
+  currentObject: THREE.Object3D
+  constructor(ins: any, currentObject: THREE.Object3D) {
+    this.instance = ins
     this.scene = ins.scene
     this.camera = ins.camera
     this.control = ins.control
-    this.currentObj = obj
+    this.currentObject = currentObject
     this.draw()
+    return this
   }
   draw() {
-    // 可行性不大，暂时无法实现复杂的交互逻辑
-    this.drawFromCanvas()
-    // 通过HTML渲染，又与3d效果背道而驰
-    // this.drawFromHtml()
-  }
-  drawFromHtml() {
-    // this.elem.style.display = 'block'
-    // console.log(this.elem)
-    // const appElement = document.createElement('div')
-    // this.elem.appendChild(appElement)
-    // const a = 'a123'
-    // const app = createApp(PointPopupApp, { a })
-    // app.use(ElementPlus)
-    // console.log(app)
-    // app.mount(appElement)
-    // const mercatorTrans = geoMercator()
-    // const pos = mercatorTrans(this.currentObj.userData.position)
-    // const vec3 = new THREE.Vector3()
-    // this.currentObj.getWorldPosition(vec3)
-    // const viewWidth = window.innerWidth
-    // const viewHeight = window.innerHeight
-    // console.log(pos, viewWidth, viewHeight, this.currentObj, vec3);
-  }
-  drawFromCanvas() {
+    const object3D = new THREE.Object3D() // 装载点弹出框
+    object3D.type = 'pointPopup'
     const mercatorTrans = geoMercator()
-    const canvas = this.drawCanvas()
+    let position: THREE.Vector3Tuple = mercatorTrans(this.currentObject.userData.position)
+    const z = 12
+    position = [position[0], -position[1], z]
+    const width = z - 2
+    const height = z - 2
+    // TODO 切换视角
+    new AddTween(
+      this.instance,
+      new THREE.Vector3(position[0], position[1] - 20, position[2]),
+      new THREE.Vector3(...position)
+    )
+    // this.camera.position.set(position[0], position[1] - 20, position[2])
+    // this.control.target.set(...position)
+
+    // canvas主体
+    let canvas = this.drawBody()
+    let mesh = this.drawMesh(canvas, position, [width, height], 'pointPopup-body')
+    object3D.add(mesh)
+    // canvas 跳转按钮
+    canvas = this.drawJumpButton()
+    mesh = this.drawMesh(
+      canvas,
+      [position[0], position[1] - 0.001, position[2] - 4],
+      [width - 8, height - 9],
+      'pointPopup-jump-button'
+    )
+    object3D.add(mesh)
+    // canvas 关闭按钮
+    canvas = this.drawCloseButton()
+    mesh = this.drawMesh(
+      canvas,
+      [position[0] + 3, position[1] - 0.001, position[2] - 4],
+      [width - 8, height - 9],
+      'pointPopup-close-button'
+    )
+    object3D.add(mesh)
+
+    this.scene.add(object3D)
+  }
+  drawMesh(
+    canvas: HTMLCanvasElement,
+    position: THREE.Vector3Tuple,
+    size: THREE.Vector2Tuple,
+    type: string
+  ) {
     const texture = new THREE.CanvasTexture(canvas)
-    const panel = new THREE.PlaneBufferGeometry(10, 10)
+    const panel = new THREE.PlaneBufferGeometry(...size)
     const panelMate = new THREE.MeshBasicMaterial({
       map: texture,
       transparent: true,
       side: THREE.DoubleSide,
     })
     const panelMesh = new THREE.Mesh(panel, panelMate)
-    const pos = mercatorTrans(this.currentObj.userData.position)
-    panelMesh.position.set(pos[0], -pos[1], 12)
+    panelMesh.position.set(...position)
     panelMesh.rotateX(Math.PI / 2)
-    panelMesh.type = 'pointPopup'
+    panelMesh.type = type
     panelMesh.userData.instance = this
-    this.scene.add(panelMesh)
-
-    // TODO 切换视角
-    this.camera.position.set(pos[0], -pos[1] - 20, 10)
-    this.control.target.set(pos[0], -pos[1], 10)
+    return panelMesh
   }
-  private drawCanvas() {
+  drawCloseButton() {
+    const canvas = document.createElement('canvas') as HTMLCanvasElement
+    const btnWidth = 60
+    const btnHeight = 30
+    const btnX = 0
+    const btnY = 0
+    canvas.width = btnWidth
+    canvas.height = btnHeight
+    const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
+    ctx.beginPath()
+    ctx.moveTo(btnX, btnY)
+    ctx.lineTo(btnX + btnWidth, btnY)
+    ctx.lineTo(btnX + btnWidth, btnY + btnHeight)
+    ctx.lineTo(btnX, btnY + btnHeight)
+    ctx.lineTo(btnX, btnY)
+    ctx.strokeStyle = 'rgba(255, 255, 255, 1)'
+    ctx.lineWidth = 4
+    ctx.stroke()
+    const fontSize = 20
+    ctx.fillStyle = 'rgba(255, 255, 255, 1)'
+    ctx.font = `${fontSize}px Arial`
+    const text = '关闭'
+    ctx.fillText(text, btnX + (btnWidth - ctx.measureText(text).width) / 2, btnY + fontSize)
+    return canvas
+  }
+  drawJumpButton() {
+    const canvas = document.createElement('canvas') as HTMLCanvasElement
+    const btnWidth = 60
+    const btnHeight = 30
+    const btnX = 0
+    const btnY = 0
+    canvas.width = btnWidth
+    canvas.height = btnHeight
+    const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
+    ctx.beginPath()
+    // const btnX = (canvas.width - btnWidth) / 2
+    // const btnY = canvas.height - btnHeight
+    ctx.moveTo(btnX, btnY)
+    ctx.lineTo(btnX + btnWidth, btnY)
+    ctx.lineTo(btnX + btnWidth, btnY + btnHeight)
+    ctx.lineTo(btnX, btnY + btnHeight)
+    ctx.lineTo(btnX, btnY)
+    ctx.strokeStyle = 'rgba(255, 255, 255, 1)'
+    ctx.lineWidth = 4
+    ctx.stroke()
+    const fontSize = 20
+    ctx.fillStyle = 'rgba(255, 255, 255, 1)'
+    ctx.font = `${fontSize}px Arial`
+    const text = '跳转'
+    ctx.fillText(text, btnX + (btnWidth - ctx.measureText(text).width) / 2, btnY + fontSize)
+    return canvas
+  }
+  drawBody() {
     const canvas = document.createElement('canvas') as HTMLCanvasElement
     canvas.width = 256
     canvas.height = 256
-    // canvas.style.width = '256px'
-    // canvas.style.height = '256px'
     const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     ctx.fillStyle = 'rgba(44, 68, 139, 0.5)'
-    // ctx.beginPath()
     ctx.fillRect(0, 0, canvas.width, canvas.height)
     ctx.moveTo(0, 0)
     ctx.lineTo(canvas.width, 0)
@@ -97,35 +163,25 @@ export default class PointPopup {
     const fontSize = 20
     ctx.fillStyle = 'rgba(255, 255, 255, 1)'
     ctx.font = `${fontSize}px Arial`
-    const text = 'Hello World'
-    // const textWidth = ctx.measureText(text).width
-    // center: (canvas.width - textWidth)/2 right:(canvas.width - textWidth)
-    ctx.fillText(text, 0, fontSize)
-    this.drawBtn(canvas, ctx)
+    let text = '经度：' + this.currentObject.userData.position[0]
+    const textWidth = ctx.measureText(text).width
+    // center居中: (canvas.width - textWidth)/2 right靠右:(canvas.width - textWidth)
+    ctx.fillText(text, (canvas.width - textWidth) / 2, fontSize + 20)
+    text = '纬度：' + this.currentObject.userData.position[1]
+    ctx.fillText(text, (canvas.width - textWidth) / 2, fontSize * 2 + 30)
     return canvas
-  }
-  private drawBtn(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
-    // 按钮
-    ctx.beginPath()
-    const btnWidth = 60
-    const btnHeight = 30
-    const btnX = (canvas.width - btnWidth) / 2
-    const btnY = canvas.height - btnHeight
-    ctx.moveTo(btnX, btnY)
-    ctx.lineTo(btnX + btnWidth, btnY)
-    ctx.lineTo(btnX + btnWidth, btnY + btnHeight)
-    ctx.lineTo(btnX, btnY + btnHeight)
-    ctx.lineTo(btnX, btnY)
-    ctx.strokeStyle = 'rgba(255, 255, 255, 1)'
-    ctx.lineWidth = 2
-    ctx.stroke()
-    const fontSize = 20
-    ctx.fillStyle = 'rgba(255, 255, 255, 1)'
-    ctx.font = `${fontSize}px Arial`
-    const text = '跳转'
-    ctx.fillText(text, btnX + (btnWidth - ctx.measureText(text).width) / 2, btnY + fontSize)
   }
   jump() {
     router.push('/8')
+  }
+  close(id: any) {
+    let object3D = this.scene.getObjectByProperty('id', id) as THREE.Object3D
+    if (object3D && object3D.type !== 'pointPopup') {
+      object3D = object3D.parent as THREE.Object3D
+    }
+    if (object3D) {
+      this.scene.remove(object3D)
+      THREE.Cache.clear()
+    }
   }
 }

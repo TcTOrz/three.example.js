@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:20:16
- * @LastEditTime: 2022-02-15 16:15:40
+ * @LastEditTime: 2022-02-16 16:43:41
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -75,7 +75,7 @@ export default class CustomMap implements MapInterface {
       this.canvas.clientWidth / this.canvas.clientHeight,
       0.1,
       1000,
-      [0, 0, 50]
+      [0, -40, 50]
     )
   }
   initLight() {
@@ -287,7 +287,7 @@ export default class CustomMap implements MapInterface {
         o0.type === 'flyline' || // 飞线
         o0.type === 'radar' || // 雷达
         o0.type === 'point' || // 点
-        o0.type === 'pointPopup' // 点弹窗
+        new RegExp('pointPopup-*').test(o0.type) // 点弹窗
       ) {
         currentObj = o0
       } else {
@@ -297,7 +297,7 @@ export default class CustomMap implements MapInterface {
           o1?.type === 'flyline' ||
           o1?.type === 'radar' ||
           o1?.type === 'point' ||
-          o1?.type === 'pointPopup'
+          new RegExp('pointPopup-*').test(o1?.type as string)
         ) {
           currentObj = o1
         } else {
@@ -307,7 +307,7 @@ export default class CustomMap implements MapInterface {
             o2?.type === 'flyline' ||
             o2?.type === 'radar' ||
             o2?.type === 'point' ||
-            o2?.type === 'pointPopup'
+            new RegExp('pointPopup-*').test(o2?.type as string)
           ) {
             currentObj = o2
           }
@@ -320,12 +320,15 @@ export default class CustomMap implements MapInterface {
     return (event: any) => {
       const currentObj = this.getIntersectedObjects(raycaster, mouse, event)
       if (currentObj && currentObj.type === 'point') {
-        // console.log('point', currentObj)
-        new AddPointPopup(this, currentObj)
-      } else if (currentObj && currentObj.type === 'pointPopup') {
-        // router.push('/8')
-        console.log('pointPopup', currentObj, currentObj.point)
-        // currentObj.userData.instance.jump() // jump
+        const pointPopupInstance = new AddPointPopup(this, currentObj)
+      } else if (currentObj && new RegExp('pointPopup-*').test(currentObj.type)) {
+        const type = currentObj.type.split('-')[1]
+        if (type === 'jump') {
+          // currentObj.userData.instance.jump() // jump
+        }
+        if (type === 'close') {
+          currentObj.userData.instance.close(currentObj.id) // close
+        }
       }
     }
   }
