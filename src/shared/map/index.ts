@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:20:16
- * @LastEditTime: 2022-02-17 11:46:07
+ * @LastEditTime: 2022-02-17 14:26:10
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -28,10 +28,12 @@ import TWEEN from '@tweenjs/tween.js'
 import chinaJson from '@assets/json/china.json'
 import chinalocationJson from '@assets/json/chinalocation.json'
 
-export default class CustomMap implements MapInterface {
-  canvas
-  provinceCvs
-  popElem
+export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivElement>
+  implements MapInterface
+{
+  canvas: T
+  provinceCvs: T
+  popElem: Q
   // pointPopElem
   renderer!: THREE.WebGLRenderer
   scene!: THREE.Scene
@@ -40,7 +42,7 @@ export default class CustomMap implements MapInterface {
   clock: THREE.Clock
   // fileLoader: THREE.FileLoader
   recoverStates: Map<Object, Function>
-  constructor(canvas: HTMLCanvasElement, provinceCvs: HTMLCanvasElement, popElem: HTMLDivElement) {
+  constructor(canvas: T, provinceCvs: T, popElem: Q) {
     this.canvas = canvas
     this.provinceCvs = provinceCvs
     this.popElem = popElem

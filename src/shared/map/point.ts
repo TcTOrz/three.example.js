@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-14 09:39:47
- * @LastEditTime: 2022-02-14 11:34:34
+ * @LastEditTime: 2022-02-17 14:35:46
  * @LastEditors: Li Jian
  * @description: 点UI
  */
@@ -9,12 +9,12 @@ import { geoMercator } from '@shared'
 import _ from 'lodash'
 import * as THREE from 'three'
 import TWEEN from '@tweenjs/tween.js'
-import { PointInterface } from './type'
+import { PointInterface, MapInterface } from './type'
 
 export default class Point implements PointInterface {
   scene: THREE.Scene
   data: any[]
-  constructor(ins: any, data: any[]) {
+  constructor(ins: MapInterface, data: any[]) {
     this.scene = ins.scene
     this.data = data
     this.draw()
@@ -29,7 +29,7 @@ export default class Point implements PointInterface {
         x: pos[0],
         y: -pos[1],
         z: 2.21 + height / 2,
-      }
+      } as THREE.Vector3
       const radius = 1
       const radialSegments = 32
       const geometry = new THREE.ConeBufferGeometry(radius, height, radialSegments)
@@ -46,7 +46,7 @@ export default class Point implements PointInterface {
       this.createTween(position, mesh, height)
     })
   }
-  createTween(position: any, mesh: THREE.Mesh, height: number) {
+  createTween(position: THREE.Vector3, mesh: THREE.Mesh, height: number) {
     new TWEEN.Tween({
       x: position.x,
       y: position.y,
@@ -69,7 +69,7 @@ export default class Point implements PointInterface {
         this.createTween1(position, mesh, height)
       })
   }
-  createTween1(position: any, mesh: THREE.Mesh, height: number) {
+  createTween1(position: THREE.Vector3, mesh: THREE.Mesh, height: number) {
     new TWEEN.Tween({
       x: position.x,
       y: position.y,

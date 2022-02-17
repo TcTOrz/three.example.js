@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-14 14:10:21
- * @LastEditTime: 2022-02-17 10:25:29
+ * @LastEditTime: 2022-02-17 14:36:26
  * @LastEditors: Li Jian
  * @description: point弹出框
  */
@@ -9,14 +9,15 @@ import * as THREE from 'three'
 import { geoMercator, AddTween } from '@shared'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import router from '@router'
+import { PointPopInterface, MapInterface } from './type'
 
-export default class PointPopup {
+export default class PointPopup implements PointPopInterface {
   instance: any
   scene: THREE.Scene
   camera: THREE.PerspectiveCamera
   control: OrbitControls
   currentObject: THREE.Object3D
-  constructor(ins: any, currentObject: THREE.Object3D) {
+  constructor(ins: MapInterface, currentObject: THREE.Object3D) {
     this.instance = ins
     this.scene = ins.scene
     this.camera = ins.camera
@@ -171,7 +172,7 @@ export default class PointPopup {
   jump() {
     router.push('/8')
   }
-  close(ins: any, uuid: any) {
+  close(ins: MapInterface, uuid: any) {
     let object3D = this.scene.getObjectByProperty('uuid', uuid) as THREE.Object3D
     if (object3D && object3D.type !== 'pointPopup') {
       object3D = object3D.parent as THREE.Object3D

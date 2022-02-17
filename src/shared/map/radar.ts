@@ -1,11 +1,11 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-11 09:52:16
- * @LastEditTime: 2022-02-14 09:51:40
+ * @LastEditTime: 2022-02-17 14:31:39
  * @LastEditors: Li Jian
  */
 import { geoMercator, RadarController } from '@shared'
-import { RadarInterface } from './type'
+import { RadarInterface, MapInterface } from './type'
 import _ from 'lodash'
 
 export let radar: RadarController
@@ -13,7 +13,7 @@ export let radar: RadarController
 export default class Radar implements RadarInterface {
   scene: THREE.Scene
   data: any[]
-  constructor(ins: any, data: any[]) {
+  constructor(ins: MapInterface, data: any[]) {
     this.scene = ins.scene
     this.data = data
     this.draw()

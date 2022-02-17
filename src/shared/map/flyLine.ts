@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-11 09:22:34
- * @LastEditTime: 2022-02-11 10:29:45
+ * @LastEditTime: 2022-02-17 14:30:23
  * @LastEditors: Li Jian
  * @Description: 加载飞线
  */
@@ -10,14 +10,14 @@ import * as THREE from 'three'
 import { Line2 } from 'three/examples/jsm/lines/Line2'
 import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial'
 import { LineGeometry } from 'three/examples/jsm/lines/LineGeometry'
-import { FlyLineInterface } from './type'
+import { FlyLineInterface, MapInterface } from './type'
 
 export const flyLines: TheFlyLine[] = []
 
 export default class FlyLine implements FlyLineInterface {
   scene: THREE.Scene
   flyLine: { name?: string; info?: string; path: any }
-  constructor(ins: any, flyline: { name?: string; info?: string; path: any }) {
+  constructor(ins: MapInterface, flyline: { name?: string; info?: string; path: any }) {
     this.scene = ins.scene
     this.flyLine = flyline
     this.draw()

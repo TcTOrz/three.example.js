@@ -1,17 +1,17 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-11 10:17:13
- * @LastEditTime: 2022-02-11 10:31:14
+ * @LastEditTime: 2022-02-17 14:37:40
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
 import { geoMercator } from '@shared'
-import { CityLightInterface } from './type'
+import { CityLightInterface, MapInterface } from './type'
 
 export default class CityLight implements CityLightInterface {
   scene: THREE.Scene
   jsonData: any
-  constructor(ins: any, jsonData: any) {
+  constructor(ins: MapInterface, jsonData: any) {
     this.scene = ins.scene
     this.jsonData = jsonData
     this.draw()

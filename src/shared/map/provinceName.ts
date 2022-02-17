@@ -1,18 +1,18 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 14:17:30
- * @LastEditTime: 2022-02-11 10:29:53
+ * @LastEditTime: 2022-02-17 14:31:25
  * @LastEditors: Li Jian
  */
 import { geoMercator } from '@shared'
 import * as THREE from 'three'
-import { ProvinceNameInterface } from './type'
+import { ProvinceNameInterface, MapInterface } from './type'
 
 export default class ProvinceName implements ProvinceNameInterface {
   canvas
   data
   camera
-  constructor(ins: any) {
+  constructor(ins: MapInterface) {
     this.canvas = ins.provinceCvs
     this.data = ins.scene.getObjectByName('nation')
     this.camera = ins.camera

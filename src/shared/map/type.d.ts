@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:47:23
- * @LastEditTime: 2022-02-17 11:48:52
+ * @LastEditTime: 2022-02-17 14:39:12
  * @LastEditors: Li Jian
  */
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
@@ -64,4 +64,26 @@ export interface PointInterface {
   scene: THREE.Scene
   data: any[]
   draw(): void
+}
+
+/** 点弹出框 */
+export interface PointPopInterface {
+  instance: any
+  scene: THREE.Scene
+  camera: THREE.PerspectiveCamera
+  control: OrbitControls
+  currentObject: THREE.Object3D
+  draw(): void
+  deduplication(): boolean
+  drawMesh(
+    canvas: HTMLCanvasElement,
+    position: THREE.Vector3Tuple,
+    size: THREE.Vector2Tuple,
+    type: string
+  ): THREE.Mesh
+  drawCloseButton(): HTMLCanvasElement
+  drawJumpButton(): HTMLCanvasElement
+  drawBody(): HTMLCanvasElement
+  jump(): void
+  close(ins: MapInterface, uuid: any): void
 }
