@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:20:16
- * @LastEditTime: 2022-02-17 10:26:32
+ * @LastEditTime: 2022-02-17 11:46:07
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -25,6 +25,8 @@ import { MapInterface } from './type'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import _ from 'lodash'
 import TWEEN from '@tweenjs/tween.js'
+import chinaJson from '@assets/json/china.json'
+import chinalocationJson from '@assets/json/chinalocation.json'
 
 export default class CustomMap implements MapInterface {
   canvas
@@ -36,7 +38,7 @@ export default class CustomMap implements MapInterface {
   camera!: THREE.PerspectiveCamera
   control!: OrbitControls
   clock: THREE.Clock
-  fileLoader: THREE.FileLoader
+  // fileLoader: THREE.FileLoader
   recoverStates: Map<Object, Function>
   constructor(canvas: HTMLCanvasElement, provinceCvs: HTMLCanvasElement, popElem: HTMLDivElement) {
     this.canvas = canvas
@@ -44,7 +46,7 @@ export default class CustomMap implements MapInterface {
     this.popElem = popElem
     // this.pointPopElem = pointPopElem
     this.clock = new THREE.Clock()
-    this.fileLoader = new THREE.FileLoader()
+    // this.fileLoader = new THREE.FileLoader()
     this.recoverStates = new Map()
     this.init()
     this.load()
@@ -110,12 +112,12 @@ export default class CustomMap implements MapInterface {
     this.asyncCityLight() // 加载城市灯光
   }
   private asyncCityLight() {
-    this.fileLoader.load('/json/chinalocation.json', data => {
-      // 灯光相关的数据取自于
-      // https://mapv.baidu.com/gl/examples/editor.html#point-china.html
-      const jsonData = JSON.parse(data as string)
-      new AddCityLight(this, jsonData)
-    })
+    // this.fileLoader.load('/json/chinalocation.json', data => {
+    // 灯光相关的数据取自于
+    // https://mapv.baidu.com/gl/examples/editor.html#point-china.html
+    // const jsonData = JSON.parse(data as string)
+    new AddCityLight(this, chinalocationJson)
+    // })
   }
   private asyncRadar() {
     // 后台加载数据
@@ -249,11 +251,12 @@ export default class CustomMap implements MapInterface {
   }
   private asyncMap() {
     return new Promise(resolve => {
-      this.fileLoader.load('/json/china.json', data => {
-        const jsonData = JSON.parse(data as string)
-        new DrawMap(this.scene, jsonData)
-        resolve(true)
-      })
+      // this.fileLoader.load('/json/china.json', data => {
+      // const jsonData = JSON.parse(data as string)
+      new DrawMap(this.scene, chinaJson)
+      resolve(true)
+      // })
+      // console.log(chinaJson)
     })
   }
   addRecoverState(obj: Object, func: Function) {
