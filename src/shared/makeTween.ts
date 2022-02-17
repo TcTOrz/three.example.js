@@ -1,15 +1,17 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-16 15:43:12
- * @LastEditTime: 2022-02-17 09:58:52
+ * @LastEditTime: 2022-02-17 14:53:05
  * @LastEditors: Li Jian
  * @description: tween动画
  */
 import TWEEN from '@tweenjs/tween.js'
 import * as THREE from 'three'
+import { MakeTweenInterface } from './type'
+import { MapInterface } from './map/type'
 
-export default class MakeTween {
-  ins: any
+export default class MakeTween implements MakeTweenInterface {
+  ins: MapInterface
   camera: THREE.PerspectiveCamera
   cameraOldPosition: THREE.Vector3
   cameraNewPosition: THREE.Vector3
@@ -35,7 +37,7 @@ export default class MakeTween {
       .easing(TWEEN.Easing.Cubic.Out)
       .start()
   }
-  static revover(ins: any, cameraNewPosition: THREE.Vector3) {
+  static recover(ins: MapInterface, cameraNewPosition: THREE.Vector3) {
     const cameraOldPosition = ins.camera.position.clone()
     const tween = new TWEEN.Tween(cameraOldPosition)
     tween

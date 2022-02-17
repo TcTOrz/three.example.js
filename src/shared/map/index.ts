@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:20:16
- * @LastEditTime: 2022-02-17 14:26:10
+ * @LastEditTime: 2022-02-17 14:49:19
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -258,7 +258,6 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
       new DrawMap(this.scene, chinaJson)
       resolve(true)
       // })
-      // console.log(chinaJson)
     })
   }
   addRecoverState(obj: Object, func: Function) {

@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-14 14:10:21
- * @LastEditTime: 2022-02-17 14:36:26
+ * @LastEditTime: 2022-02-17 14:53:53
  * @LastEditors: Li Jian
  * @description: point弹出框
  */
@@ -181,6 +181,6 @@ export default class PointPopup implements PointPopInterface {
       this.scene.remove(object3D)
       THREE.Cache.clear()
     }
-    AddTween.revover(ins, object3D.userData.cameraOldPosition)
+    AddTween.recover(ins, object3D.userData.cameraOldPosition)
   }
 }
