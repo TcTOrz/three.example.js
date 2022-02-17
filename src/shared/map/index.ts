@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:20:16
- * @LastEditTime: 2022-02-16 16:43:41
+ * @LastEditTime: 2022-02-17 10:26:32
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -75,7 +75,7 @@ export default class CustomMap implements MapInterface {
       this.canvas.clientWidth / this.canvas.clientHeight,
       0.1,
       1000,
-      [0, -40, 50]
+      [0, -35, 20]
     )
   }
   initLight() {
@@ -90,16 +90,17 @@ export default class CustomMap implements MapInterface {
   }
   initControl() {
     const control = (this.control = new OrbitControls(this.camera, this.canvas))
-    control.target.set(0, 0, 0)
-    // control.enableDamping = true
-    // control.dampingFactor = 0.25
-    // control.rotateSpeed = 0.35
-    // control.maxDistance = 50
-    // control.minDistance = 20
-    // control.maxPolarAngle = Math.PI // (Math.PI / 4) * 3
-    // control.minPolarAngle = Math.PI / 2
-    // control.maxAzimuthAngle = Math.PI / 4
-    // control.minAzimuthAngle = -Math.PI / 4
+    control.target.set(0, -20, 10)
+    // control.target.set(0, 0, 0)
+    control.enableDamping = true
+    control.dampingFactor = 0.25
+    control.rotateSpeed = 0.35
+    control.maxDistance = 50
+    control.minDistance = 20
+    control.maxPolarAngle = Math.PI // (Math.PI / 4) * 3
+    control.minPolarAngle = Math.PI / 2
+    control.maxAzimuthAngle = Math.PI / 4
+    control.minAzimuthAngle = -Math.PI / 4
   }
   async load() {
     await this.asyncMap() // 加载地图
@@ -320,14 +321,14 @@ export default class CustomMap implements MapInterface {
     return (event: any) => {
       const currentObj = this.getIntersectedObjects(raycaster, mouse, event)
       if (currentObj && currentObj.type === 'point') {
-        const pointPopupInstance = new AddPointPopup(this, currentObj)
+        new AddPointPopup(this, currentObj)
       } else if (currentObj && new RegExp('pointPopup-*').test(currentObj.type)) {
         const type = currentObj.type.split('-')[1]
         if (type === 'jump') {
-          // currentObj.userData.instance.jump() // jump
+          currentObj.userData.instance.jump() // jump
         }
         if (type === 'close') {
-          currentObj.userData.instance.close(currentObj.id) // close
+          currentObj.userData.instance.close(this, currentObj.uuid) // close
         }
       }
     }
