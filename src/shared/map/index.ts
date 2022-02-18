@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:20:16
- * @LastEditTime: 2022-02-18 10:13:20
+ * @LastEditTime: 2022-02-18 16:33:55
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -97,7 +97,7 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
     control.target.set(0, -20, 10)
     // control.target.set(0, 0, 0)
     control.enableDamping = true
-    control.dampingFactor = 0.25
+    control.dampingFactor = 0.05
     control.rotateSpeed = 0.35
     control.maxDistance = 50
     control.minDistance = 20
