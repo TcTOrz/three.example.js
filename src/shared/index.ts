@@ -1,13 +1,13 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-01-07 10:39:37
- * @LastEditTime: 2022-02-16 15:55:14
+ * @LastEditTime: 2022-02-18 15:46:36
  * @LastEditors: Li Jian
  */
 import resizeRendererToDisplaySize from './resizeRendererToDisplaySize'
 import { makePerspectiveCamera } from './makeCamera'
 import { makeDirectionalLight, makeAmbientLight, makeHemisphereLight } from './makeLight'
-import { loadModel } from './loadModel'
+import { loadModel, loadGltfModel } from './loadModel'
 import { makeControl, makeKeyControl } from './makeControl'
 import { makeFiber } from './makeFiber'
 import { makeText } from './makeText'
@@ -33,6 +33,10 @@ import geoMercator from './geoMercator'
 import popup, { popInstance } from './map/popup'
 // ---
 
+// ---site
+// class
+import Site from './site/index'
+
 export {
   resizeRendererToDisplaySize,
   makePerspectiveCamera,
@@ -40,6 +44,7 @@ export {
   makeAmbientLight,
   makeHemisphereLight,
   loadModel,
+  loadGltfModel,
   makeControl,
   makeKeyControl,
   makeFiber,
@@ -64,4 +69,5 @@ export {
   AddPoint,
   AddPointPopup,
   AddTween,
+  Site,
 }

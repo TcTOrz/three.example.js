@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-01-05 10:03:52
- * @LastEditTime: 2022-02-10 16:13:12
+ * @LastEditTime: 2022-02-18 14:47:33
  * @LastEditors: Li Jian
  */
 import { createRouter, createWebHistory, createWebHashHistory, RouteRecordRaw } from 'vue-router'
@@ -85,6 +85,16 @@ const routes: Array<RouteRecordRaw> = [
     path: '/14',
     name: '14',
     component: () => import(/* webpackChunkName: "14" */ '@views/14.threejs.vue'),
+  },
+  {
+    path: '/15',
+    name: '15',
+    component: () => import(/* webpackChunkName: "15" */ '@views/15.threejs.vue'),
+  },
+  {
+    path: '/16',
+    name: '16',
+    component: () => import(/* webpackChunkName: "16" */ '@views/16.threejs.vue'),
   },
 ]
 
