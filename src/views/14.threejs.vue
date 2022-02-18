@@ -1,12 +1,14 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-02-10 10:11:06
- * @LastEditTime: 2022-02-15 15:41:43
+ * @LastEditTime: 2022-02-18 11:04:20
  * @LastEditors: Li Jian
+ * @Description: 第一级(地图)程序入口
 -->
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import { CustomMap } from '@shared'
+import HtmlView from '@views/14/Layout.vue'
 
 onMounted(() => {
   const canvas: HTMLCanvasElement = document.querySelector('#c14') as HTMLCanvasElement
@@ -22,8 +24,25 @@ onMounted(() => {
 </script>
 
 <template lang="pug">
-canvas#c14(style="width: 100vw; height: 100vh; position: relative;")
-canvas#c14ProvinceName(style="pointer-events:none; z-index: 0; width: 100vw; height: 100vh; position: absolute; top: 0; left: 0;")
+#topLevel
+  #canvasContainer
+    canvas#c14(style="width: 100vw; height: 100vh; position: relative;")
+    canvas#c14ProvinceName(style="pointer-events:none; z-index: 0; width: 100vw; height: 100vh; position: absolute; top: 0; left: 0;")
+  <html-view></html-view>
+//- pippy弹出框
 #popInfo(style="display: inline;")
-//- #pointPopInfo(style="display: none; position: absolute; top: 0; left: 0; width: 200px; height: 100px; background-color: white;")
 </template>
+
+<style lang="scss">
+#topLevel {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  * {
+    position: absolute;
+  }
+  #canvasContainer {
+    height: inherit;
+  }
+}
+</style>

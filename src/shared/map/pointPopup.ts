@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-14 14:10:21
- * @LastEditTime: 2022-02-17 14:53:53
+ * @LastEditTime: 2022-02-18 08:55:12
  * @LastEditors: Li Jian
  * @description: point弹出框
  */
@@ -12,7 +12,7 @@ import router from '@router'
 import { PointPopInterface, MapInterface } from './type'
 
 export default class PointPopup implements PointPopInterface {
-  instance: any
+  instance: MapInterface
   scene: THREE.Scene
   camera: THREE.PerspectiveCamera
   control: OrbitControls

@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:20:16
- * @LastEditTime: 2022-02-17 14:49:19
+ * @LastEditTime: 2022-02-18 10:13:20
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -108,9 +108,10 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
   }
   async load() {
     await this.asyncMap() // 加载地图
+    // 后期可能重写: 参照 - https://threejs.org/manual/#en/align-html-elements-to-3d
     this.asyncProvinceName() // 加载省份名称
     this.asyncFlyLine() // 加载飞线
-    this.asyncRadar() // 加载雷达
+    this.asyncRadarAndPoint() // 加载雷达和点
     this.asyncCityLight() // 加载城市灯光
   }
   private asyncCityLight() {
@@ -121,7 +122,7 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
     new AddCityLight(this, chinalocationJson)
     // })
   }
-  private asyncRadar() {
+  private asyncRadarAndPoint() {
     // 后台加载数据
     const radarData = [
       {
