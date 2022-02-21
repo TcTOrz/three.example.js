@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-14 14:10:21
- * @LastEditTime: 2022-02-18 16:35:13
+ * @LastEditTime: 2022-02-21 15:42:50
  * @LastEditors: Li Jian
  * @description: point弹出框
  */
@@ -28,7 +28,7 @@ export default class PointPopup implements PointPopInterface {
   draw() {
     if (!this.deduplication()) return // 去重
     const object3D = new THREE.Object3D() // 装载点弹出框
-    object3D.type = 'pointPopup'
+    object3D.type = 'pointOrLinePopup'
     object3D.userData.cameraOldPosition = this.camera.position.clone() // 记录摄像机原始位置
     object3D.userData.pointObject = this.currentObject
     const mercatorTrans = geoMercator()
@@ -41,7 +41,7 @@ export default class PointPopup implements PointPopInterface {
     new AddTween(this.instance, new THREE.Vector3(position[0], position[1] - 20, position[2]))
     // canvas主体
     let canvas = this.drawBody()
-    let mesh = this.drawMesh(canvas, position, [width, height], 'pointPopup-body')
+    let mesh = this.drawMesh(canvas, position, [width, height], 'pointOrLinePopup-body')
     object3D.add(mesh)
     // canvas 跳转按钮
     canvas = this.drawJumpButton()
@@ -49,7 +49,7 @@ export default class PointPopup implements PointPopInterface {
       canvas,
       [position[0], position[1] - 0.001, position[2] - 4],
       [width - 8, height - 9],
-      'pointPopup-jump-button'
+      'pointOrLinePopup-jump-button'
     )
     object3D.add(mesh)
     // canvas 关闭按钮
@@ -58,14 +58,14 @@ export default class PointPopup implements PointPopInterface {
       canvas,
       [position[0] + 3, position[1] - 0.001, position[2] - 4],
       [width - 8, height - 9],
-      'pointPopup-close-button'
+      'pointOrLinePopup-close-button'
     )
     object3D.add(mesh)
     this.scene.add(object3D)
   }
   deduplication() {
     // 去重，防止同一个点弹出多个框
-    const obj = this.scene.children.find(item => item.type === 'pointPopup')
+    const obj = this.scene.children.find(item => item.type === 'pointOrLinePopup')
     if (obj?.userData.pointObject.uuid === this.currentObject.uuid) return false
     return true
   }
@@ -170,11 +170,11 @@ export default class PointPopup implements PointPopInterface {
     return canvas
   }
   jump() {
-    router.push('/15')
+    router.push('/15') // point
   }
   close(ins: MapInterface, uuid: any) {
     let object3D = this.scene.getObjectByProperty('uuid', uuid) as THREE.Object3D
-    if (object3D && object3D.type !== 'pointPopup') {
+    if (object3D && object3D.type !== 'pointOrLinePopup') {
       object3D = object3D.parent as THREE.Object3D
     }
     if (object3D) {

@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-01-07 10:39:37
- * @LastEditTime: 2022-02-18 15:46:36
+ * @LastEditTime: 2022-02-21 15:33:43
  * @LastEditors: Li Jian
  */
 import resizeRendererToDisplaySize from './resizeRendererToDisplaySize'
@@ -27,6 +27,7 @@ import AddCityLight from './map/cityLight'
 import AddPoint from './map/point'
 import AddPointPopup from './map/pointPopup'
 import AddTween from './makeTween'
+import AddLinePopup from './map/linePopup'
 
 // func
 import geoMercator from './geoMercator'
@@ -70,4 +71,5 @@ export {
   AddPointPopup,
   AddTween,
   Site,
+  AddLinePopup,
 }

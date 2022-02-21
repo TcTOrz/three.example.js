@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:47:23
- * @LastEditTime: 2022-02-17 14:39:12
+ * @LastEditTime: 2022-02-21 15:37:22
  * @LastEditors: Li Jian
  */
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
@@ -86,4 +86,9 @@ export interface PointPopInterface {
   drawBody(): HTMLCanvasElement
   jump(): void
   close(ins: MapInterface, uuid: any): void
+}
+
+/** 线弹出框 */
+export interface LinePopupInterface extends PointPopInterface {
+  jump(): void
 }

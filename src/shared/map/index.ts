@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:20:16
- * @LastEditTime: 2022-02-18 16:33:55
+ * @LastEditTime: 2022-02-21 15:41:03
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -20,6 +20,7 @@ import {
   popInstance,
   AddPoint,
   AddPointPopup,
+  AddLinePopup,
 } from '@shared'
 import { MapInterface } from './type'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
@@ -293,7 +294,7 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
         o0.type === 'flyline' || // 飞线
         o0.type === 'radar' || // 雷达
         o0.type === 'point' || // 点
-        new RegExp('pointPopup-*').test(o0.type) // 点弹窗
+        new RegExp('pointOrLinePopup-*').test(o0.type) // 点弹窗
       ) {
         currentObj = o0
       } else {
@@ -303,7 +304,7 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
           o1?.type === 'flyline' ||
           o1?.type === 'radar' ||
           o1?.type === 'point' ||
-          new RegExp('pointPopup-*').test(o1?.type as string)
+          new RegExp('pointOrLinePopup-*').test(o1?.type as string)
         ) {
           currentObj = o1
         } else {
@@ -313,7 +314,7 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
             o2?.type === 'flyline' ||
             o2?.type === 'radar' ||
             o2?.type === 'point' ||
-            new RegExp('pointPopup-*').test(o2?.type as string)
+            new RegExp('pointOrLinePopup-*').test(o2?.type as string)
           ) {
             currentObj = o2
           }
@@ -326,8 +327,17 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
     return (event: any) => {
       const currentObj = this.getIntersectedObjects(raycaster, mouse, event)
       if (currentObj && currentObj.type === 'point') {
+        // 点弹出框
         new AddPointPopup(this, currentObj)
-      } else if (currentObj && new RegExp('pointPopup-*').test(currentObj.type)) {
+      } else if (currentObj && currentObj.type === 'flyline') {
+        // 飞线弹出框
+        const [[slong, slat], [elong, elat]] = currentObj.userData.path
+        currentObj.userData.position = [
+          _.round((slong + elong) / 2, 6),
+          _.round((slat + elat) / 2, 6),
+        ]
+        new AddLinePopup(this, currentObj)
+      } else if (currentObj && new RegExp('pointOrLinePopup-*').test(currentObj.type)) {
         const type = currentObj.type.split('-')[1]
         if (type === 'jump') {
           currentObj.userData.instance.jump() // jump
