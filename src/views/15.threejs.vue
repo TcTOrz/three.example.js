@@ -1,13 +1,14 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-02-18 14:05:43
- * @LastEditTime: 2022-02-18 16:26:25
+ * @LastEditTime: 2022-02-21 16:19:01
  * @LastEditors: Li Jian
  * @Description: 第二三级站点程序入口
 -->
 <script setup lang="ts">
 import { onMounted, watchEffect } from 'vue'
 import { Site } from '@shared'
+import HtmlView from '@views/15/Layout.vue'
 
 let ins: Site<HTMLCanvasElement>
 onMounted(() => {
@@ -29,6 +30,7 @@ onMounted(() => {
       .img
         .progressbar
         .progress-number
+  html-view.btnClass
 </template>
 
 <style lang="scss">
@@ -108,6 +110,11 @@ onMounted(() => {
       font-weight: bold;
       color: green;
     }
+  }
+  .btnClass {
+    position: absolute;
+    left: 5px;
+    top: 5px;
   }
 }
 </style>

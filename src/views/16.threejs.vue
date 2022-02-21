@@ -1,13 +1,14 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-02-18 14:05:43
- * @LastEditTime: 2022-02-21 10:27:56
+ * @LastEditTime: 2022-02-21 16:19:06
  * @LastEditors: Li Jian
  * @Description: 第二三级光缆程序入口
 -->
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import Fiber from '@shared/fiber'
+import HtmlView from '@views/16/Layout.vue'
 
 onMounted(() => {
   const canvas = document.querySelector('#c16') as HTMLCanvasElement
@@ -24,6 +25,7 @@ onMounted(() => {
       .img
         .progressbar
         .progress-number
+  html-view.btnClass
 </template>
 
 <style lang="scss">
@@ -82,6 +84,11 @@ onMounted(() => {
       font-weight: bold;
       color: green;
     }
+  }
+  .btnClass {
+    position: absolute;
+    left: 5px;
+    top: 5px;
   }
 }
 </style>

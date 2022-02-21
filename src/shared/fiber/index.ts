@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-21 09:30:39
- * @LastEditTime: 2022-02-21 14:35:34
+ * @LastEditTime: 2022-02-21 16:08:19
  * @LastEditors: Li Jian
  */
 import { FiberInterface } from './type'
@@ -16,7 +16,6 @@ import {
 } from '@/shared'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import Tower from '@assets/blender/塔杆/corset-power-transmission-tower.gltf?url'
-import { eventFn } from '@shared/makeEvent'
 
 export default class Fiber<T extends HTMLCanvasElement> implements FiberInterface {
   canvas: T
