@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-18 14:18:57
- * @LastEditTime: 2022-02-18 16:26:04
+ * @LastEditTime: 2022-02-21 08:50:36
  * @LastEditors: Li Jian
  * @Description: 站点
  */
@@ -22,8 +22,9 @@ import {
 import siteBg from '@assets/image/site-bg.jpg?url'
 import ElectricStation from '@assets/blender/场景/ElectricStation.gltf?url'
 import Cabinet from '@assets/blender/柜子/scene.gltf?url'
+import { SiteInterface } from './type'
 
-export default class Site<T extends HTMLCanvasElement> {
+export default class Site<T extends HTMLCanvasElement> implements SiteInterface {
   canvas: T
   renderer!: THREE.WebGLRenderer
   scene!: THREE.Scene
