@@ -1,16 +1,22 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-21 09:30:39
- * @LastEditTime: 2022-02-21 11:31:23
+ * @LastEditTime: 2022-02-21 14:35:34
  * @LastEditors: Li Jian
  */
 import { FiberInterface } from './type'
 import * as THREE from 'three'
 import siteBg from '@assets/image/site-bg.jpg?url'
 import planeBg from '@assets/image/plane-bg.jpg?url'
-import { resizeRendererToDisplaySize, makePerspectiveCamera, loadGltfModel } from '@/shared'
+import {
+  resizeRendererToDisplaySize,
+  makePerspectiveCamera,
+  loadGltfModel,
+  makeEvent,
+} from '@/shared'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import Tower from '@assets/blender/塔杆/corset-power-transmission-tower.gltf?url'
+import { eventFn } from '@shared/makeEvent'
 
 export default class Fiber<T extends HTMLCanvasElement> implements FiberInterface {
   canvas: T
@@ -20,6 +26,9 @@ export default class Fiber<T extends HTMLCanvasElement> implements FiberInterfac
   cameraPosition: THREE.Vector3Tuple = [30, 40, 50]
   textureLoader: THREE.TextureLoader = new THREE.TextureLoader()
   control!: OrbitControls
+  mouse: THREE.Vector2 = new THREE.Vector2()
+  INTERSECTED: any
+  raycaster = new THREE.Raycaster()
   constructor(canvas: T) {
     this.canvas = canvas
     this.init()
@@ -138,7 +147,36 @@ export default class Fiber<T extends HTMLCanvasElement> implements FiberInterfac
     plane.rotation.x = -Math.PI / 2
     this.scene.add(plane)
   }
-  event() {}
+  event() {
+    makeEvent(this.canvas, 'mousemove', this.mousemoveFn.bind(this))
+  }
+  private mousemoveFn(event: { clientX: number; clientY: number }) {
+    const mouse = this.mouse
+    let raycaster = this.raycaster
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1
+    raycaster.setFromCamera(mouse, this.camera)
+    const intersects = raycaster.intersectObjects(this.scene.children)
+    const intersect = intersects[0] // 只取第一个,第一个靠的最近
+    if (
+      // 当且只有为塔杆和电缆时才会触发
+      intersect?.object.name === 'Fiber'
+    ) {
+      if (this.INTERSECTED) {
+        this.INTERSECTED.material.color.set(this.INTERSECTED.currentColor)
+      }
+      this.INTERSECTED = intersect.object
+      this.INTERSECTED.currentColor = this.INTERSECTED.material.color
+      this.INTERSECTED.material.color = new THREE.Color(0xff0000)
+    }
+    if (intersect?.object.name.startsWith('Tower')) {
+      if (this.INTERSECTED) {
+        this.INTERSECTED.material.color.set(this.INTERSECTED.currentColor)
+      }
+      // 塔杆暂时不加颜色
+      this.INTERSECTED = intersect.object
+    }
+  }
   render() {
     requestAnimationFrame(this.render.bind(this))
     if (resizeRendererToDisplaySize(this.renderer)) {
