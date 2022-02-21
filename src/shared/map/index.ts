@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:20:16
- * @LastEditTime: 2022-02-21 15:41:03
+ * @LastEditTime: 2022-02-21 15:50:38
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -333,8 +333,8 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
         // 飞线弹出框
         const [[slong, slat], [elong, elat]] = currentObj.userData.path
         currentObj.userData.position = [
-          _.round((slong + elong) / 2, 6),
-          _.round((slat + elat) / 2, 6),
+          _.round((slong + elong) / 2, 5),
+          _.round((slat + elat) / 2, 5),
         ]
         new AddLinePopup(this, currentObj)
       } else if (currentObj && new RegExp('pointOrLinePopup-*').test(currentObj.type)) {
