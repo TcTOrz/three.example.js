@@ -1,0 +1,424 @@
+{
+    "asset" : {
+        "generator" : "Khronos glTF Blender I/O v1.7.33",
+        "version" : "2.0"
+    },
+    "scene" : 0,
+    "scenes" : [
+        {
+            "name" : "Scene",
+            "nodes" : [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+            ]
+        }
+    ],
+    "nodes" : [
+        {
+            "mesh" : 0,
+            "name" : "Anchor_bolt"
+        },
+        {
+            "mesh" : 1,
+            "name" : "Fixing_bracket"
+        },
+        {
+            "mesh" : 2,
+            "name" : "Plinth"
+        },
+        {
+            "mesh" : 3,
+            "name" : "Tower"
+        },
+        {
+            "mesh" : 4,
+            "name" : "Insulation disk",
+            "rotation" : [
+                0,
+                0,
+                -0.6427876353263855,
+                0.766044557094574
+            ],
+            "scale" : [
+                1.5,
+                1.5,
+                1.5
+            ],
+            "translation" : [
+                -0.848035991191864,
+                63.871131896972656,
+                14.118734359741211
+            ]
+        },
+        {
+            "mesh" : 4,
+            "name" : "Insulation disk.001",
+            "rotation" : [
+                -0.6427876353263855,
+                0.766044557094574,
+                0,
+                -3.348486998788758e-08
+            ],
+            "scale" : [
+                1.5,
+                1.5,
+                1.5
+            ],
+            "translation" : [
+                0.8464376926422119,
+                63.871131896972656,
+                -14.06967830657959
+            ]
+        },
+        {
+            "mesh" : 4,
+            "name" : "Insulation disk.002",
+            "translation" : [
+                -0.848035991191864,
+                63.85072326660156,
+                14.118734359741211
+            ]
+        },
+        {
+            "mesh" : 4,
+            "name" : "Insulation disk.003",
+            "translation" : [
+                0.8538880348205566,
+                63.85072326660156,
+                14.118734359741211
+            ]
+        }
+    ],
+    "materials" : [
+        {
+            "doubleSided" : true,
+            "name" : "Black paint",
+            "pbrMetallicRoughness" : {
+                "baseColorFactor" : [
+                    0.014845481142401695,
+                    0.014845481142401695,
+                    0.014845481142401695,
+                    1
+                ],
+                "metallicFactor" : 0.20000000298023224,
+                "roughnessFactor" : 0.4000000059604645
+            }
+        },
+        {
+            "doubleSided" : true,
+            "name" : "Concrete #002",
+            "pbrMetallicRoughness" : {
+                "metallicFactor" : 0,
+                "roughnessFactor" : 0.5238094925880432
+            }
+        },
+        {
+            "doubleSided" : true,
+            "name" : "Galvanized_steel-Dark",
+            "pbrMetallicRoughness" : {}
+        },
+        {
+            "doubleSided" : true,
+            "name" : "Stainless_steel",
+            "pbrMetallicRoughness" : {}
+        }
+    ],
+    "meshes" : [
+        {
+            "name" : "Anchor_bolt",
+            "primitives" : [
+                {
+                    "attributes" : {
+                        "POSITION" : 0,
+                        "NORMAL" : 1
+                    },
+                    "indices" : 2,
+                    "material" : 0
+                }
+            ]
+        },
+        {
+            "name" : "Fixing_bracket",
+            "primitives" : [
+                {
+                    "attributes" : {
+                        "POSITION" : 3,
+                        "NORMAL" : 4
+                    },
+                    "indices" : 5,
+                    "material" : 0
+                }
+            ]
+        },
+        {
+            "name" : "Plinth",
+            "primitives" : [
+                {
+                    "attributes" : {
+                        "POSITION" : 6,
+                        "NORMAL" : 7
+                    },
+                    "indices" : 8,
+                    "material" : 1
+                }
+            ]
+        },
+        {
+            "name" : "Tower",
+            "primitives" : [
+                {
+                    "attributes" : {
+                        "POSITION" : 9,
+                        "NORMAL" : 10
+                    },
+                    "indices" : 11,
+                    "material" : 2
+                }
+            ]
+        },
+        {
+            "name" : "Insulation disk",
+            "primitives" : [
+                {
+                    "attributes" : {
+                        "POSITION" : 12,
+                        "NORMAL" : 13
+                    },
+                    "indices" : 14,
+                    "material" : 3
+                }
+            ]
+        }
+    ],
+    "accessors" : [
+        {
+            "bufferView" : 0,
+            "componentType" : 5126,
+            "count" : 8348,
+            "max" : [
+                8.171753883361816,
+                0.4000000059604645,
+                8.171753883361816
+            ],
+            "min" : [
+                -8.171753883361816,
+                0.3199999928474426,
+                -8.171753883361816
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 1,
+            "componentType" : 5126,
+            "count" : 8348,
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 2,
+            "componentType" : 5123,
+            "count" : 12576,
+            "type" : "SCALAR"
+        },
+        {
+            "bufferView" : 3,
+            "componentType" : 5126,
+            "count" : 615,
+            "max" : [
+                8.225000381469727,
+                0.8105844855308533,
+                8.225000381469727
+            ],
+            "min" : [
+                -8.225000381469727,
+                0.30000001192092896,
+                -8.225000381469727
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 4,
+            "componentType" : 5126,
+            "count" : 615,
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 5,
+            "componentType" : 5123,
+            "count" : 888,
+            "type" : "SCALAR"
+        },
+        {
+            "bufferView" : 6,
+            "componentType" : 5126,
+            "count" : 80,
+            "max" : [
+                8.300000190734863,
+                0.30000001192092896,
+                8.300000190734863
+            ],
+            "min" : [
+                -8.300000190734863,
+                0,
+                -8.300000190734863
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 7,
+            "componentType" : 5126,
+            "count" : 80,
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 8,
+            "componentType" : 5123,
+            "count" : 120,
+            "type" : "SCALAR"
+        },
+        {
+            "bufferView" : 9,
+            "componentType" : 5126,
+            "count" : 38266,
+            "max" : [
+                8.108133316040039,
+                72.56147003173828,
+                14.609999656677246
+            ],
+            "min" : [
+                -8.108133316040039,
+                0.43271610140800476,
+                -14.609999656677246
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 10,
+            "componentType" : 5126,
+            "count" : 38266,
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 11,
+            "componentType" : 5123,
+            "count" : 57498,
+            "type" : "SCALAR"
+        },
+        {
+            "bufferView" : 12,
+            "componentType" : 5126,
+            "count" : 36808,
+            "max" : [
+                0.06489063054323196,
+                0,
+                0.06478084623813629
+            ],
+            "min" : [
+                -0.06489063054323196,
+                -0.9200000166893005,
+                -0.06478084623813629
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 13,
+            "componentType" : 5126,
+            "count" : 36808,
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 14,
+            "componentType" : 5123,
+            "count" : 54420,
+            "type" : "SCALAR"
+        }
+    ],
+    "bufferViews" : [
+        {
+            "buffer" : 0,
+            "byteLength" : 100176,
+            "byteOffset" : 0
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 100176,
+            "byteOffset" : 100176
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 25152,
+            "byteOffset" : 200352
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 7380,
+            "byteOffset" : 225504
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 7380,
+            "byteOffset" : 232884
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 1776,
+            "byteOffset" : 240264
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 960,
+            "byteOffset" : 242040
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 960,
+            "byteOffset" : 243000
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 240,
+            "byteOffset" : 243960
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 459192,
+            "byteOffset" : 244200
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 459192,
+            "byteOffset" : 703392
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 114996,
+            "byteOffset" : 1162584
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 441696,
+            "byteOffset" : 1277580
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 441696,
+            "byteOffset" : 1719276
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 108840,
+            "byteOffset" : 2160972
+        }
+    ],
+    "buffers" : [
+        {
+            "byteLength" : 2269812,
+            "uri" : "corset-power-transmission-tower.bin"
+        }
+    ]
+}

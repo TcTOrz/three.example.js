@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-01-07 16:17:58
- * @LastEditTime: 2022-02-18 15:48:57
+ * @LastEditTime: 2022-02-21 11:31:52
  * @LastEditors: Li Jian
  */
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
@@ -10,6 +10,9 @@ import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader'
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader'
 
 import { makeLoading, onProgress } from './makeLoading'
+import * as THREE from 'three'
+
+import makeFiber from './fiber/makeFiber'
 
 //   gltf.scene.traverse( function ( child ) {
 //     if ( child.isMesh ) {
@@ -18,7 +21,7 @@ import { makeLoading, onProgress } from './makeLoading'
 //     }
 //   } );
 
-export const loadGltfModel = (scene: THREE.Scene, url: String) => {
+export const loadGltfModel = (scene: THREE.Scene, url: String, rest?: any) => {
   const gltfUrl = url as string
   const arr = gltfUrl.split('/')
   const name = arr[arr.length - 2]
@@ -46,6 +49,67 @@ export const loadGltfModel = (scene: THREE.Scene, url: String) => {
           group.visible = false
           // group.scale.setZ(0.5)
           // console.log(group)
+        }
+        // 杆塔
+        if (name === '塔杆' && rest) {
+          // gltf.scene.position.set(0, 20, 0)
+          // scene.add(gltf.scene)
+          // scenes<Array> 默认是有一个值的,其值为scene
+          const { scene: towerScene, scenes: towerScenes } = gltf
+          let moreTowerScene: any
+          rest.map(
+            (
+              tower: {
+                id: number
+                name: string
+                position: THREE.Vector3Tuple
+                fiber: { from: Array<number>; to: Array<number> }
+              },
+              index: number
+            ) => {
+              if (index === 0) {
+                moreTowerScene = towerScene
+                moreTowerScene.position.set(...tower.position)
+              } else {
+                moreTowerScene = towerScene.clone()
+                towerScenes.push(moreTowerScene)
+              }
+              moreTowerScene.traverse(
+                (child: { isMesh: any; material: THREE.MeshStandardMaterial }) => {
+                  if (child.isMesh) {
+                    child.material = new THREE.MeshStandardMaterial({
+                      color: 0xffffff,
+                      metalness: 0.5,
+                      roughness: 0.5,
+                      emissive: 0xffffff,
+                      emissiveIntensity: 0.3,
+                    })
+                  }
+                }
+              )
+              moreTowerScene.scale.set(0.4, 0.4, 0.4)
+              moreTowerScene.position.set(...tower.position)
+              const box = new THREE.Box3().setFromObject(moreTowerScene)
+              const boxSize = box.getSize(new THREE.Vector3()) // 大小
+              const boxCenter = box.getCenter(new THREE.Vector3()) // 中心
+              moreTowerScene.children.map((_: any, idx: string | number) => {
+                moreTowerScene.children[idx].name = `Tower_${moreTowerScene.children[idx].name}`
+              })
+              moreTowerScene.userData.boxSize = boxSize
+              moreTowerScene.userData.boxCenter = boxCenter
+              moreTowerScene.userData.info = tower
+              // 为什么是下标12,13而不是其他，需要结合blender模型查看
+              moreTowerScene.userData.from = moreTowerScene.children[4].position
+              moreTowerScene.userData.to = moreTowerScene.children[5].position
+              if (index !== 0) {
+                // 如果不是第一个，则需要添加到场景中，防止重复添加
+                scene.add(moreTowerScene)
+              }
+            }
+          )
+          towerScenes.map(group => {
+            makeFiber(scene, towerScenes, group)
+          })
         }
         scene.add(gltf.scene)
       },
