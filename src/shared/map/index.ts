@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:20:16
- * @LastEditTime: 2022-02-21 15:50:38
+ * @LastEditTime: 2022-02-22 16:45:27
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -59,6 +59,7 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
   init() {
     this.initRenderer() // renderer
     this.initScene() // scene
+    this.initBackground() // background
     this.initCamera() // camera
     this.initLight() // light
     this.initControl() // control
@@ -71,8 +72,34 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
     })
   }
   initScene() {
-    const scene = (this.scene = new THREE.Scene())
-    scene.background = new THREE.Color('black')
+    this.scene = new THREE.Scene()
+  }
+  initBackground() {
+    this.scene.background = new THREE.Color(0x020924)
+    const positions = []
+    const colors = []
+    const geometry = new THREE.BufferGeometry()
+    for (let i = 0; i < 5000; i++) {
+      const vertex = new THREE.Vector3()
+      vertex.x = Math.random() * this.canvas.clientWidth - this.canvas.clientWidth / 2
+      vertex.y = (Math.random() - 0.5) * this.canvas.clientHeight
+      vertex.z = (Math.random() - 0.5) * this.canvas.clientHeight
+      positions.push(vertex.x, vertex.y, vertex.z)
+      const color = new THREE.Color()
+      color.setHSL(Math.random() * 0.2 + 0.5, 0.55, Math.random() * 0.25 + 0.55)
+      colors.push(color.r, color.g, color.b)
+    }
+    geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3))
+    geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3))
+    const starsMaterial = new THREE.PointsMaterial({
+      transparent: true,
+      size: Math.random(),
+      vertexColors: true,
+      opacity: 1,
+    })
+    const stars = new THREE.Points(geometry, starsMaterial)
+    stars.rotation.x = -Math.PI / 2
+    this.scene.add(stars)
   }
   initCamera() {
     this.camera = makePerspectiveCamera(
