@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-16 15:43:12
- * @LastEditTime: 2022-02-17 14:53:05
+ * @LastEditTime: 2022-02-22 15:42:24
  * @LastEditors: Li Jian
  * @description: tween动画
  */
@@ -15,37 +15,49 @@ export default class MakeTween implements MakeTweenInterface {
   camera: THREE.PerspectiveCamera
   cameraOldPosition: THREE.Vector3
   cameraNewPosition: THREE.Vector3
-  // controlNewPosition: THREE.Vector3
-  constructor(ins: any, cameraNewPosition: THREE.Vector3) {
+  controlNewPosition: THREE.Vector3
+  controlOldPosition: THREE.Vector3
+  constructor(ins: any, cameraNewPosition: THREE.Vector3, controlNewPosition: THREE.Vector3) {
     this.ins = ins
     this.cameraOldPosition = new THREE.Vector3()
     this.cameraNewPosition = cameraNewPosition
-    // this.controlNewPosition = controlNewPosition
+    this.controlNewPosition = controlNewPosition
+    this.controlOldPosition = ins.control.target.clone()
     this.camera = ins.camera
     this.camera.getWorldPosition(this.cameraOldPosition)
     this.run()
   }
   run() {
-    const tween = new TWEEN.Tween(this.cameraOldPosition)
+    const tween = new TWEEN.Tween({
+      camera: this.cameraOldPosition,
+      control: this.controlOldPosition,
+    })
     tween
-      .to(this.cameraNewPosition, 1000)
-      .onUpdate(obj => {
-        this.camera.position.set(obj.x, obj.y, obj.z)
-        this.ins.control.target.set(obj.x, (obj.y / 7) * 4 + 20, obj.z)
+      .to({ camera: this.cameraNewPosition, control: this.controlNewPosition }, 1000)
+      .onUpdate(object => {
+        this.camera.position.set(object.camera.x, object.camera.y, object.camera.z)
+        this.ins.control.target.set(object.control.x, object.control.y, object.control.z)
       })
       .onComplete(() => {})
       .easing(TWEEN.Easing.Cubic.Out)
       .start()
   }
-  static recover(ins: MapInterface, cameraNewPosition: THREE.Vector3) {
+  static recover(
+    ins: MapInterface,
+    cameraNewPosition: THREE.Vector3,
+    controlNewPosition: THREE.Vector3
+  ) {
     const cameraOldPosition = ins.camera.position.clone()
-    const tween = new TWEEN.Tween(cameraOldPosition)
+    const controlOldPosition = ins.control.target.clone()
+    const tween = new TWEEN.Tween({
+      camera: cameraOldPosition,
+      control: controlOldPosition,
+    })
     tween
-      .to(cameraNewPosition, 1000)
+      .to({ camera: cameraNewPosition, control: controlNewPosition }, 1000)
       .onUpdate(obj => {
-        ins.camera.position.set(obj.x, obj.y, obj.z)
-        // calulate: camera = [0, -35, 20] control = 0, -20, 10
-        ins.control.target.set(obj.x, (obj.y / 7) * 4, obj.z / 2)
+        ins.camera.position.set(obj.camera.x, obj.camera.y, obj.camera.z)
+        ins.control.target.set(obj.control.x, obj.control.y, obj.control.z)
       })
       .onComplete(() => {})
       .easing(TWEEN.Easing.Cubic.Out)

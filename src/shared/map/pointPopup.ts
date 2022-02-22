@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-14 14:10:21
- * @LastEditTime: 2022-02-21 15:42:50
+ * @LastEditTime: 2022-02-22 15:36:01
  * @LastEditors: Li Jian
  * @description: point弹出框
  */
@@ -30,6 +30,7 @@ export default class PointPopup implements PointPopInterface {
     const object3D = new THREE.Object3D() // 装载点弹出框
     object3D.type = 'pointOrLinePopup'
     object3D.userData.cameraOldPosition = this.camera.position.clone() // 记录摄像机原始位置
+    object3D.userData.controlOldPosition = this.control.target.clone() // 记录控制器原始位置
     object3D.userData.pointObject = this.currentObject
     const mercatorTrans = geoMercator()
     let position: THREE.Vector3Tuple = mercatorTrans(this.currentObject.userData.position)
@@ -38,7 +39,11 @@ export default class PointPopup implements PointPopInterface {
     const width = z - 2
     const height = z - 2
     // 切换视角
-    new AddTween(this.instance, new THREE.Vector3(position[0], position[1] - 20, position[2]))
+    new AddTween(
+      this.instance,
+      new THREE.Vector3(position[0], position[1] - 20, position[2]),
+      new THREE.Vector3(position[0], position[1], position[2])
+    )
     // canvas主体
     let canvas = this.drawBody()
     let mesh = this.drawMesh(canvas, position, [width, height], 'pointOrLinePopup-body')
@@ -181,6 +186,6 @@ export default class PointPopup implements PointPopInterface {
       this.scene.remove(object3D)
       THREE.Cache.clear()
     }
-    AddTween.recover(ins, object3D.userData.cameraOldPosition)
+    AddTween.recover(ins, object3D.userData.cameraOldPosition, object3D.userData.controlOldPosition)
   }
 }

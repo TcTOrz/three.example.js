@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-14 09:39:47
- * @LastEditTime: 2022-02-22 10:13:04
+ * @LastEditTime: 2022-02-22 14:49:53
  * @LastEditors: Li Jian
  * @description: 点UI
  */
@@ -55,12 +55,17 @@ export default class Point implements PointInterface {
         z: 2.21,
       } as THREE.Vector3
       let geometry: THREE.CircleBufferGeometry | THREE.RingBufferGeometry =
-        new THREE.CircleBufferGeometry(0.3, 200)
-      let material = new THREE.MeshPhongMaterial({ color: 0x90e0ef, side: THREE.DoubleSide })
+        new THREE.CircleBufferGeometry(0.4, 200)
+      let material = new THREE.MeshPhongMaterial({
+        color: 0x90e0ef,
+        side: THREE.DoubleSide,
+        transparent: true,
+        opacity: 0.8,
+      })
       let mesh: THREE.Mesh = new THREE.Mesh(geometry, material)
       mesh.position.set(position.x, position.y, position.z)
       this.scene.add(mesh)
-      geometry = new THREE.RingBufferGeometry(0.3, 0.5, 50)
+      geometry = new THREE.RingBufferGeometry(0.4, 0.6, 50)
       material = new THREE.MeshPhongMaterial({
         color: 0x90e0ef,
         side: THREE.DoubleSide,
@@ -93,31 +98,10 @@ export default class Point implements PointInterface {
       .easing(TWEEN.Easing.Quadratic.InOut)
       .start()
       .onComplete(() => {
-        this.createTweenFromCone1(position, mesh, height)
+        // this.createTweenFromCone1(position, mesh, height)
       })
-  }
-  createTweenFromCone1(position: THREE.Vector3, mesh: THREE.Mesh, height: number) {
-    new TWEEN.Tween({
-      x: position.x,
-      y: position.y,
-      z: position.z + height / 2,
-    })
-      .to(
-        {
-          x: position.x,
-          y: position.y,
-          z: position.z,
-        },
-        Math.random() * 300 + 300
-      ) // 随机延时任意时间(600ms)，防止动画重叠
-      .onUpdate(object => {
-        mesh.position.set(object.x, object.y, object.z)
-      })
-      .easing(TWEEN.Easing.Quadratic.InOut)
-      .start()
-      .onComplete(() => {
-        this.createTweenFromCone(position, mesh, height)
-      })
+      .repeat(Infinity)
+      .yoyo(true)
   }
   createTweenFromCircle(mesh: THREE.Mesh) {
     new TWEEN.Tween({
@@ -141,32 +125,9 @@ export default class Point implements PointInterface {
       .easing(TWEEN.Easing.Quadratic.InOut)
       .start()
       .onComplete(() => {
-        this.createTweenFromCircle1(mesh)
+        // this.createTweenFromCircle1(mesh)
       })
-  }
-  createTweenFromCircle1(mesh: THREE.Mesh) {
-    new TWEEN.Tween({
-      x: mesh.scale.x,
-      y: mesh.scale.y,
-      z: mesh.scale.z,
-    })
-      .to(
-        {
-          x: 0.9,
-          y: 0.9,
-          z: 0.9,
-        },
-        500
-      )
-      .onUpdate(object => {
-        mesh.scale.set(object.x, object.y, object.z)
-        // @ts-ignore
-        mesh.material.opacity = 1.7 - object.z
-      })
-      .easing(TWEEN.Easing.Quadratic.InOut)
-      .start()
-      .onComplete(() => {
-        this.createTweenFromCircle(mesh)
-      })
+      .repeat(Infinity)
+      .yoyo(true)
   }
 }
