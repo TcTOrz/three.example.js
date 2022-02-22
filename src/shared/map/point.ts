@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-14 09:39:47
- * @LastEditTime: 2022-02-22 10:05:23
+ * @LastEditTime: 2022-02-22 10:13:04
  * @LastEditors: Li Jian
  * @description: 点UI
  */
@@ -161,7 +161,7 @@ export default class Point implements PointInterface {
       .onUpdate(object => {
         mesh.scale.set(object.x, object.y, object.z)
         // @ts-ignore
-        mesh.material.opacity = 1
+        mesh.material.opacity = 1.7 - object.z
       })
       .easing(TWEEN.Easing.Quadratic.InOut)
       .start()
