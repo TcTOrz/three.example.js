@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:20:16
- * @LastEditTime: 2022-02-23 14:38:48
+ * @LastEditTime: 2022-02-23 16:52:55
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -43,6 +43,7 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
   clock: THREE.Clock
   // fileLoader: THREE.FileLoader
   recoverStates: Map<Object, Function>
+  events: Array<Function> = []
   constructor(canvas: T, provinceCvs: T, popElem: Q) {
     this.canvas = canvas
     this.provinceCvs = provinceCvs
@@ -55,6 +56,7 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
     this.load()
     this.event()
     this.render()
+    return this
   }
   init() {
     this.initRenderer() // renderer
@@ -306,6 +308,7 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
     let removeChangeControl = makeEvent(this.control, 'change', this.onMouseChange())
     let removeMoveEvent = makeEvent(this.canvas, 'mousemove', this.onMouseMove(raycaster, mouse))
     let removeClickEvent = makeEvent(this.canvas, 'click', this.onMouseClick(raycaster, mouse))
+    this.events.push(removeChangeControl, removeMoveEvent, removeClickEvent)
   }
   private getIntersectedObjects(raycaster: THREE.Raycaster, mouse: THREE.Vector2, event: any) {
     // (0 ~ 1) * 2 - 1 => -1 ~ 1

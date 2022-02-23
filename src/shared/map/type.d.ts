@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:47:23
- * @LastEditTime: 2022-02-21 15:37:22
+ * @LastEditTime: 2022-02-23 16:42:37
  * @LastEditors: Li Jian
  */
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
@@ -17,6 +17,7 @@ export interface MapInterface {
   camera: THREE.PerspectiveCamera
   control: OrbitControls
   clock: THREE.Clock
+  events: Array<Function>
   // fileLoader: THREE.FileLoader
   init(): void
   load(): void
