@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 14:17:30
- * @LastEditTime: 2022-02-17 14:31:25
+ * @LastEditTime: 2022-02-23 15:21:25
  * @LastEditors: Li Jian
  */
 import { geoMercator } from '@shared'
@@ -35,7 +35,7 @@ export default class ProvinceName implements ProvinceNameInterface {
     offsetCanvas.height = height
     const offsetCtx = offsetCanvas.getContext('2d')
     if (!offsetCtx) return
-    offsetCtx.font = '12px'
+    offsetCtx.font = '10px'
     // offsetCtx.strokeStyle = '#000'
     offsetCtx.fillStyle = '#ccc'
 
@@ -50,7 +50,7 @@ export default class ProvinceName implements ProvinceNameInterface {
           const [x, y] = mercatorTrans(center)
           const z = 0
           const vector = new THREE.Vector3(x, -y, z)
-          const position = vector.project(this.camera)
+          vector.project(this.camera)
           const left = ((vector.x + 1) / 2) * width
           const top = (-(vector.y - 1) / 2) * height
           const gap = 10 // 省名显示密度
@@ -59,15 +59,17 @@ export default class ProvinceName implements ProvinceNameInterface {
             left,
             top,
             width: offsetCtx.measureText(name).width + gap,
-            height: 12 + gap,
+            height: 10 + gap,
           }
           let show = true
           for (let i = 0; i < texts.length; i++) {
             if (
-              text.left + text.width < texts[i].left ||
-              text.top + text.height < texts[i].top ||
-              texts[i].left + texts[i].width < text.left ||
-              texts[i].top + texts[i].height < text.top
+              (text.left + text.width < texts[i].left ||
+                text.top + text.height < texts[i].top ||
+                texts[i].left + texts[i].width < text.left ||
+                texts[i].top + texts[i].height < text.top) &&
+              -(vector.y - 1) / 2 > 0.1 &&
+              (vector.x + 1) / 2 < 0.9 // 一个折中的做法，台湾等省名显示异常
             ) {
               show = true
             } else {

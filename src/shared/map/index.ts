@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:20:16
- * @LastEditTime: 2022-02-23 12:06:10
+ * @LastEditTime: 2022-02-23 14:38:48
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -138,7 +138,7 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
   async load() {
     await this.asyncMap() // 加载地图
     // 后期可能重写: 参照 - https://threejs.org/manual/#en/align-html-elements-to-3d
-    this.asyncProvinceName() // 加载省份名称
+    // this.asyncProvinceName() // 加载省份名称-移到change事件中
     this.asyncFlyLine() // 加载飞线
     this.asyncRadarAndPoint() // 加载雷达和点
     this.asyncCityLight() // 加载城市灯光
@@ -403,9 +403,9 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
     )
   }
   private onMouseChange() {
-    return () => {
+    return _.debounce(() => {
       this.asyncProvinceName()
-    }
+    }, 10)
   }
   render() {
     requestAnimationFrame(this.render.bind(this))
