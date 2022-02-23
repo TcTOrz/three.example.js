@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-16 15:43:12
- * @LastEditTime: 2022-02-22 15:42:24
+ * @LastEditTime: 2022-02-23 12:04:52
  * @LastEditors: Li Jian
  * @description: tween动画
  */
@@ -33,13 +33,13 @@ export default class MakeTween implements MakeTweenInterface {
       control: this.controlOldPosition,
     })
     tween
-      .to({ camera: this.cameraNewPosition, control: this.controlNewPosition }, 1000)
+      .to({ camera: this.cameraNewPosition, control: this.controlNewPosition }, 800)
       .onUpdate(object => {
         this.camera.position.set(object.camera.x, object.camera.y, object.camera.z)
         this.ins.control.target.set(object.control.x, object.control.y, object.control.z)
       })
       .onComplete(() => {})
-      .easing(TWEEN.Easing.Cubic.Out)
+      .easing(TWEEN.Easing.Quadratic.In)
       .start()
   }
   static recover(

@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:20:16
- * @LastEditTime: 2022-02-22 16:45:27
+ * @LastEditTime: 2022-02-23 12:06:10
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -108,6 +108,7 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
       0.1,
       1000,
       [0, -35, 20]
+      // [0, -45, 45]
     )
   }
   initLight() {
