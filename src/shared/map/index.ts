@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:20:16
- * @LastEditTime: 2022-02-23 16:52:55
+ * @LastEditTime: 2022-02-24 08:53:08
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -408,7 +408,7 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
   private onMouseChange() {
     return _.debounce(() => {
       this.asyncProvinceName()
-    }, 10)
+    }, 0)
   }
   render() {
     requestAnimationFrame(this.render.bind(this))
