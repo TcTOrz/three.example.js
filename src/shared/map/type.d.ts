@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:47:23
- * @LastEditTime: 2022-02-23 16:42:37
+ * @LastEditTime: 2022-02-25 16:02:53
  * @LastEditors: Li Jian
  */
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
@@ -33,10 +33,14 @@ export interface DrawMapInterface {
 
 /** 省名 */
 export interface ProvinceNameInterface {
+  ins: MapInterface
   canvas: HTMLCanvasElement
   data: any
   camera: THREE.PerspectiveCamera
-  draw(): void
+  group: THREE.Group
+  mercatorTrans: Function
+  drawFromSprite(): void
+  drawFromCanvas(): void
 }
 
 /** 飞线 */

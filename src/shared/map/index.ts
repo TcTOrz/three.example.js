@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:20:16
- * @LastEditTime: 2022-02-24 08:53:08
+ * @LastEditTime: 2022-02-25 16:04:48
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -56,7 +56,14 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
     this.load()
     this.event()
     this.render()
+    // this.addHelper()
     return this
+  }
+  addHelper() {
+    const axesHelper = new THREE.AxesHelper(30)
+    this.scene.add(axesHelper)
+    // const gridHelper = new THREE.GridHelper(100, 10)
+    // this.scene.add(gridHelper)
   }
   init() {
     this.initRenderer() // renderer
@@ -331,7 +338,7 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
       } else {
         const o1 = o0.parent
         if (
-          /* o1?.type === 'province' || */
+          o1?.type === 'province' ||
           o1?.type === 'flyline' ||
           o1?.type === 'radar' ||
           o1?.type === 'point' ||
@@ -341,7 +348,7 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
         } else {
           const o2 = o1?.parent
           if (
-            /* o2?.type === 'province' || */
+            o2?.type === 'province' ||
             o2?.type === 'flyline' ||
             o2?.type === 'radar' ||
             o2?.type === 'point' ||
@@ -388,6 +395,9 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
         this.recoverState() // 恢复初始状态
         const currentObj = this.getIntersectedObjects(raycaster, mouse, event)
         // if (popInstance) popInstance.hide()
+        if (currentObj && currentObj.type === 'province') {
+          // console.log(currentObj);
+        }
         if (currentObj && currentObj.type === 'flyline') {
           popup(event, popElem, currentObj.userData)
         }
@@ -408,7 +418,7 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
   private onMouseChange() {
     return _.debounce(() => {
       this.asyncProvinceName()
-    }, 0)
+    }, 20)
   }
   render() {
     requestAnimationFrame(this.render.bind(this))

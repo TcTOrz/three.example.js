@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 11:11:10
- * @LastEditTime: 2022-02-11 10:29:34
+ * @LastEditTime: 2022-02-25 11:04:13
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -38,6 +38,7 @@ export default class DrawMap implements DrawMapInterface {
         transparent: true,
         opacity: 0.3,
         emissive: 0x2c448b,
+        depthWrite: false,
       })
       const mesh = new THREE.Mesh(geometry, material)
       return mesh
