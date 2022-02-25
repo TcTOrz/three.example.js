@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 14:17:30
- * @LastEditTime: 2022-02-25 16:06:02
+ * @LastEditTime: 2022-02-25 16:13:34
  * @LastEditors: Li Jian
  */
 import { geoMercator } from '@shared'
@@ -29,6 +29,7 @@ export default class ProvinceName implements ProvinceNameInterface {
     ins.scene.add(this.group)
     this.mercatorTrans = geoMercator()
     // 1、这是第一种画出省名的方法，缺点是需要与外部canvas相结合，占用dom空间
+    // 并且这种方法还有一些令人感到困惑的边界值需要处理。
     // this.drawFromCanvas()
     // 2、第二种方法，引用自带Sprite
     this.drawFromSprite()
@@ -43,9 +44,8 @@ export default class ProvinceName implements ProvinceNameInterface {
     canvas.height = fontSize * 1.5
     ctx.fillStyle = 'rgba(44, 68, 139, 0)'
     ctx.fillRect(0, 0, canvas.width, canvas.height)
-    ctx.fillStyle = '#ccc'
+    ctx.fillStyle = '#eee'
     ctx.font = `${fontSize}px`
-
     // center居中: (canvas.width - textWidth)/2 right靠右:(canvas.width - textWidth)
     // ctx.fillText(text, (canvas.width - textWidth) / 2, fontSize + 20)
     ctx.fillText(text, (canvas.width - textWidth) / 2, fontSize)
@@ -69,6 +69,9 @@ export default class ProvinceName implements ProvinceNameInterface {
       (elem: { name: any; userData: { centroid?: any; name?: any; center?: any } }) => {
         if (elem.name) {
           let { name, center } = elem.userData
+          if ('centroid' in elem.userData) {
+            center = elem.userData.centroid
+          }
           const [x, y] = this.mercatorTrans(center)
           const z = 0
           const position: THREE.Vector3Tuple = [x, -y, z]
