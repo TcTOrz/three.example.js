@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-11 09:52:16
- * @LastEditTime: 2022-02-17 14:31:39
+ * @LastEditTime: 2022-02-28 08:59:19
  * @LastEditors: Li Jian
  */
 import { geoMercator, RadarController } from '@shared'
@@ -29,8 +29,8 @@ export default class Radar implements RadarInterface {
         z: 2.21,
       }
     })
-    // @ts-ignore
     radar = new RadarController(data)
+    radar.group.name = 'radar-group'
     this.scene.add(radar.group)
   }
 }

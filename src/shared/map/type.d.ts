@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:47:23
- * @LastEditTime: 2022-02-25 16:02:53
+ * @LastEditTime: 2022-02-28 09:31:33
  * @LastEditors: Li Jian
  */
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
@@ -18,10 +18,12 @@ export interface MapInterface {
   control: OrbitControls
   clock: THREE.Clock
   events: Array<Function>
+  removeChangeProvinceNameControl: Function
   // fileLoader: THREE.FileLoader
   init(): void
   load(): void
   render(): void
+  toggleRenderer(): void
 }
 
 /** 地图 */

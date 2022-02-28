@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-02-10 10:11:06
- * @LastEditTime: 2022-02-23 16:54:11
+ * @LastEditTime: 2022-02-28 09:29:25
  * @LastEditors: Li Jian
  * @Description: 第一级(地图)程序入口
 -->
@@ -21,6 +21,9 @@ onMounted(() => {
   const popElem: HTMLDivElement = document.querySelector('#popInfo') as HTMLDivElement
   // const pointPopElem: HTMLDivElement = document.querySelector('#pointPopInfo') as HTMLDivElement
   maps = new CustomMap(canvas, provinceCvs, popElem) // 初始化地图
+  // setInterval(() => {
+  //   maps.toggleRenderer()
+  // }, 2000)
 })
 onUnmounted(() => {
   maps.events.map(f => f()) // 销毁事件

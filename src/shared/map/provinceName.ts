@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 14:17:30
- * @LastEditTime: 2022-02-25 16:13:34
+ * @LastEditTime: 2022-02-28 09:22:39
  * @LastEditors: Li Jian
  */
 import { geoMercator } from '@shared'
@@ -22,9 +22,9 @@ export default class ProvinceName implements ProvinceNameInterface {
     this.camera = ins.camera
     this.group = new THREE.Group()
     // 清除原有的标注
-    const grp = ins.scene.getObjectByName('provinceName')
+    const grp = ins.scene.getObjectByName('province-name')
     grp ? ins.scene.remove(grp) : null
-    this.group.name = 'provinceName'
+    this.group.name = 'province-name'
     this.mercatorTrans = geoMercator()
     ins.scene.add(this.group)
     this.mercatorTrans = geoMercator()

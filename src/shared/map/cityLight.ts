@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-11 10:17:13
- * @LastEditTime: 2022-02-17 14:37:40
+ * @LastEditTime: 2022-02-28 09:20:25
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -34,6 +34,7 @@ export default class CityLight implements CityLightInterface {
     geometry.computeBoundingSphere()
     const material = new THREE.PointsMaterial({ size: 0.01, vertexColors: true })
     const points = new THREE.Points(geometry, material)
+    points.name = 'city-light'
     this.scene.add(points)
   }
 }

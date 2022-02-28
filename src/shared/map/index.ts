@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:20:16
- * @LastEditTime: 2022-02-25 16:04:48
+ * @LastEditTime: 2022-02-28 09:30:00
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -44,6 +44,8 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
   // fileLoader: THREE.FileLoader
   recoverStates: Map<Object, Function>
   events: Array<Function> = []
+  removeChangeProvinceNameControl!: Function
+  // toggleElems: Array<THREE.Group> = []
   constructor(canvas: T, provinceCvs: T, popElem: Q) {
     this.canvas = canvas
     this.provinceCvs = provinceCvs
@@ -312,10 +314,14 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
   event() {
     const raycaster = new THREE.Raycaster()
     const mouse = new THREE.Vector2()
-    let removeChangeControl = makeEvent(this.control, 'change', this.onMouseChange())
+    let removeChangeProvinceNameControl = (this.removeChangeProvinceNameControl = makeEvent(
+      this.control,
+      'change',
+      this.onProvinceNameChange()
+    ))
     let removeMoveEvent = makeEvent(this.canvas, 'mousemove', this.onMouseMove(raycaster, mouse))
     let removeClickEvent = makeEvent(this.canvas, 'click', this.onMouseClick(raycaster, mouse))
-    this.events.push(removeChangeControl, removeMoveEvent, removeClickEvent)
+    this.events.push(removeChangeProvinceNameControl, removeMoveEvent, removeClickEvent)
   }
   private getIntersectedObjects(raycaster: THREE.Raycaster, mouse: THREE.Vector2, event: any) {
     // (0 ~ 1) * 2 - 1 => -1 ~ 1
@@ -415,7 +421,7 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
       0
     )
   }
-  private onMouseChange() {
+  private onProvinceNameChange() {
     return _.debounce(() => {
       this.asyncProvinceName()
     }, 20)
@@ -436,5 +442,27 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
     const dt = this.clock.getDelta()
     radar && radar.animate(dt)
     this.renderer.render(this.scene, this.camera)
+  }
+  toggleRenderer() {
+    // 切换部分渲染 - radar/citytLight/provinceName
+    console.log(this.scene)
+    // radar
+    const radar = this.scene.getObjectByName('radar-group') as THREE.Group
+    radar.visible = !radar.visible
+    // cityLight
+    const cityLight = this.scene.getObjectByName('city-light') as THREE.Group
+    cityLight.visible = !cityLight.visible
+    // provinceName
+    const provinceName = this.scene.getObjectByName('province-name') as THREE.Group
+    provinceName.visible = !provinceName.visible
+    if (provinceName.visible) {
+      this.removeChangeProvinceNameControl = makeEvent(
+        this.control,
+        'change',
+        this.onProvinceNameChange()
+      )
+    } else {
+      this.removeChangeProvinceNameControl()
+    }
   }
 }
