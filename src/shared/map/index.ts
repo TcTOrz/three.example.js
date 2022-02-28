@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:20:16
- * @LastEditTime: 2022-02-28 15:20:04
+ * @LastEditTime: 2022-02-28 16:11:38
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -30,6 +30,7 @@ import TWEEN from '@tweenjs/tween.js'
 // import chinaJson from '@assets/json/china.json'
 // import chinalocationJson from '@assets/json/chinalocation.json'
 import Stats from 'three/examples/jsm/libs/stats.module'
+import rainBg from '@assets/image/star.png'
 
 export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivElement>
   implements MapInterface
@@ -94,6 +95,7 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
     const positions = []
     const colors = []
     const geometry = new THREE.BufferGeometry()
+    const texture = new THREE.TextureLoader().load(rainBg)
     for (let i = 0; i < 5000; i++) {
       const vertex = new THREE.Vector3()
       vertex.x = (Math.random() - 0.5) * this.canvas.clientWidth
@@ -107,10 +109,13 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
     geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3))
     geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3))
     const starsMaterial = new THREE.PointsMaterial({
+      map: texture,
       transparent: true,
-      size: Math.random(),
+      size: Math.random() * 20,
+      // size: Math.random(),
       vertexColors: true,
       opacity: 1,
+      depthWrite: false,
     })
     const stars = new THREE.Points(geometry, starsMaterial)
     stars.rotation.x = -Math.PI / 2

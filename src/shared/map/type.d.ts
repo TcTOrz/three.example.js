@@ -1,11 +1,11 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:47:23
- * @LastEditTime: 2022-02-28 09:31:33
+ * @LastEditTime: 2022-02-28 16:21:33
  * @LastEditors: Li Jian
  */
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-
+import Stats from 'three/examples/jsm/libs/stats.module'
 /** 基础地图 */
 export interface MapInterface {
   canvas: HTMLCanvasElement
@@ -19,6 +19,7 @@ export interface MapInterface {
   clock: THREE.Clock
   events: Array<Function>
   removeChangeProvinceNameControl: Function
+  stats: Stats
   // fileLoader: THREE.FileLoader
   init(): void
   load(): void
