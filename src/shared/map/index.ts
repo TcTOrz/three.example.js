@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:20:16
- * @LastEditTime: 2022-02-28 10:08:39
+ * @LastEditTime: 2022-02-28 10:54:01
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -29,6 +29,7 @@ import _ from 'lodash'
 import TWEEN from '@tweenjs/tween.js'
 import chinaJson from '@assets/json/china.json'
 import chinalocationJson from '@assets/json/chinalocation.json'
+import Stats from 'three/examples/jsm/libs/stats.module'
 
 export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivElement>
   implements MapInterface
@@ -46,6 +47,7 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
   recoverStates: Map<Object, Function>
   events: Array<Function> = []
   removeChangeProvinceNameControl!: Function
+  stats: Stats = new (Stats as any)()
   // toggleElems: Array<THREE.Group> = []
   constructor(canvas: T, provinceCvs: T, popElem: Q) {
     this.canvas = canvas
@@ -59,7 +61,7 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
     this.load()
     this.event()
     this.render()
-    // this.addHelper()
+    import.meta.env.PROD ? undefined : this.addHelper()
     return this
   }
   addHelper() {
@@ -67,6 +69,7 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
     this.scene.add(axesHelper)
     // const gridHelper = new THREE.GridHelper(100, 10)
     // this.scene.add(gridHelper)
+    document.querySelector('#stats')?.appendChild(this.stats.dom)
   }
   init() {
     this.initRenderer() // renderer
@@ -456,6 +459,7 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
     const dt = this.clock.getDelta()
     radar && radar.animate(dt)
     this.renderer.render(this.scene, this.camera)
+    import.meta.env.PROD ? undefined : this.stats.update()
   }
   toggleRenderer() {
     // 切换部分渲染 - radar/citytLight/provinceName

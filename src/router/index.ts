@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-01-05 10:03:52
- * @LastEditTime: 2022-02-21 09:18:51
+ * @LastEditTime: 2022-02-28 10:28:22
  * @LastEditors: Li Jian
  */
 import { createRouter, createWebHistory, createWebHashHistory, RouteRecordRaw } from 'vue-router'
@@ -9,7 +9,7 @@ import { createRouter, createWebHistory, createWebHashHistory, RouteRecordRaw } 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    redirect: '/16',
+    redirect: '/14',
   },
   {
     path: '/0',
