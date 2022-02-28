@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:20:16
- * @LastEditTime: 2022-02-28 14:56:29
+ * @LastEditTime: 2022-02-28 15:20:04
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -96,7 +96,7 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
     const geometry = new THREE.BufferGeometry()
     for (let i = 0; i < 5000; i++) {
       const vertex = new THREE.Vector3()
-      vertex.x = Math.random() * this.canvas.clientWidth - this.canvas.clientWidth / 2
+      vertex.x = (Math.random() - 0.5) * this.canvas.clientWidth
       vertex.y = (Math.random() - 0.5) * this.canvas.clientHeight
       vertex.z = (Math.random() - 0.5) * this.canvas.clientHeight
       positions.push(vertex.x, vertex.y, vertex.z)
