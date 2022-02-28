@@ -1,14 +1,14 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:20:16
- * @LastEditTime: 2022-02-28 10:54:01
+ * @LastEditTime: 2022-02-28 14:56:29
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
 import {
   makePerspectiveCamera,
   resizeRendererToDisplaySize,
-  DrawMap,
+  // DrawMap,
   AddProvinceName,
   AddFlyLine,
   flyLines,
@@ -27,8 +27,8 @@ import { MapInterface } from './type'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import _ from 'lodash'
 import TWEEN from '@tweenjs/tween.js'
-import chinaJson from '@assets/json/china.json'
-import chinalocationJson from '@assets/json/chinalocation.json'
+// import chinaJson from '@assets/json/china.json'
+// import chinalocationJson from '@assets/json/chinalocation.json'
 import Stats from 'three/examples/jsm/libs/stats.module'
 
 export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivElement>
@@ -157,18 +157,18 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
   async load() {
     await this.asyncMap() // 加载地图
     // 后期可能重写: 参照 - https://threejs.org/manual/#en/align-html-elements-to-3d
-    // this.asyncProvinceName() // 加载省份名称-移到change事件中
+    this.asyncProvinceName() // 加载省份名称
     this.asyncFlyLine() // 加载飞线
     this.asyncRadarAndPoint() // 加载雷达和点
     this.asyncCityLight() // 加载城市灯光
   }
-  private asyncCityLight() {
+  private async asyncCityLight() {
     // this.fileLoader.load('/json/chinalocation.json', data => {
     // 灯光相关的数据取自于
     // https://mapv.baidu.com/gl/examples/editor.html#point-china.html
     // const jsonData = JSON.parse(data as string)
+    const chinalocationJson = (await import('@assets/json/chinalocation.json')).default
     new AddCityLight(this, chinalocationJson)
-    // })
   }
   private asyncRadarAndPoint() {
     // 后台加载数据
@@ -310,12 +310,11 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
     new AddProvinceName(this)
   }
   private asyncMap() {
-    return new Promise(resolve => {
-      // this.fileLoader.load('/json/china.json', data => {
-      // const jsonData = JSON.parse(data as string)
-      new DrawMap(this.scene, chinaJson)
-      resolve(true)
-      // })
+    const MapInstance = import('@shared/map/drawMap')
+    const ChinaJson = import('@assets/json/china.json')
+    return Promise.all([MapInstance, ChinaJson]).then(res => {
+      const [Map, chinaJson] = res
+      new Map.default(this.scene, chinaJson)
     })
   }
   addRecoverState(obj: Object, func: Function) {
