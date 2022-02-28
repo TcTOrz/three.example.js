@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-01-07 10:39:37
- * @LastEditTime: 2022-02-21 15:33:43
+ * @LastEditTime: 2022-02-28 10:05:39
  * @LastEditors: Li Jian
  */
 import resizeRendererToDisplaySize from './resizeRendererToDisplaySize'
@@ -21,7 +21,7 @@ import RadarController from './radar'
 import CustomMap from './map/index'
 import DrawMap from './map/drawMap'
 import AddProvinceName from './map/provinceName'
-import AddFlyLine, { flyLines } from './map/flyLine'
+import AddFlyLine, { flyLines, lines2 } from './map/flyLine'
 import AddRadar, { radar } from './map/radar'
 import AddCityLight from './map/cityLight'
 import AddPoint from './map/point'
@@ -61,6 +61,7 @@ export {
   AddProvinceName,
   AddFlyLine,
   flyLines,
+  lines2,
   AddRadar,
   radar,
   AddCityLight,

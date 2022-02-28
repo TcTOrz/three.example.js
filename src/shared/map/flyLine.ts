@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-11 09:22:34
- * @LastEditTime: 2022-02-17 14:30:23
+ * @LastEditTime: 2022-02-28 10:05:42
  * @LastEditors: Li Jian
  * @Description: 加载飞线
  */
@@ -13,6 +13,7 @@ import { LineGeometry } from 'three/examples/jsm/lines/LineGeometry'
 import { FlyLineInterface, MapInterface } from './type'
 
 export const flyLines: TheFlyLine[] = []
+export const lines2: Line2[] = []
 
 export default class FlyLine implements FlyLineInterface {
   scene: THREE.Scene
@@ -46,13 +47,12 @@ export default class FlyLine implements FlyLineInterface {
       linewidth: 0.002,
     })
     const curveObject = new Line2(geometry, material)
-    scene.add(curveObject)
+    lines2.push(curveObject)
     // @ts-ignore
     let flyLine = new TheFlyLine(curve, {
       color: 0x90e0ef,
       segFlag: true,
     })
-    scene.add(flyLine)
     flyLine.userData = {
       type: 'flyline',
       path: flyline.path,

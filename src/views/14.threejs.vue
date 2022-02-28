@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-02-10 10:11:06
- * @LastEditTime: 2022-02-28 09:29:25
+ * @LastEditTime: 2022-02-28 09:45:08
  * @LastEditors: Li Jian
  * @Description: 第一级(地图)程序入口
 -->
@@ -24,6 +24,7 @@ onMounted(() => {
   // setInterval(() => {
   //   maps.toggleRenderer()
   // }, 2000)
+  console.log(maps.scene)
 })
 onUnmounted(() => {
   maps.events.map(f => f()) // 销毁事件

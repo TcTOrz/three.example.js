@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-14 09:39:47
- * @LastEditTime: 2022-02-22 14:49:53
+ * @LastEditTime: 2022-02-28 09:58:51
  * @LastEditors: Li Jian
  * @description: 点UI
  */
@@ -23,6 +23,7 @@ export default class Point implements PointInterface {
     const data = _.cloneDeep(this.data)
     const mercator = geoMercator()
     // 画锥形体
+    let group = new THREE.Group()
     data.map((elem: any) => {
       const pos = mercator(elem.position)
       const height = 3
@@ -43,10 +44,13 @@ export default class Point implements PointInterface {
       mesh.rotateX(-Math.PI / 2)
       mesh.type = 'point'
       mesh.userData = elem
-      this.scene.add(mesh)
+      group.add(mesh)
       this.createTweenFromCone(position, mesh, height)
     })
+    group.name = 'point-group'
+    this.scene.add(group)
     // 画圆环
+    group = new THREE.Group()
     data.map((elem: any) => {
       const pos = mercator(elem.position)
       const position = {
@@ -64,7 +68,7 @@ export default class Point implements PointInterface {
       })
       let mesh: THREE.Mesh = new THREE.Mesh(geometry, material)
       mesh.position.set(position.x, position.y, position.z)
-      this.scene.add(mesh)
+      group.add(mesh)
       geometry = new THREE.RingBufferGeometry(0.4, 0.6, 50)
       material = new THREE.MeshPhongMaterial({
         color: 0x90e0ef,
@@ -75,8 +79,10 @@ export default class Point implements PointInterface {
       mesh = new THREE.Mesh(geometry, material)
       mesh.position.set(position.x, position.y, position.z)
       this.createTweenFromCircle(mesh)
-      this.scene.add(mesh)
+      group.add(mesh)
     })
+    group.name = 'point-circle-group'
+    this.scene.add(group)
   }
   createTweenFromCone(position: THREE.Vector3, mesh: THREE.Mesh, height: number) {
     new TWEEN.Tween({

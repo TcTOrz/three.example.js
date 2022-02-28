@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:20:16
- * @LastEditTime: 2022-02-28 09:30:00
+ * @LastEditTime: 2022-02-28 10:08:39
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -12,6 +12,7 @@ import {
   AddProvinceName,
   AddFlyLine,
   flyLines,
+  lines2,
   AddRadar,
   radar,
   AddCityLight,
@@ -110,6 +111,7 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
     })
     const stars = new THREE.Points(geometry, starsMaterial)
     stars.rotation.x = -Math.PI / 2
+    stars.name = 'background-stars'
     this.scene.add(stars)
   }
   initCamera() {
@@ -123,14 +125,17 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
     )
   }
   initLight() {
+    const group = new THREE.Group()
     const light = new THREE.DirectionalLight(0xb1e1ff, 1)
     light.position.set(1, 1, 2)
     light.target.position.set(0, 0, 0)
-    this.scene.add(light)
+    group.add(light)
     const light1 = new THREE.DirectionalLight(0xb1e1ff, 1)
     light1.position.set(-1, -1, -2)
     light1.target.position.set(0, 0, 0)
-    this.scene.add(light1)
+    group.add(light1)
+    group.name = 'light-group'
+    this.scene.add(group)
   }
   initControl() {
     const control = (this.control = new OrbitControls(this.camera, this.canvas))
@@ -227,7 +232,7 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
   }
   private asyncFlyLine() {
     // 后台加载数据
-    const flylines = [
+    const data = [
       {
         name: '光缆0',
         info: '一些测试信息',
@@ -285,8 +290,17 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
         ],
       },
     ]
-    flylines.forEach(flyline => {
+    data.forEach(flyline => {
       new AddFlyLine(this, flyline)
+    })
+    let group = new THREE.Group()
+    group.name = 'fly-line-group'
+    this.scene.add(group)
+    lines2.forEach(line => {
+      group.add(line)
+    })
+    flyLines.forEach(flyline => {
+      group.add(flyline)
     })
   }
   private asyncProvinceName() {

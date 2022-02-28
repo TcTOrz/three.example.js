@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 11:11:10
- * @LastEditTime: 2022-02-25 11:04:13
+ * @LastEditTime: 2022-02-28 09:51:43
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -93,7 +93,7 @@ export default class DrawMap implements DrawMapInterface {
     }
   }
   draw() {
-    const nation = new THREE.Object3D() // 国家
+    const nation = new THREE.Group() // 国家
     nation.name = 'nation'
     const mercatorTrans = geoMercator()
     this.jsonData.features.forEach(feature => {
