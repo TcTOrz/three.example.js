@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:20:16
- * @LastEditTime: 2022-02-28 16:11:38
+ * @LastEditTime: 2022-03-01 15:41:19
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -22,13 +22,12 @@ import {
   AddPoint,
   AddPointPopup,
   AddLinePopup,
+  SweepEffectShader,
 } from '@shared'
 import { MapInterface } from './type'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import _ from 'lodash'
 import TWEEN from '@tweenjs/tween.js'
-// import chinaJson from '@assets/json/china.json'
-// import chinalocationJson from '@assets/json/chinalocation.json'
 import Stats from 'three/examples/jsm/libs/stats.module'
 import rainBg from '@assets/image/star.png'
 
@@ -44,12 +43,11 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
   camera!: THREE.PerspectiveCamera
   control!: OrbitControls
   clock: THREE.Clock
-  // fileLoader: THREE.FileLoader
   recoverStates: Map<Object, Function>
   events: Array<Function> = []
   removeChangeProvinceNameControl!: Function
   stats: Stats = new (Stats as any)()
-  // toggleElems: Array<THREE.Group> = []
+  insSweepShader!: SweepEffectShader
   constructor(canvas: T, provinceCvs: T, popElem: Q) {
     this.canvas = canvas
     this.provinceCvs = provinceCvs
@@ -91,7 +89,8 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
     this.scene = new THREE.Scene()
   }
   initBackground() {
-    this.scene.background = new THREE.Color(0x020924)
+    // this.scene.background = new THREE.Color(0x020924)
+    this.scene.background = new THREE.Color(0x000000)
     const positions = []
     const colors = []
     const geometry = new THREE.BufferGeometry()
@@ -166,6 +165,13 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
     this.asyncFlyLine() // 加载飞线
     this.asyncRadarAndPoint() // 加载雷达和点
     this.asyncCityLight() // 加载城市灯光
+    setTimeout(() => {
+      // 由于首次加载会出现卡顿，所以延时两秒执行
+      this.asyncSweepShader() // 加载扫光
+    }, 2000)
+  }
+  private asyncSweepShader() {
+    this.insSweepShader = new SweepEffectShader(this)
   }
   private async asyncCityLight() {
     // this.fileLoader.load('/json/chinalocation.json', data => {
@@ -463,6 +469,7 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
     const dt = this.clock.getDelta()
     radar && radar.animate(dt)
     this.renderer.render(this.scene, this.camera)
+    this.insSweepShader && this.insSweepShader.animate(dt)
     import.meta.env.PROD ? undefined : this.stats.update()
   }
   toggleRenderer() {

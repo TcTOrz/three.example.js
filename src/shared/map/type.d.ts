@@ -1,11 +1,13 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:47:23
- * @LastEditTime: 2022-02-28 16:21:33
+ * @LastEditTime: 2022-03-01 15:35:13
  * @LastEditors: Li Jian
  */
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import Stats from 'three/examples/jsm/libs/stats.module'
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer'
+import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass'
 /** 基础地图 */
 export interface MapInterface {
   canvas: HTMLCanvasElement
@@ -99,4 +101,16 @@ export interface PointPopInterface {
 /** 线弹出框 */
 export interface LinePopupInterface extends PointPopInterface {
   jump(): void
+}
+
+/** 扫光特效 */
+export interface SweepEffectShaderInterface {
+  vertexShader: string
+  fragmentShader: string
+  ins: MapInterface
+  composer: EffectComposer
+  shaderPass: ShaderPass
+  draw(): void
+  getShader(): [string, string]
+  animate(dt: number): void
 }

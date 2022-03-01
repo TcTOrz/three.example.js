@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-01-07 10:39:37
- * @LastEditTime: 2022-02-28 10:05:39
+ * @LastEditTime: 2022-03-01 15:06:41
  * @LastEditors: Li Jian
  */
 import resizeRendererToDisplaySize from './resizeRendererToDisplaySize'
@@ -28,6 +28,7 @@ import AddPoint from './map/point'
 import AddPointPopup from './map/pointPopup'
 import AddTween from './makeTween'
 import AddLinePopup from './map/linePopup'
+import SweepEffectShader from './map/sweepEffectShader'
 
 // func
 import geoMercator from './geoMercator'
@@ -73,4 +74,5 @@ export {
   AddTween,
   Site,
   AddLinePopup,
+  SweepEffectShader,
 }
