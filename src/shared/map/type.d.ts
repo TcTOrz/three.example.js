@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:47:23
- * @LastEditTime: 2022-03-01 15:35:13
+ * @LastEditTime: 2022-03-01 15:55:20
  * @LastEditors: Li Jian
  */
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
@@ -113,4 +113,5 @@ export interface SweepEffectShaderInterface {
   draw(): void
   getShader(): [string, string]
   animate(dt: number): void
+  toggle(): void
 }

@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:20:16
- * @LastEditTime: 2022-03-01 15:41:19
+ * @LastEditTime: 2022-03-01 15:57:26
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -473,7 +473,7 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
     import.meta.env.PROD ? undefined : this.stats.update()
   }
   toggleRenderer() {
-    // 切换部分渲染 - radar/citytLight/provinceName
+    // 切换部分渲染 - radar/citytLight/provinceName/sweepEffectShader
     console.log(this.scene)
     // radar
     const radar = this.scene.getObjectByName('radar-group') as THREE.Group
@@ -493,5 +493,7 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
     } else {
       this.removeChangeProvinceNameControl()
     }
+    // 扫光特效
+    this.insSweepShader && this.insSweepShader.toggle()
   }
 }

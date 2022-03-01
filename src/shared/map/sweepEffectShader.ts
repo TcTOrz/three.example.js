@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-03-01 14:43:14
- * @LastEditTime: 2022-03-01 15:38:18
+ * @LastEditTime: 2022-03-01 15:56:55
  * @LastEditors: Li Jian
  * @Description: 扫光特效
  */
@@ -76,5 +76,8 @@ export default class SweepEffectShader implements SweepEffectShaderInterface {
     if (this.shaderPass.uniforms['time'].value > 15) {
       this.shaderPass.uniforms['time'].value = -1
     }
+  }
+  toggle() {
+    this.composer.passes[1].enabled = !this.composer.passes[1].enabled
   }
 }
