@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-03-01 14:43:14
- * @LastEditTime: 2022-03-01 15:56:55
+ * @LastEditTime: 2022-03-01 16:18:03
  * @LastEditors: Li Jian
  * @Description: 扫光特效
  */
@@ -63,7 +63,7 @@ export default class SweepEffectShader implements SweepEffectShaderInterface {
           float a = 1.0 - alpha / 0.1;
           float enda = smoothstep(0.0, 1.0, a) + 1.3;
           gl_FragColor = texel * enda;
-        } else{
+        } else {
           gl_FragColor = texel;
         }
       }
