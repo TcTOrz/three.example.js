@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:20:16
- * @LastEditTime: 2022-03-02 10:18:50
+ * @LastEditTime: 2022-03-02 15:15:18
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -141,6 +141,13 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
     light1.position.set(-1, -1, -2)
     light1.target.position.set(0, 0, 0)
     group.add(light1)
+    const light2 = new THREE.PointLight(0x00ff00, 100, 25)
+    light2.position.set(-20, 0, 10)
+    group.add(light2)
+    if (!import.meta.env.PROD) {
+      const helper = new THREE.PointLightHelper(light2)
+      this.scene.add(helper)
+    }
     group.name = 'light-group'
     this.scene.add(group)
   }

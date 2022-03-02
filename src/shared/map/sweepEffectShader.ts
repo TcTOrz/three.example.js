@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-03-01 14:43:14
- * @LastEditTime: 2022-03-02 14:33:13
+ * @LastEditTime: 2022-03-02 14:41:31
  * @LastEditors: Li Jian
  * @Description: 扫光特效
  */
@@ -32,7 +32,7 @@ export default class SweepEffectShader implements SweepEffectShaderInterface {
       uniforms: {
         tDiffuse: { value: null },
         time: { value: -1.0 },
-        ratio: { value: 5.0 },
+        // ratio: { value: 5.0 },
       },
       vertexShader: this.vertexShader,
       fragmentShader: this.fragmentShader,
@@ -55,7 +55,7 @@ export default class SweepEffectShader implements SweepEffectShaderInterface {
       uniform sampler2D tDiffuse;
       varying vec2 vUv;
       varying vec3 iPosition;
-      uniform float ratio;
+      // uniform float ratio;
       void main() {
         vec4 texel = texture2D(tDiffuse, vUv);
         // --- 圆圈
