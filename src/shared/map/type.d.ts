@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:47:23
- * @LastEditTime: 2022-03-01 15:55:20
+ * @LastEditTime: 2022-03-02 08:57:14
  * @LastEditors: Li Jian
  */
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
@@ -9,7 +9,8 @@ import Stats from 'three/examples/jsm/libs/stats.module'
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer'
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass'
 /** 基础地图 */
-export interface MapInterface {
+export class MapInterface {
+  constructor(canvas: HTMLCanvasElement, provinceCvs: HTMLCanvasElement, popElem: HTMLDivElement)
   canvas: HTMLCanvasElement
   provinceCvs: HTMLCanvasElement
   popElem: HTMLDivElement
@@ -30,14 +31,16 @@ export interface MapInterface {
 }
 
 /** 地图 */
-export interface DrawMapInterface {
+export class DrawMapInterface {
+  constructor(scene: THREE.Scene, jsonData: { features: any[]; type: string })
   scene: THREE.Scene
   jsonData: { features: Object[]; type: string }
   draw(): void
 }
 
 /** 省名 */
-export interface ProvinceNameInterface {
+export class ProvinceNameInterface {
+  constructor(ins: MapInterface)
   ins: MapInterface
   canvas: HTMLCanvasElement
   data: any
@@ -49,35 +52,40 @@ export interface ProvinceNameInterface {
 }
 
 /** 飞线 */
-export interface FlyLineInterface {
+export class FlyLineInterface {
+  constructor(ins: MapInterface, flyline: { name?: string; info?: string; path: any })
   scene: THREE.Scene
   flyLine: { name?: string; info?: string; path: any }
   draw(): void
 }
 
 /** 雷达 */
-export interface RadarInterface {
+export class RadarInterface {
+  constructor(ins: MapInterface, data: any[])
   scene: THREE.Scene
   data: any[]
   draw(): void
 }
 
 /** 城市光 */
-export interface CityLightInterface {
+export class CityLightInterface {
+  constructor(ins: MapInterface, jsonData: any)
   scene: THREE.Scene
   jsonData: any
   draw(): void
 }
 
 /** 点 */
-export interface PointInterface {
+export class PointInterface {
+  constructor(ins: MapInterface, data: any[])
   scene: THREE.Scene
   data: any[]
   draw(): void
 }
 
 /** 点弹出框 */
-export interface PointPopInterface {
+export class PointPopInterface {
+  constructor(ins: MapInterface, currentObject: THREE.Object3D)
   instance: any
   scene: THREE.Scene
   camera: THREE.PerspectiveCamera
@@ -99,12 +107,14 @@ export interface PointPopInterface {
 }
 
 /** 线弹出框 */
-export interface LinePopupInterface extends PointPopInterface {
+export class LinePopupInterface extends PointPopInterface {
+  constructor(ins: MapInterface, currentObject: THREE.Object3D)
   jump(): void
 }
 
 /** 扫光特效 */
-export interface SweepEffectShaderInterface {
+export class SweepEffectShaderInterface {
+  constructor(ins: MapInterface)
   vertexShader: string
   fragmentShader: string
   ins: MapInterface
