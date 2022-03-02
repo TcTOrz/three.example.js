@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-03-01 14:43:14
- * @LastEditTime: 2022-03-02 14:41:31
+ * @LastEditTime: 2022-03-02 15:33:41
  * @LastEditors: Li Jian
  * @Description: 扫光特效
  */
@@ -31,7 +31,7 @@ export default class SweepEffectShader implements SweepEffectShaderInterface {
     const shader = new THREE.ShaderMaterial({
       uniforms: {
         tDiffuse: { value: null },
-        time: { value: -1.0 },
+        time: { value: -3.0 },
         // ratio: { value: 5.0 },
       },
       vertexShader: this.vertexShader,
@@ -96,7 +96,7 @@ export default class SweepEffectShader implements SweepEffectShaderInterface {
     this.composer.render()
     this.shaderPass.uniforms['time'].value += dt * 1.5
     if (this.shaderPass.uniforms['time'].value > 15) {
-      this.shaderPass.uniforms['time'].value = -1
+      this.shaderPass.uniforms['time'].value = -3.0
     }
   }
   toggle() {
