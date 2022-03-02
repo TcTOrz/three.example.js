@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-01-13 09:31:45
- * @LastEditTime: 2022-02-14 14:21:29
+ * @LastEditTime: 2022-03-02 15:47:37
  * @LastEditors: Li Jian
  */
 
@@ -23,6 +23,7 @@ type TypeTuples =
   // | 'dblclick'
   | 'keydown'
   | 'change'
+  | 'resize'
 
 export const makeEvent = (
   elem: HTMLDivElement | Window | HTMLCanvasElement | OrbitControls,

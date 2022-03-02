@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:20:16
- * @LastEditTime: 2022-03-02 15:15:18
+ * @LastEditTime: 2022-03-02 15:52:20
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -355,7 +355,13 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
     ))
     let removeMoveEvent = makeEvent(this.canvas, 'mousemove', this.onMouseMove(raycaster, mouse))
     let removeClickEvent = makeEvent(this.canvas, 'click', this.onMouseClick(raycaster, mouse))
-    this.events.push(removeChangeProvinceNameControl, removeMoveEvent, removeClickEvent)
+    let removeResizeEvent = makeEvent(window, 'resize', this.onResize())
+    this.events.push(
+      removeChangeProvinceNameControl,
+      removeMoveEvent,
+      removeClickEvent,
+      removeResizeEvent
+    )
   }
   private getIntersectedObjects(raycaster: THREE.Raycaster, mouse: THREE.Vector2, event: any) {
     // (0 ~ 1) * 2 - 1 => -1 ~ 1
@@ -400,6 +406,11 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
       }
     }
     return currentObj
+  }
+  private onResize() {
+    return _.debounce(() => {
+      this.asyncProvinceName()
+    }, 20)
   }
   private onMouseClick(raycaster: THREE.Raycaster, mouse: THREE.Vector2) {
     return (event: any) => {
