@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 14:17:30
- * @LastEditTime: 2022-02-28 09:22:39
+ * @LastEditTime: 2022-03-03 14:05:15
  * @LastEditors: Li Jian
  */
 import { geoMercator } from '@shared'
@@ -45,7 +45,7 @@ export default class ProvinceName implements ProvinceNameInterface {
     ctx.fillStyle = 'rgba(44, 68, 139, 0)'
     ctx.fillRect(0, 0, canvas.width, canvas.height)
     ctx.fillStyle = '#eee'
-    ctx.font = `${fontSize}px`
+    ctx.font = `${fontSize}vh`
     // center居中: (canvas.width - textWidth)/2 right靠右:(canvas.width - textWidth)
     // ctx.fillText(text, (canvas.width - textWidth) / 2, fontSize + 20)
     ctx.fillText(text, (canvas.width - textWidth) / 2, fontSize)
