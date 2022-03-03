@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-03-03 10:10:29
- * @LastEditTime: 2022-03-03 10:39:27
+ * @LastEditTime: 2022-03-03 10:44:12
  * @LastEditors: Li Jian
  * @Description: remove dist files
  */
@@ -19,6 +19,6 @@ fs.existsSync(path.resolve(__dirname, '../dist')) &&
       console.log(chalk.red(err))
       process.exit(1)
     } else {
-      console.log(chalk.green('删除成功'))
+      console.log(chalk.green('dist文件删除成功'))
     }
   })
