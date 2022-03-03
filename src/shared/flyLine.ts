@@ -3,7 +3,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-01-21 10:36:09
- * @LastEditTime: 2022-02-09 10:59:29
+ * @LastEditTime: 2022-03-03 15:41:49
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -106,6 +106,7 @@ export default class FlyLine extends THREE.Object3D {
     this.time = time
   }
   dispose() {
+    console.log('flyLine has been removed!')
     this.remove(this.mesh)
     this.mesh.geometry.dispose()
     this.mesh.material.dispose()

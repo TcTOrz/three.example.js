@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:20:16
- * @LastEditTime: 2022-03-02 15:52:20
+ * @LastEditTime: 2022-03-03 15:40:54
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -512,5 +512,12 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
     }
     // 扫光特效
     this.insSweepShader && this.insSweepShader.toggle()
+  }
+  dispose() {
+    // 销毁
+    this.events.forEach(f => f()) // 销毁事件
+    flyLines.forEach(flyline => {
+      flyline.dispose() // 销毁飞线
+    })
   }
 }
