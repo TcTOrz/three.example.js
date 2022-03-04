@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-02-18 10:41:00
- * @LastEditTime: 2022-03-04 10:09:31
+ * @LastEditTime: 2022-03-04 10:47:05
  * @LastEditors: Li Jian
  * @Description: 第一级(地图)程序HTML布局
 -->
@@ -68,17 +68,15 @@ onMounted(() => {
     #right
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 $width: v-bind('theme.width');
 $header-height: 50px;
 $side-width: 300px;
 .layout {
-  // width: $width;
-  // height: inherit;
+  position: absolute;
   top: 0;
   left: 0;
   * {
-    position: relative;
     opacity: 0.8;
   }
   #header {
@@ -87,7 +85,6 @@ $side-width: 300px;
     background-image: url('@assets/image/u6.png');
     background-repeat: no-repeat;
     background-size: 100%;
-    // background-position: center;
     .left {
       width: 100px;
     }
@@ -97,18 +94,25 @@ $side-width: 300px;
   }
   .content {
     top: $header-height;
-    height: calc(100vh - $header-height);
-    width: $side-width;
+    // height: calc(100vh - $header-height);
+
+    // width: $side-width;
+    // display: flex;
+    // justify-content: space-between;
     #left {
-      width: inherit;
-      height: inherit;
+      width: $side-width;
+      height: calc(100vh - $header-height);
       background-color: white;
+      display: inline-block;
+      position: absolute;
     }
     #right {
-      width: inherit;
-      height: inherit;
+      width: $side-width;
+      height: calc(100vh - $header-height);
       left: calc($width - $side-width);
       background-color: white;
+      display: inline-block;
+      position: absolute;
     }
   }
 }

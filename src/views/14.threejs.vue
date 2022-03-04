@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-02-10 10:11:06
- * @LastEditTime: 2022-03-04 10:11:11
+ * @LastEditTime: 2022-03-04 11:03:42
  * @LastEditors: Li Jian
  * @Description: 第一级(地图)程序入口
 -->
@@ -40,10 +40,10 @@ onUnmounted(() => {
 //- pippy弹出框
 #popInfo(style="display: inline;")
 // - stats
-#stats(style="position: absolute; top: 0; left: 0;")
+#stats
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 #topLevel {
   width: inherit;
   height: inherit;
@@ -56,5 +56,8 @@ onUnmounted(() => {
       position: relative;
     }
   }
+}
+:global(#stats > div) {
+  left: 100px !important;
 }
 </style>
