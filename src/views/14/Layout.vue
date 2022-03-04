@@ -1,19 +1,25 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-02-18 10:41:00
- * @LastEditTime: 2022-02-18 11:17:10
+ * @LastEditTime: 2022-03-04 10:09:31
  * @LastEditors: Li Jian
  * @Description: 第一级(地图)程序HTML布局
 -->
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import * as echarts from 'echarts'
 
 const headername = ref('test header')
 const times = ref(0)
-const changeHeadername = () => {
-  headername.value = `test header: ${times.value++}`
-}
+// const changeHeadername = () => {
+//   headername.value = `test header: ${times.value++}`
+// }
+const theme = reactive({
+  width: `${document.body.clientWidth}px`,
+})
+window.addEventListener('resize', () => {
+  theme.width = `${document.body.clientWidth}px`
+})
 
 onMounted(() => {
   const myChart = echarts.init(document.querySelector('#left') as HTMLDivElement)
@@ -53,38 +59,57 @@ onMounted(() => {
 })
 </script>
 <template lang="pug">
-#header(@click="changeHeadername()")
-  | {{ headername }}
-#left
-#right
+.layout
+  #header
+    .left
+    .right
+  .content
+    #left
+    #right
 </template>
 
 <style lang="scss">
-#header {
-  width: inherit;
-  height: 40px;
-  background-color: #009688;
-  color: white;
-  opacity: 0.8;
-  font-size: large;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-#left {
-  width: 200px;
-  height: 200px;
-  background-color: white;
-  opacity: 0.7;
-  left: 10px;
-  top: 50px;
-}
-#right {
-  width: 200px;
-  height: 200px;
-  background-color: white;
-  opacity: 0.7;
-  left: 670px;
-  top: 50px;
+$width: v-bind('theme.width');
+$header-height: 50px;
+$side-width: 300px;
+.layout {
+  // width: $width;
+  // height: inherit;
+  top: 0;
+  left: 0;
+  * {
+    position: relative;
+    opacity: 0.8;
+  }
+  #header {
+    width: $width;
+    height: $header-height;
+    background-image: url('@assets/image/u6.png');
+    background-repeat: no-repeat;
+    background-size: 100%;
+    // background-position: center;
+    .left {
+      width: 100px;
+    }
+    .right {
+      width: 100px;
+    }
+  }
+  .content {
+    top: $header-height;
+    height: calc(100vh - $header-height);
+    width: $side-width;
+    #left {
+      width: inherit;
+      height: inherit;
+      background-color: white;
+    }
+    #right {
+      width: inherit;
+      height: inherit;
+      left: calc($width - $side-width);
+      background-color: white;
+    }
+  }
 }
 </style>

@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:20:16
- * @LastEditTime: 2022-03-03 15:40:54
+ * @LastEditTime: 2022-03-04 10:10:40
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -95,7 +95,7 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
     const colors = []
     const geometry = new THREE.BufferGeometry()
     const texture = new THREE.TextureLoader().load(rainBg)
-    for (let i = 0; i < 5000; i++) {
+    for (let i = 0; i < 500; i++) {
       const vertex = new THREE.Vector3()
       vertex.x = (Math.random() - 0.5) * this.canvas.clientWidth
       vertex.y = (Math.random() - 0.5) * this.canvas.clientHeight

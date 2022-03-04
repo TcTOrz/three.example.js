@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-02-10 10:11:06
- * @LastEditTime: 2022-03-03 15:39:36
+ * @LastEditTime: 2022-03-04 10:11:11
  * @LastEditors: Li Jian
  * @Description: 第一级(地图)程序入口
 -->
@@ -34,7 +34,7 @@ onUnmounted(() => {
 <template lang="pug">
 #topLevel
   #canvasContainer
-    canvas#c14(style="width: 100vw; height: 100vh; position: relative;")
+    canvas#c14
     canvas#c14ProvinceName(style="pointer-events:none; z-index: 0; width: 100vw; height: 100vh; position: absolute; top: 0; left: 0;")
   html-view
 //- pippy弹出框
@@ -45,14 +45,16 @@ onUnmounted(() => {
 
 <style lang="scss">
 #topLevel {
-  width: 100vw;
-  height: 100vh;
-  position: relative;
+  width: inherit;
+  height: inherit;
   * {
     position: absolute;
   }
   #canvasContainer {
     height: inherit;
+    #c14 {
+      position: relative;
+    }
   }
 }
 </style>
