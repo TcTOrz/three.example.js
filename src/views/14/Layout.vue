@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-02-18 10:41:00
- * @LastEditTime: 2022-03-04 14:34:04
+ * @LastEditTime: 2022-03-04 16:50:48
  * @LastEditors: Li Jian
  * @Description: 第一级(地图)程序HTML布局
 -->
@@ -9,51 +9,48 @@
 import { onMounted, reactive, ref } from 'vue'
 import * as echarts from 'echarts'
 
-const headername = ref('test header')
-const times = ref(0)
-
 const theme = reactive({
   width: `${document.body.clientWidth}px`,
 })
 window.addEventListener('resize', () => {
   theme.width = `${document.body.clientWidth}px`
 })
-
+const nickname = ref('张三')
 onMounted(() => {
-  const myChart = echarts.init(document.querySelector('#left') as HTMLDivElement)
-  myChart.setOption({
-    title: {
-      text: 'ECharts',
-    },
-    xAxis: {
-      data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子'],
-    },
-    yAxis: {},
-    series: [
-      {
-        name: '销量',
-        type: 'bar',
-        data: [5, 20, 36, 10, 10, 20],
-      },
-    ],
-  })
-  const myChart1 = echarts.init(document.querySelector('#right') as HTMLDivElement)
-  myChart1.setOption({
-    title: {
-      text: 'ECharts',
-    },
-    xAxis: {
-      data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子'],
-    },
-    yAxis: {},
-    series: [
-      {
-        name: '销量',
-        type: 'bar',
-        data: [5, 20, 36, 10, 10, 20],
-      },
-    ],
-  })
+  //   const myChart = echarts.init(document.querySelector('#left') as HTMLDivElement)
+  //   myChart.setOption({
+  //     title: {
+  //       text: 'ECharts',
+  //     },
+  //     xAxis: {
+  //       data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子'],
+  //     },
+  //     yAxis: {},
+  //     series: [
+  //       {
+  //         name: '销量',
+  //         type: 'bar',
+  //         data: [5, 20, 36, 10, 10, 20],
+  //       },
+  //     ],
+  //   })
+  //   const myChart1 = echarts.init(document.querySelector('#right') as HTMLDivElement)
+  //   myChart1.setOption({
+  //     title: {
+  //       text: 'ECharts',
+  //     },
+  //     xAxis: {
+  //       data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子'],
+  //     },
+  //     yAxis: {},
+  //     series: [
+  //       {
+  //         name: '销量',
+  //         type: 'bar',
+  //         data: [5, 20, 36, 10, 10, 20],
+  //       },
+  //     ],
+  //   })
 })
 </script>
 <template lang="pug">
@@ -62,16 +59,14 @@ onMounted(() => {
     .left
     .right
       .container
-        #aIcon
-          <svg version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="20px" height="15px" xmlns="http://www.w3.org/2000/svg">
-            <g transform="matrix(1 0 0 1 -1580 -19 )">
-              <path d="M 20.0184135977337 0  C 20.4348441926346 0  20.7273371104816 0.193892045454546  20.8958923512748 0.581676136363637  C 21.064447592068 0.989346590909089  20.9950424929178 1.33735795454545  20.6876770538244 1.62571022727273  L 13 8.97869318181818  L 13 20.0454545454545  C 13.3555240793201 20.4630681818182  13.1621813031161 20.7563920454545  12.7754957507082 20.9254261363636  C 12.6466005665722 20.9751420454545  12.5226628895184 21  12.4036827195467 21  C 12.1359773371105 21  11.9128895184136 20.9055397727273  11.7344192634561 20.7166193181818  L 7.92705382436261 16.8984375  C 7.73866855524079 16.7095170454545  7.64447592067989 16.4857954545455  7.64447592067989 16.2272727272727  L 7.64447592067989 8.97869318181818  L 0.312322946175637 1.62571022727273  C 0.00495750708215297 1.33735795454545  -0.0644475920679887 0.989346590909089  0.104107648725212 0.581676136363637  C 0.272662889518414 0.193892045454546  0.565155807365439 0  0.981586402266289 0  L 20.0184135977337 0  Z " fill-rule="nonzero" fill="#a4d8fd" stroke="none" transform="matrix(1 0 0 1 1580 19 )" />
-            </g>
-          </svg>
-        #bIcon
-        #cIcon
-        #dIcon
-        #eIcon
+        svg-icon#aIcon(name="u241" width="25px" height="25px" style="transform: scale(.7);")
+        #bContainer
+          #bText
+            | {{ nickname }}
+          svg-icon#bIcon(name="u242" width="40px" height="40px" style="transform: scale(.7);")
+        svg-icon#cIcon(name="u243" width="25px" height="21px" style="transform: scale(.7);")
+        svg-icon#dIcon(name="u244" width="20px" height="22px" style="transform: scale(.7);")
+        svg-icon#eIcon(name="u245" width="25px" height="25px" style="transform: scale(.7);")
   .content
     //- #left
     //- #right
@@ -107,18 +102,46 @@ $opacity: 0.9;
       cursor: pointer;
     }
     .right {
-      width: 100px;
+      width: 160px;
       height: 40px;
+      position: relative;
+      right: 80px;
       .container {
         width: 100%;
         height: 100%;
-        & > div {
-          display: flex;
-          align-items: center;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        & > * {
+          cursor: pointer;
         }
         #aIcon {
           width: 20px;
-          height: 100%;
+        }
+        #bContainer {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          #bIcon {
+            width: 40px;
+          }
+          #bText {
+            position: absolute;
+            z-index: 1;
+            color: white;
+            font-size: 12px;
+            transform: scale(0.8);
+            user-select: none;
+          }
+        }
+        #cIcon {
+          width: 25px;
+        }
+        #dIcon {
+          width: 20px;
+        }
+        #eIcon {
+          width: 25px;
         }
       }
     }

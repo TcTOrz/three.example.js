@@ -1,18 +1,19 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-01-05 08:50:19
- * @LastEditTime: 2022-02-28 13:56:19
+ * @LastEditTime: 2022-03-04 14:46:33
  * @LastEditors: Li Jian
  */
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { dependencies } from './package.json'
+import { svgBuilder } from './scripts/svgBuilder'
 
 const chunks = ['d3', 'lodash', 'echarts', 'vue']
 const elementplus = ['element-plus']
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue()],
+  plugins: [vue(), svgBuilder('./src/icons/svg/')],
   resolve: {
     alias: {
       '@': '/src',
