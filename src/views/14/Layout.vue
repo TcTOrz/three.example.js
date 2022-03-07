@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-02-18 10:41:00
- * @LastEditTime: 2022-03-07 16:26:51
+ * @LastEditTime: 2022-03-07 16:37:34
  * @LastEditors: Li Jian
  * @Description: 第一级(地图)程序HTML布局
 -->
@@ -9,12 +9,14 @@
 import { onMounted, reactive, ref } from 'vue'
 import * as echarts from 'echarts'
 
+// 实时获取页面宽度, 响应式布局
 const theme = reactive({
   width: `${document.body.clientWidth}px`,
 })
 window.addEventListener('resize', () => {
   theme.width = `${document.body.clientWidth}px`
 })
+// 昵称
 const nickname = ref('张三')
 onMounted(() => {
   //   const myChart = echarts.init(document.querySelector('#left') as HTMLDivElement)
