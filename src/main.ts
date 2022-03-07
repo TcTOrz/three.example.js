@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-01-05 08:50:19
- * @LastEditTime: 2022-03-04 15:31:35
+ * @LastEditTime: 2022-03-07 09:19:17
  * @LastEditors: Li Jian
  */
 import { createApp } from 'vue'
@@ -17,4 +17,12 @@ app.component('svg-icon', svgIcon)
 app.use(router)
 app.use(store)
 app.use(ElementPlus)
+
+app.config.errorHandler = (err, vm, info) => {
+  console.log('from errorHandler', err, vm, info)
+}
+app.config.warnHandler = (msg, vm, trace) => {
+  console.log('from warnHandler', msg, vm, trace)
+}
+
 app.mount('#app')

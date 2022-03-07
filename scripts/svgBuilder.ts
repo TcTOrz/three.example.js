@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-03-04 14:42:44
- * @LastEditTime: 2022-03-04 16:31:13
+ * @LastEditTime: 2022-03-07 09:29:53
  * @LastEditors: Li Jian
  * @Description: svg图标生成器
  * @reference: https://github.com/JetBrains/svg-sprite-loader/issues/434
@@ -58,20 +58,15 @@ export const svgBuilder = (path: string, perfix = 'icon'): Plugin => {
   if (path === '') return
   idPerfix = perfix
   const res = findSvgFile(path)
-  // console.log(res.length)
-  // const res = []
   return {
     name: 'svg-transform',
     transformIndexHtml(html): string {
-      console.log(html)
       return html.replace(
         '<body>',
-        `
-          <body>
-            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="position: absolute; width: 0; height: 0">
-              ${res.join('')}
-            </svg>
-        `
+        `<body>
+          <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="position: absolute; width: 0; height: 0;">
+            ${res.join('')}
+          </svg>`
       )
     },
   }
