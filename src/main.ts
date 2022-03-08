@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-01-05 08:50:19
- * @LastEditTime: 2022-03-07 09:19:17
+ * @LastEditTime: 2022-03-08 14:10:59
  * @LastEditors: Li Jian
  */
 import { createApp } from 'vue'
@@ -10,6 +10,7 @@ import router from './router'
 import store from './store'
 import ElementPlus from './element-plus'
 import svgIcon from '@components/SvgIcon.vue'
+import 'animate.css'
 
 const app = createApp(App)
 

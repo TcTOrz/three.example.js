@@ -1,15 +1,26 @@
 <!-- 这里是UI的头部HTML定义 -->
 //- mixin svgs(name, width, height)
 //-   svg-icon#aIcon(name=name width=width height=height)
-#header
-  .left
-  .right
-    .container
-      svg-icon#aIcon(name='u241' width='25px' height='25px')
-      #bContainer
-        #bText
-          | {{ nickname }}
-        svg-icon#aIcon(name='u242' width='40px' height='40px')
-      svg-icon#aIcon(name='u243' width='25px' height='21px')
-      svg-icon#aIcon(name='u244' width='20px' height='22px')
-      svg-icon#aIcon(name='u245' width='25px' height='25px')
+.left(@click='toggleNavBar')
+.right
+  .container
+    svg-icon#aIcon(name='u241' width='25px' height='25px')
+    #bContainer
+      #bText
+        | {{ nickname }}
+      svg-icon#aIcon(name='u242' width='40px' height='40px')
+    svg-icon#aIcon(name='u243' width='25px' height='21px')
+    svg-icon#aIcon(name='u244' width='20px' height='22px')
+    svg-icon#aIcon(name='u245' width='25px' height='25px')
+.header
+  //- .left
+  //- .right
+  //-   .container
+  //-     svg-icon#aIcon(name='u241' width='25px' height='25px')
+  //-     #bContainer
+  //-       #bText
+  //-         | {{ nickname }}
+  //-       svg-icon#aIcon(name='u242' width='40px' height='40px')
+  //-     svg-icon#aIcon(name='u243' width='25px' height='21px')
+  //-     svg-icon#aIcon(name='u244' width='20px' height='22px')
+  //-     svg-icon#aIcon(name='u245' width='25px' height='25px')
