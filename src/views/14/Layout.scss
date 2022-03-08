@@ -41,7 +41,7 @@ $opacity: 0.9;
           cursor: pointer;
         }
         #aIcon {
-          width: 20px;
+          // width: 20px;
           transform: scale(0.7);
           &:hover {
             transform: scale(0.8);
@@ -55,7 +55,7 @@ $opacity: 0.9;
             transform: scale(1.1);
           }
           #bIcon {
-            width: 40px;
+            // width: 40px;
             transform: scale(0.7);
           }
           #bText {
@@ -68,21 +68,21 @@ $opacity: 0.9;
           }
         }
         #cIcon {
-          width: 25px;
+          // width: 25px;
           transform: scale(0.7);
           &:hover {
             transform: scale(0.8);
           }
         }
         #dIcon {
-          width: 20px;
+          // width: 20px;
           transform: scale(0.7);
           &:hover {
             transform: scale(0.8);
           }
         }
         #eIcon {
-          width: 25px;
+          // width: 25px;
           transform: scale(0.7);
           &:hover {
             transform: scale(0.8);
