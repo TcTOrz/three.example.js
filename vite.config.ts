@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-01-05 08:50:19
- * @LastEditTime: 2022-03-04 14:46:33
+ * @LastEditTime: 2022-03-08 16:03:07
  * @LastEditors: Li Jian
  */
 import { defineConfig } from 'vite'
@@ -27,7 +27,7 @@ export default defineConfig({
     },
   },
   base: process.env.NODE_ENV === 'production' ? '/dist/' : '',
-  // assetsInclude: ["**/*.gltf", "**/*.bin", "**/*.fbx", "**/*.obj", "**/*.mtl"],
+  assetsInclude: ['**/*.gltf'],
   build: {
     emptyOutDir: true,
     rollupOptions: {

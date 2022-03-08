@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-18 14:18:57
- * @LastEditTime: 2022-02-21 08:50:36
+ * @LastEditTime: 2022-03-08 15:52:05
  * @LastEditors: Li Jian
  * @Description: 站点
  */
@@ -20,8 +20,8 @@ import {
   eventKeyDown,
 } from '@/shared'
 import siteBg from '@assets/image/site-bg.jpg?url'
-import ElectricStation from '@assets/blender/场景/ElectricStation.gltf?url'
-import Cabinet from '@assets/blender/柜子/scene.gltf?url'
+import ElectricStation from '/blender/场景/ElectricStation.gltf?url'
+import Cabinet from '/blender/柜子/scene.gltf?url'
 import { SiteInterface } from './type'
 
 export default class Site<T extends HTMLCanvasElement> implements SiteInterface {
