@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:20:16
- * @LastEditTime: 2022-03-04 10:10:40
+ * @LastEditTime: 2022-03-08 16:59:49
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -516,8 +516,47 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
   dispose() {
     // 销毁
     this.events.forEach(f => f()) // 销毁事件
+    // 销毁飞线
     flyLines.forEach(flyline => {
-      flyline.dispose() // 销毁飞线
+      flyline.dispose()
     })
+    // 销毁线
+    lines2.forEach(line => {
+      line.geometry.dispose()
+      line.material.dispose()
+      line.parent && line.parent.remove(line)
+    })
+    // 销毁雷达
+    this.scene.getObjectByName('radar-group')?.children[0].children.forEach((child: any) => {
+      child.geometry.dispose()
+      child.material.dispose()
+      child.parent && child.parent.remove(child)
+    })
+    // 销毁小圆点
+    this.scene.getObjectByName('point-circle-group')?.children.forEach((child: any) => {
+      child.geometry.dispose()
+      child.material.dispose()
+      child.parent && child.parent.remove(child)
+    })
+    // 销毁点
+    this.scene.getObjectByName('point-group')?.children.forEach((child: any) => {
+      child.geometry.dispose()
+      child.material.dispose()
+      child.parent && child.parent.remove(child)
+    })
+    // 销毁省名
+    this.scene.getObjectByName('province-name')?.children.forEach((child: any) => {
+      child.geometry.dispose()
+      child.material.dispose()
+      child.parent && child.parent.remove(child)
+    })
+    // 销毁城市光
+    const mesh = this.scene.getObjectByName('city-light') as any
+    mesh.geometry.dispose()
+    mesh.material.dispose()
+    mesh.parent && mesh.parent.remove(mesh)
+
+    console.log(this.scene)
+    this.renderer.dispose()
   }
 }
