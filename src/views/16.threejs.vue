@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-02-18 14:05:43
- * @LastEditTime: 2022-02-21 16:19:06
+ * @LastEditTime: 2022-03-09 14:21:33
  * @LastEditors: Li Jian
  * @Description: 第二三级光缆程序入口
 -->
@@ -9,10 +9,16 @@
 import { onMounted } from 'vue'
 import Fiber from '@shared/fiber'
 import HtmlView from '@views/16/Layout.vue'
+import router from '@router'
 
+let ins: Fiber<HTMLCanvasElement>
+const toIndex = () => {
+  ins.dispose()
+  router.push('/14')
+}
 onMounted(() => {
   const canvas = document.querySelector('#c16') as HTMLCanvasElement
-  new Fiber(canvas)
+  ins = new Fiber(canvas)
 })
 </script>
 <template lang="pug">
@@ -25,7 +31,7 @@ onMounted(() => {
       .img
         .progressbar
         .progress-number
-  html-view.btnClass
+  html-view.btnClass(v-on:jumpBack="toIndex")
 </template>
 
 <style lang="scss">

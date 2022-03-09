@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:47:23
- * @LastEditTime: 2022-03-02 08:57:14
+ * @LastEditTime: 2022-03-09 08:50:50
  * @LastEditors: Li Jian
  */
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
@@ -28,6 +28,7 @@ export class MapInterface {
   load(): void
   render(): void
   toggleRenderer(): void
+  dispose(): void
 }
 
 /** 地图 */

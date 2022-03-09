@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-02-10 10:11:06
- * @LastEditTime: 2022-03-04 11:03:42
+ * @LastEditTime: 2022-03-09 09:49:57
  * @LastEditors: Li Jian
  * @Description: 第一级(地图)程序入口
 -->
@@ -23,6 +23,7 @@ onMounted(() => {
   maps = new CustomMap(canvas, provinceCvs, popElem) // 初始化地图
   // setInterval(() => {
   //   maps.toggleRenderer()
+  //   maps.dispose()
   // }, 2000)
   // console.log(maps.scene)
 })

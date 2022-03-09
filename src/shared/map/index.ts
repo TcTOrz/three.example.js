@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:20:16
- * @LastEditTime: 2022-03-08 16:59:49
+ * @LastEditTime: 2022-03-09 13:59:44
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -171,7 +171,7 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
     this.asyncProvinceName() // 加载省份名称
     this.asyncFlyLine() // 加载飞线
     this.asyncRadarAndPoint() // 加载雷达和点
-    this.asyncCityLight() // 加载城市灯光
+    // this.asyncCityLight() // 加载城市灯光
     setTimeout(() => {
       // 由于首次加载会出现卡顿，所以延时两秒执行
       this.asyncSweepShader() // 加载扫光
@@ -496,8 +496,8 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
     const radar = this.scene.getObjectByName('radar-group') as THREE.Group
     radar.visible = !radar.visible
     // cityLight
-    const cityLight = this.scene.getObjectByName('city-light') as THREE.Group
-    cityLight.visible = !cityLight.visible
+    // const cityLight = this.scene.getObjectByName('city-light') as THREE.Group
+    // cityLight.visible = !cityLight.visible
     // provinceName
     const provinceName = this.scene.getObjectByName('province-name') as THREE.Group
     provinceName.visible = !provinceName.visible
@@ -550,13 +550,8 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
       child.material.dispose()
       child.parent && child.parent.remove(child)
     })
-    // 销毁城市光
-    const mesh = this.scene.getObjectByName('city-light') as any
-    mesh.geometry.dispose()
-    mesh.material.dispose()
-    mesh.parent && mesh.parent.remove(mesh)
 
-    console.log(this.scene)
     this.renderer.dispose()
+    this.scene.children = []
   }
 }

@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-18 14:18:57
- * @LastEditTime: 2022-03-08 15:52:05
+ * @LastEditTime: 2022-03-09 14:24:45
  * @LastEditors: Li Jian
  * @Description: 站点
  */
@@ -137,5 +137,12 @@ export default class Site<T extends HTMLCanvasElement> implements SiteInterface 
       console.log('leave the room')
       this.removeEvent3 && this.removeEvent3()
     }
+  }
+  dispose() {
+    this.removeEvent && this.removeEvent()
+    this.removeEvent2 && this.removeEvent2()
+    this.removeEvent3 && this.removeEvent3()
+    this.renderer.dispose()
+    this.scene.children = []
   }
 }

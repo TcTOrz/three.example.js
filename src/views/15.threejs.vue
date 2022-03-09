@@ -1,16 +1,21 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-02-18 14:05:43
- * @LastEditTime: 2022-02-21 16:19:01
+ * @LastEditTime: 2022-03-09 14:15:05
  * @LastEditors: Li Jian
  * @Description: 第二三级站点程序入口
 -->
 <script setup lang="ts">
-import { onMounted, watchEffect } from 'vue'
+import { onMounted, reactive, watchEffect } from 'vue'
 import { Site } from '@shared'
 import HtmlView from '@views/15/Layout.vue'
+import router from '@router'
 
 let ins: Site<HTMLCanvasElement>
+const toIndex = () => {
+  ins.dispose()
+  router.push('/14')
+}
 onMounted(() => {
   const canvas = document.querySelector('#c15') as HTMLCanvasElement
   ins = new Site(canvas)
@@ -30,7 +35,8 @@ onMounted(() => {
       .img
         .progressbar
         .progress-number
-  html-view.btnClass
+  html-view.btnClass(v-on:jumpBack="toIndex")
+    | 返 回
 </template>
 
 <style lang="scss">

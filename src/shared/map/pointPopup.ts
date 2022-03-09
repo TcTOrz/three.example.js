@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-14 14:10:21
- * @LastEditTime: 2022-02-22 15:36:01
+ * @LastEditTime: 2022-03-09 08:50:53
  * @LastEditors: Li Jian
  * @description: point弹出框
  */
@@ -175,6 +175,7 @@ export default class PointPopup implements PointPopInterface {
     return canvas
   }
   jump() {
+    this.instance.dispose()
     router.push('/15') // point
   }
   close(ins: MapInterface, uuid: any) {

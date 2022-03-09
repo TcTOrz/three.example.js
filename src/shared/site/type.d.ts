@@ -1,13 +1,13 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-21 08:46:24
- * @LastEditTime: 2022-02-21 08:50:20
+ * @LastEditTime: 2022-03-09 14:27:07
  * @LastEditors: Li Jian
  */
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { Ref } from 'vue'
 
-export interface SiteInterface {
+export class SiteInterface {
   canvas: HTMLCanvasElement
   renderer: THREE.WebGLRenderer
   scene: THREE.Scene
@@ -23,5 +23,7 @@ export interface SiteInterface {
   cameraPosition: THREE.Vector3Tuple
   elemEnter: HTMLDivElement
   elemLeave: HTMLDivElement
+  constructor(canvas: HTMLCanvasElement)
   move(): void
+  dispose(): void
 }

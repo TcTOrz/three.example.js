@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-21 09:30:39
- * @LastEditTime: 2022-03-08 15:51:55
+ * @LastEditTime: 2022-03-09 14:19:58
  * @LastEditors: Li Jian
  */
 import { FiberInterface } from './type'
@@ -34,6 +34,7 @@ export default class Fiber<T extends HTMLCanvasElement> implements FiberInterfac
     this.load()
     this.event()
     this.render()
+    return this
   }
   init() {
     this.initRenderer()
@@ -185,5 +186,9 @@ export default class Fiber<T extends HTMLCanvasElement> implements FiberInterfac
     }
     this.control.update()
     this.renderer.render(this.scene, this.camera)
+  }
+  dispose() {
+    this.renderer.dispose()
+    this.scene.children = []
   }
 }
