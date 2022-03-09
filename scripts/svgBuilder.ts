@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-03-04 14:42:44
- * @LastEditTime: 2022-03-07 09:29:53
+ * @LastEditTime: 2022-03-09 15:29:52
  * @LastEditors: Li Jian
  * @Description: svg图标生成器
  * @reference: https://github.com/JetBrains/svg-sprite-loader/issues/434
@@ -30,8 +30,6 @@ function findSvgFile(dir): string[] {
         .toString()
         .replace(clearReturn, '')
         .replace(svgTitle, ($1, $2) => {
-          // console.log(++i)
-          // console.log(dirent.name)
           let width = 0
           let height = 0
           let content = $2.replace(clearHeightWidth, (s1, s2, s3) => {
@@ -42,9 +40,9 @@ function findSvgFile(dir): string[] {
             }
             return ''
           })
-          if (!hasViewBox.test($2)) {
-            content += `viewBox="0 0 ${width} ${height}"`
-          }
+          // if (!hasViewBox.test($2)) {
+          //   content += `viewBox="0 0 ${width} ${height}"`
+          // }
           return `<symbol id="${idPerfix}-${dirent.name.replace('.svg', '')}" ${content}>`
         })
         .replace('</svg>', '</symbol>')
