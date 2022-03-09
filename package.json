@@ -3,10 +3,11 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite --host",
-    "build": "npm run remove && vue-tsc --noEmit && vite build",
+    "build": "run-s version remove && vue-tsc --noEmit && vite build",
     "preview": "vite preview",
     "prepare": "husky install",
-    "remove": "node scripts/remove.js"
+    "remove": "node scripts/remove.js",
+    "version": "node scripts/version.js"
   },
   "engines": {
     "node": ">=16.0.0",
@@ -37,6 +38,7 @@
     "@vitejs/plugin-vue": "^2.0.0",
     "git-format-staged": "^2.1.3",
     "husky": "^7.0.0",
+    "npm-run-all": "^4.1.5",
     "prettier": "^2.5.1",
     "pretty-quick": "^3.1.3",
     "sass": "^1.49.8",
