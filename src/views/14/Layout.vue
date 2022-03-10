@@ -1,13 +1,13 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-02-18 10:41:00
- * @LastEditTime: 2022-03-08 15:04:01
+ * @LastEditTime: 2022-03-10 09:45:07
  * @LastEditors: Li Jian
  * @Description: 第一级(地图)程序HTML布局
 -->
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue'
-import * as echarts from 'echarts'
+// import * as echarts from 'echarts'
 import { Search } from '@element-plus/icons-vue'
 
 // 实时获取页面宽度, 响应式布局
@@ -39,6 +39,16 @@ const inputSearch = ref('')
 const btnSearch = () => {
   console.log(inputSearch.value)
 }
+document.body.addEventListener('click', e => {
+  // 点击其他区域关闭搜索
+  if ((e.target as any).dataset.f === 'navigate') {
+    showNavBarTag.value = false
+    ;(document.querySelector('.navigate') as HTMLDivElement).style.animation = 'flipOutX 1s'
+    setTimeout(() => {
+      showNavBar.value = showNavBarTag.value
+    }, 1000)
+  }
+})
 onMounted(() => {})
 </script>
 <template lang="pug">

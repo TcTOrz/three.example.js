@@ -1,10 +1,10 @@
 //- 这里是导航DOM
 .navigate(v-show='showNavBar')
-  .header
+  .header(data-f='navigate')
     el-input.input(v-model='inputSearch' placeholder="请输入检索内容" :prefix-icon="Search")
     el-button.button(type="primary" @click='btnSearch')
       el-icon  
         component(:is="Search")
       | 搜索
-  .content
+  .content(data-f='navigate')
     | 此处是内容区域
