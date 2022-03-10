@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:20:16
- * @LastEditTime: 2022-03-09 13:59:44
+ * @LastEditTime: 2022-03-10 10:34:39
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -30,6 +30,7 @@ import _ from 'lodash'
 import TWEEN from '@tweenjs/tween.js'
 import Stats from 'three/examples/jsm/libs/stats.module'
 import rainBg from '@assets/image/star.png'
+import { map } from '@axios/api'
 
 export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivElement>
   implements MapInterface
@@ -252,6 +253,9 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
     new AddPoint(this, radarData)
   }
   private asyncFlyLine() {
+    map.getFlyline({}).then(data => {
+      console.log('12345', data)
+    })
     // 后台加载数据
     const data = [
       {

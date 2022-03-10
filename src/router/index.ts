@@ -1,12 +1,12 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-01-05 10:03:52
- * @LastEditTime: 2022-02-28 10:28:22
+ * @LastEditTime: 2022-03-10 13:22:46
  * @LastEditors: Li Jian
  */
-import { createRouter, createWebHistory, createWebHashHistory, RouteRecordRaw } from 'vue-router'
+import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router'
 
-const routes: Array<RouteRecordRaw> = [
+const routes: any = [
   {
     path: '/',
     redirect: '/14',
