@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-14 09:39:47
- * @LastEditTime: 2022-02-28 09:58:51
+ * @LastEditTime: 2022-03-10 16:24:28
  * @LastEditors: Li Jian
  * @description: 点UI
  */
@@ -36,7 +36,7 @@ export default class Point implements PointInterface {
       const radialSegments = 32
       const geometry = new THREE.ConeBufferGeometry(radius, height, radialSegments)
       const material = new THREE.MeshPhongMaterial({
-        color: 0x90e0ef,
+        color: elem.color, // 0x90e0ef,
         shininess: 50,
       })
       const mesh = new THREE.Mesh(geometry, material)

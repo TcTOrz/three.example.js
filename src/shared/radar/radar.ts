@@ -95,10 +95,10 @@ export default function (opts: {
   rotation?: { x: number; y: number; z: number } | undefined
 }) {
   const {
-    radius = 50,
-    color = '#fff',
-    speed = 1,
-    opacity = 1,
+    radius = 2,
+    color = '#f00',
+    speed = 2,
+    opacity = 0.5,
     angle = Math.PI,
     position = {
       x: 0,

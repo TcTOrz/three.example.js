@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:20:16
- * @LastEditTime: 2022-03-10 10:34:39
+ * @LastEditTime: 2022-03-10 16:32:37
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -30,7 +30,7 @@ import _ from 'lodash'
 import TWEEN from '@tweenjs/tween.js'
 import Stats from 'three/examples/jsm/libs/stats.module'
 import rainBg from '@assets/image/star.png'
-import { map } from '@axios/api'
+import { httpMap } from '@axios/api'
 
 export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivElement>
   implements MapInterface
@@ -49,6 +49,7 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
   removeChangeProvinceNameControl!: Function
   stats: Stats = new (Stats as any)()
   insSweepShader!: SweepEffectShader
+  pointAndFlylineData!: any // 存储点和飞线数据
   constructor(canvas: T, provinceCvs: T, popElem: Q) {
     this.canvas = canvas
     this.provinceCvs = provinceCvs
@@ -170,7 +171,7 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
     await this.asyncMap() // 加载地图
     // 后期可能重写: 参照 - https://threejs.org/manual/#en/align-html-elements-to-3d
     this.asyncProvinceName() // 加载省份名称
-    this.asyncFlyLine() // 加载飞线
+    // this.asyncFlyLine() // 加载飞线
     this.asyncRadarAndPoint() // 加载雷达和点
     // this.asyncCityLight() // 加载城市灯光
     setTimeout(() => {
@@ -189,133 +190,45 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
     const chinalocationJson = (await import('@assets/json/chinalocation.json')).default
     new AddCityLight(this, chinalocationJson)
   }
-  private asyncRadarAndPoint() {
+  private async asyncRadarAndPoint() {
     // 后台加载数据
-    const radarData = [
-      {
-        position: [121.48941, 31.40527],
-        radius: 4,
-        color: '#0000ff',
-        opacity: 1,
-        speed: 4,
-      },
-      {
-        position: [91.13775, 29.65262],
-        radius: 3,
-        color: '#ff0000',
-        opacity: 0.5,
-        speed: 2,
-      },
-      {
-        position: [116.23128, 40.22077],
-        radius: 3,
-        color: '#ff0000',
-        opacity: 0.5,
-        speed: 2,
-      },
-      {
-        position: [113.6401, 34.72468],
-        radius: 3,
-        color: '#ff0000',
-        opacity: 0.5,
-        speed: 2,
-      },
-      {
-        position: [113.88308, 22.55329],
-        radius: 3,
-        color: '#ff0000',
-        opacity: 0.5,
-        speed: 2,
-      },
-      {
-        position: [81.32416, 43.91689],
-        radius: 3,
-        color: '#ff0000',
-        opacity: 0.5,
-        speed: 2,
-      },
-      {
-        position: [126.95717, 45.54774],
-        radius: 3,
-        color: '#ff0000',
-        opacity: 0.5,
-        speed: 2,
-      },
-      {
-        position: [112.29162, 3.981086],
-        radius: 3,
-        color: '#ff0000',
-        opacity: 0.5,
-        speed: 2,
-      },
-    ]
-    new AddRadar(this, radarData)
-    new AddPoint(this, radarData)
+    const ret = await httpMap.getPointAndFlyline()
+    this.pointAndFlylineData = ret.data
+
+    const handleData = () => {
+      const data: any[] = []
+      this.pointAndFlylineData.map((item: any) => {
+        let position = item.start
+        data.push({
+          position,
+          color: 0x00ff00,
+          ...item,
+          station: item.startStation,
+        })
+        position = item.end
+        data.push({
+          position,
+          color: 0xffff00,
+          ...item,
+          station: item.endStation,
+        })
+      })
+      return data
+    }
+    // const pointData = await httpMap.getPoint({})
+    // const radarData = pointData.data
+    const data: any[] = handleData()
+    new AddRadar(this, data)
+    new AddPoint(this, data)
+
+    this.asyncFlyLine() // 加载飞线
   }
-  private asyncFlyLine() {
-    map.getFlyline({}).then(data => {
-      console.log('12345', data)
-    })
+  private async asyncFlyLine() {
     // 后台加载数据
-    const data = [
-      {
-        name: '光缆0',
-        info: '一些测试信息',
-        path: [
-          [121.48941, 31.40527],
-          [91.13775, 29.65262],
-        ],
-      },
-      {
-        name: '光缆1',
-        info: '一些测试信息',
-        path: [
-          [121.48941, 31.40527],
-          [116.23128, 40.22077],
-        ],
-      },
-      {
-        name: '光缆2',
-        info: '一些测试信息',
-        path: [
-          [121.48941, 31.40527],
-          [113.6401, 34.72468],
-        ],
-      },
-      {
-        name: '光缆3',
-        info: '一些测试信息',
-        path: [
-          [121.48941, 31.40527],
-          [113.88308, 22.55329],
-        ],
-      },
-      {
-        name: '光缆4',
-        info: '一些测试信息',
-        path: [
-          [121.48941, 31.40527],
-          [81.32416, 43.91689],
-        ],
-      },
-      {
-        name: '光缆5',
-        info: '一些测试信息',
-        path: [
-          [121.48941, 31.40527],
-          [126.95717, 45.54774],
-        ],
-      },
-      {
-        name: '光缆6',
-        info: '一些测试信息',
-        path: [
-          [121.48941, 31.40527],
-          [112.29162, 3.981086],
-        ],
-      },
-    ]
-    data.forEach(flyline => {
+    const flyLineData = await httpMap.getFlyline({})
+    const data = flyLineData.data
+    // const data = this.pointAndFlylineData
+    data.forEach((flyline: any) => {
       new AddFlyLine(this, flyline)
     })
     let group = new THREE.Group()

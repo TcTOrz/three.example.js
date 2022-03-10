@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-14 14:10:21
- * @LastEditTime: 2022-03-09 08:50:53
+ * @LastEditTime: 2022-03-10 16:38:48
  * @LastEditors: Li Jian
  * @description: point弹出框
  */
@@ -166,12 +166,14 @@ export default class PointPopup implements PointPopInterface {
     const fontSize = 20
     ctx.fillStyle = 'rgba(255, 255, 255, 1)'
     ctx.font = `${fontSize}px Arial`
-    let text = '经度：' + this.currentObject.userData.position[0]
+    let text = `经度： ${this.currentObject.userData.position[0]}`
     const textWidth = ctx.measureText(text).width
     // center居中: (canvas.width - textWidth)/2 right靠右:(canvas.width - textWidth)
     ctx.fillText(text, (canvas.width - textWidth) / 2, fontSize + 20)
-    text = '纬度：' + this.currentObject.userData.position[1]
+    text = `纬度： ${this.currentObject.userData.position[1]}`
     ctx.fillText(text, (canvas.width - textWidth) / 2, fontSize * 2 + 30)
+    text = `站名：${this.currentObject.userData.station}`
+    ctx.fillText(text, (canvas.width - textWidth) / 2, fontSize * 3 + 40)
     return canvas
   }
   jump() {
