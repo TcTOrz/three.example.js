@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-14 09:39:47
- * @LastEditTime: 2022-03-10 16:24:28
+ * @LastEditTime: 2022-03-11 15:02:42
  * @LastEditors: Li Jian
  * @description: 点UI
  */
@@ -26,13 +26,13 @@ export default class Point implements PointInterface {
     let group = new THREE.Group()
     data.map((elem: any) => {
       const pos = mercator(elem.position)
-      const height = 3
+      const height = 1.5 // 3
       const position = {
         x: pos[0],
         y: -pos[1],
         z: 2.21 + height / 2,
       } as THREE.Vector3
-      const radius = 1
+      const radius = 0.5 // 1
       const radialSegments = 32
       const geometry = new THREE.ConeBufferGeometry(radius, height, radialSegments)
       const material = new THREE.MeshPhongMaterial({

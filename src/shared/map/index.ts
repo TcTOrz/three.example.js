@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:20:16
- * @LastEditTime: 2022-03-10 16:32:37
+ * @LastEditTime: 2022-03-11 16:40:08
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -161,7 +161,7 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
     control.dampingFactor = 0.05
     control.rotateSpeed = 0.35
     control.maxDistance = 50
-    control.minDistance = 20
+    control.minDistance = 5
     control.maxPolarAngle = Math.PI // (Math.PI / 4) * 3
     control.minPolarAngle = Math.PI / 2
     control.maxAzimuthAngle = Math.PI / 4
@@ -224,13 +224,44 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
     this.asyncFlyLine() // 加载飞线
   }
   private async asyncFlyLine() {
-    // 后台加载数据
-    const flyLineData = await httpMap.getFlyline({})
-    const data = flyLineData.data
-    // const data = this.pointAndFlylineData
-    data.forEach((flyline: any) => {
-      new AddFlyLine(this, flyline)
+    // ------rewrite start----
+    const data = this.pointAndFlylineData
+    data.forEach((item: any) => {
+      let path = [item.end, item.start]
+      let length = item.children.length
+      length
+        ? item.children.forEach((child: any, idx: number) => {
+            path = [child.end, child.start]
+            new AddFlyLine(this, {
+              path,
+              length,
+              idx,
+              cableId: child.cableId,
+              cableName: child.cableName,
+              toStation: child.toStation,
+              children: item.children,
+            })
+          })
+        : new AddFlyLine(this, {
+            path,
+            length,
+            idx: 0,
+            cableId: item.cableId,
+            cableName: item.cableName,
+            startStation: item.startStation,
+            endStation: item.endStation,
+            lineId: item.lineId,
+            lineName: item.lineName,
+          })
     })
+    // ------rewrite end------
+
+    // 后台加载数据
+    // const flyLineData = await httpMap.getFlyline({})
+    // const data = flyLineData.data
+    // data.forEach((flyline: any) => {
+    //   new AddFlyLine(this, flyline)
+    // })
     let group = new THREE.Group()
     group.name = 'fly-line-group'
     this.scene.add(group)
@@ -293,6 +324,7 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
       if (
         /* o0.type === 'province' || */
         o0.type === 'flyline' || // 飞线
+        o0.type === 'curveLine' || // 飞线-分段
         o0.type === 'radar' || // 雷达
         o0.type === 'point' || // 点
         new RegExp('pointOrLinePopup-*').test(o0.type) // 点弹窗
@@ -301,17 +333,21 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
       } else {
         const o1 = o0.parent
         if (
-          o1?.type === 'province' ||
+          // o1?.type === 'province' ||
           o1?.type === 'flyline' ||
+          o0?.type === 'curveLine' ||
           o1?.type === 'radar' ||
           o1?.type === 'point' ||
           new RegExp('pointOrLinePopup-*').test(o1?.type as string)
         ) {
           currentObj = o1
+          if (o1?.type === 'flyline') {
+            currentObj = intersectedObjects[1].object
+          }
         } else {
           const o2 = o1?.parent
           if (
-            o2?.type === 'province' ||
+            // o2?.type === 'province' ||
             o2?.type === 'flyline' ||
             o2?.type === 'radar' ||
             o2?.type === 'point' ||
@@ -335,8 +371,17 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
       if (currentObj && currentObj.type === 'point') {
         // 点弹出框
         new AddPointPopup(this, currentObj)
-      } else if (currentObj && currentObj.type === 'flyline') {
-        // 飞线弹出框
+      } //else if (currentObj && currentObj.type === 'flyline') {
+      // 飞线弹出框
+      // const [[slong, slat], [elong, elat]] = currentObj.userData.path
+      // currentObj.userData.position = [
+      //   _.round((slong + elong) / 2, 5),
+      //   _.round((slat + elat) / 2, 5),
+      // ]
+      // new AddLinePopup(this, currentObj)
+      //}
+      else if (currentObj && currentObj.type === 'curveLine') {
+        // 飞线段弹出框
         const [[slong, slat], [elong, elat]] = currentObj.userData.path
         currentObj.userData.position = [
           _.round((slong + elong) / 2, 5),
@@ -367,6 +412,9 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
           // console.log(currentObj);
         }
         if (currentObj && currentObj.type === 'flyline') {
+          popup(event, popElem, currentObj.userData)
+        }
+        if (currentObj && currentObj.type === 'curveLine') {
           popup(event, popElem, currentObj.userData)
         }
         if (currentObj && currentObj.type === 'point') {

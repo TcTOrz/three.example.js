@@ -95,7 +95,7 @@ export default function (opts: {
   rotation?: { x: number; y: number; z: number } | undefined
 }) {
   const {
-    radius = 2,
+    radius = 1.5, // 2
     color = '#f00',
     speed = 2,
     opacity = 0.5,
