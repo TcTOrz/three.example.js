@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-11 09:22:34
- * @LastEditTime: 2022-03-11 16:36:19
+ * @LastEditTime: 2022-03-14 10:46:51
  * @LastEditors: Li Jian
  * @Description: 加载飞线
  */
@@ -42,14 +42,12 @@ export default class FlyLine implements FlyLineInterface {
         (mercatorPath[mercatorPath.length - 2].x + mercatorPath[mercatorPath.length - 1].x) / 2
       const my =
         (mercatorPath[mercatorPath.length - 2].y + mercatorPath[mercatorPath.length - 1].y) / 2
-      // console.log(flylines)
       let mz = Math.sqrt(elem.end[0] * elem.start[0] + elem.end[1] * elem.start[1]) / 100 + 2.21
       mercatorPath.splice(mercatorPath.length - 1, 0, new THREE.Vector3(mx, my, mz))
     })
-    console.log(mercatorPath)
     mercatorPath = mercatorPath.reverse()
     const curve = new THREE.CatmullRomCurve3(mercatorPath)
-    const points = curve.getPoints(50000)
+    const points = curve.getPoints(500)
     const geometry = new LineGeometry()
     geometry.setPositions(points.map(item => [item.x, item.y, item.z]).flat())
     const material = new LineMaterial({
@@ -98,11 +96,10 @@ export default class FlyLine implements FlyLineInterface {
     })
     const curveObject = new Line2(geometry, material)
     curveObject.userData = {
-      // TODO
       type: 'curveLine',
-      path: flyline.path,
-      // info: flyline.info,
-      // name: flyline.name,
+      // path: flyline.path,
+      // info: flyline,
+      ...flyline,
     }
     curveObject.type = 'curveLine'
     lines2.push(curveObject)

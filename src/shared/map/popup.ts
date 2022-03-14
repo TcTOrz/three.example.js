@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-11 14:35:24
- * @LastEditTime: 2022-02-11 16:13:27
+ * @LastEditTime: 2022-03-14 10:47:25
  * @LastEditors: Li Jian
  * @Description: 弹出提示框
  */
@@ -33,10 +33,20 @@ export default function (
   parDom.style.left = `${event.clientX}px`
   parDom.style.top = `${event.clientY}px`
   popElem.appendChild(parDom)
-
-  const template = `<div>
-    ${data.name}：${data.info}
-  </div>`
+  let template = ''
+  if (data.length) {
+    const toStation = data.toStation[0]
+    const idx = data.children.findIndex((elem: any) => elem.toStation[0] === toStation)
+    template = `<div>
+      <p>from: ${data.children[idx].cableId[0]}</p>
+      <p>to: ${data.children[idx].cableId[1]}</p>
+    </div>`
+  } else {
+    template = `<div>
+      <p>from: ${data.startStation}</p>
+      <p>to: ${data.endStation}</p>
+    </div>`
+  }
   popInstance = tippy(parDom, {
     content: template,
     // trigger: 'click',

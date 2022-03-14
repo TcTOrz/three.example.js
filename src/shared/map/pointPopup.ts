@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-14 14:10:21
- * @LastEditTime: 2022-03-10 16:38:48
+ * @LastEditTime: 2022-03-14 10:37:55
  * @LastEditors: Li Jian
  * @description: point弹出框
  */
@@ -34,10 +34,10 @@ export default class PointPopup implements PointPopInterface {
     object3D.userData.pointObject = this.currentObject
     const mercatorTrans = geoMercator()
     let position: THREE.Vector3Tuple = mercatorTrans(this.currentObject.userData.position)
-    const z = 12
+    const z = 10
     position = [position[0], -position[1], z]
-    const width = z - 2
-    const height = z - 2
+    const width = z
+    const height = z
     // 切换视角
     new AddTween(
       this.instance,
