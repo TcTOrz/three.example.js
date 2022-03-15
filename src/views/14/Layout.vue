@@ -1,16 +1,16 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-02-18 10:41:00
- * @LastEditTime: 2022-03-10 16:25:15
+ * @LastEditTime: 2022-03-15 16:48:42
  * @LastEditors: Li Jian
  * @Description: 第一级(地图)程序HTML布局
 -->
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue'
-import * as echarts from 'echarts'
 import { Search } from '@element-plus/icons-vue'
+import EchartsInstance, { barLineOptions, stackBarOptions, pieOptions, barOptions } from '@echarts'
+import { httpCharts } from '@axios/api'
 
-console.log('ercharts instance: ', echarts)
 // 实时获取页面宽度, 响应式布局
 const theme = reactive({
   width: `${document.body.clientWidth}px`,
@@ -50,12 +50,30 @@ document.body.addEventListener('click', e => {
     }, 1000)
   }
 })
-onMounted(() => {})
+
+// 左上图表渲染 - 这里的代码我觉得放到axios/https/charts.ts里面更好。
+const renderLeftTop = async () => {
+  const dom = document.querySelector('#content-left-top') as HTMLDivElement
+  const myChart = new EchartsInstance(dom)
+  const myChartIns = myChart.registerChartInstance()
+  const res = await httpCharts.getLeftTopChartData()
+  let data = res.data
+  barLineOptions.title.text = data.text
+  barLineOptions.xAxis.data = data.xAxis
+  barLineOptions.yAxis[0].name = data.yAxis[0].name
+  barLineOptions.yAxis[1].name = data.yAxis[1].name
+  barLineOptions.series[0].data = data.series[0].data
+  barLineOptions.series[1].data = data.series[1].data
+  myChart.setOption(myChartIns, barLineOptions)
+}
+onMounted(async () => {
+  renderLeftTop()
+})
 </script>
 <template lang="pug">
 .layout
   //- 此处有一个bug，在开发环境中，无法触发.pug文件的热更新。
-  //- 目前无法锁定是vite bug, 还是其他原因。
+  //- 目前无法锁定是vite bug(github issue未找到有人提这个bug), 还是其他原因。
   include ./Header
   //- 定义一个空白区域
   include ./Gap

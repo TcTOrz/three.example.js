@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-03-10 09:58:10
- * @LastEditTime: 2022-03-11 11:27:41
+ * @LastEditTime: 2022-03-15 15:55:01
  * @LastEditors: Li Jian
  */
 import { MockMethod } from 'vite-plugin-mock'
@@ -392,6 +392,37 @@ export default [
             children: [],
           },
         ],
+      })
+    },
+  },
+  {
+    url: '/api/getLeftTopChartData',
+    type: 'get',
+    response: () => {
+      return Mock.mock({
+        code: 200,
+        message: 'ok',
+        type: 'success',
+        data: {
+          text: '通信光缆',
+          xAxis: ['OPGW', 'ADSS', '普通光缆'],
+          yAxis: [
+            {
+              name: '单位: 千米',
+            },
+            {
+              name: '单位: 条',
+            },
+          ],
+          series: [
+            {
+              data: [25000, 35000, 43200],
+            },
+            {
+              data: [500, 800, 900],
+            },
+          ],
+        },
       })
     },
   },

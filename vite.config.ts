@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-01-05 08:50:19
- * @LastEditTime: 2022-03-10 14:10:29
+ * @LastEditTime: 2022-03-15 10:57:45
  * @LastEditors: Li Jian
  */
 import { defineConfig, ConfigEnv } from 'vite'
@@ -43,6 +43,7 @@ export default defineConfig(({ command }: ConfigEnv) => {
         '@utils': '/src/utils',
         '@shared': '/src/shared',
         '@axios': '/src/axios',
+        '@echarts': '/src/echarts',
       },
     },
     base: process.env.NODE_ENV === 'production' ? '/dist/' : '',
