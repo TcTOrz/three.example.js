@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-03-10 09:58:10
- * @LastEditTime: 2022-03-15 15:55:01
+ * @LastEditTime: 2022-03-16 16:21:25
  * @LastEditors: Li Jian
  */
 import { MockMethod } from 'vite-plugin-mock'
@@ -397,7 +397,7 @@ export default [
   },
   {
     url: '/api/getLeftTopChartData',
-    type: 'get',
+    method: 'get',
     response: () => {
       return Mock.mock({
         code: 200,
@@ -416,10 +416,161 @@ export default [
           ],
           series: [
             {
-              data: [25000, 35000, 43200],
+              data: [25000, 35000, 18000],
             },
             {
-              data: [500, 800, 900],
+              data: [500, 800, 600],
+            },
+          ],
+        },
+      })
+    },
+  },
+  {
+    url: '/api/getLeftMiddleChartData',
+    method: 'get',
+    response: () => {
+      return Mock.mock({
+        code: 200,
+        message: 'ok',
+        type: 'success',
+        data: {
+          text: '通信设备',
+          series: {
+            data: [
+              {
+                value: 1025,
+                name: '传输设备',
+              },
+              {
+                value: 234,
+                name: '支撑网设备',
+              },
+              {
+                value: 567,
+                name: '业务网设备',
+              },
+            ],
+          },
+        },
+      })
+    },
+  },
+  {
+    url: '/api/getLeftBottomChartData',
+    method: 'get',
+    response: () => {
+      return Mock.mock({
+        code: 200,
+        message: 'ok',
+        type: 'success',
+        data: {
+          text: '通信光缆',
+          xAxis: ['继电保护', '安全自动装置', '自动化'],
+          yAxis: [
+            {
+              name: '单位: 条',
+            },
+          ],
+          series: [
+            {
+              name: '单通道',
+              data: [25000, 35000, 18000],
+            },
+            {
+              name: '双通道',
+              data: [24000, 25000, 28000],
+            },
+          ],
+        },
+      })
+    },
+  },
+  {
+    url: '/api/getRightTopChartData',
+    method: 'get',
+    response: () => {
+      return Mock.mock({
+        code: 200,
+        message: 'ok',
+        type: 'success',
+        data: {
+          text: '通信光缆',
+          xAxis: ['西北', '西南', '华北', '华东', '华中', '东北'],
+          yAxis: [
+            {
+              name: '单位: 条',
+            },
+          ],
+          series: [
+            {
+              name: '根告警数',
+              data: [25000, 35000, 18000, 20000, 30000, 40000],
+            },
+            {
+              name: '告警确认数',
+              data: [24000, 25000, 28000, 30000, 40000, 50000],
+            },
+          ],
+        },
+      })
+    },
+  },
+  {
+    url: '/api/getRightMiddleChartData',
+    method: 'get',
+    response: () => {
+      return Mock.mock({
+        code: 200,
+        message: 'ok',
+        type: 'success',
+        data: {
+          text: '通信设备',
+          series: {
+            data: [
+              {
+                value: 1023,
+                name: '传输设备',
+              },
+              {
+                value: 234,
+                name: '支撑网设备',
+              },
+              {
+                value: 567,
+                name: '业务网设备',
+              },
+            ],
+          },
+        },
+      })
+    },
+  },
+  {
+    url: '/api/getRightBottomChartData',
+    method: 'get',
+    response: () => {
+      return Mock.mock({
+        code: 200,
+        message: 'ok',
+        type: 'success',
+        data: {
+          text: '通信光缆',
+          xAxis: ['OPGW', 'ADSS', '普通光缆'],
+          yAxis: [
+            {
+              name: '单位: 千米',
+            },
+            {
+              name: '单位: 条',
+            },
+          ],
+          series: [
+            {
+              data: [25200, 15300, 18400],
+            },
+            {
+              data: [510, 430, 620],
             },
           ],
         },
