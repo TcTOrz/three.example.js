@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-02-18 10:41:00
- * @LastEditTime: 2022-03-16 16:18:45
+ * @LastEditTime: 2022-03-16 16:52:55
  * @LastEditors: Li Jian
  * @Description: 第一级(地图)程序HTML布局
 -->
@@ -36,11 +36,6 @@ const toggleNavBar = () => {
     }, 1000)
   }
 }
-// 搜索
-const inputSearch = ref('')
-const btnSearch = () => {
-  console.log(inputSearch.value)
-}
 document.body.addEventListener('click', e => {
   // 点击其他区域关闭搜索
   if ((e.target as any).dataset.f === 'navigate') {
@@ -51,8 +46,13 @@ document.body.addEventListener('click', e => {
     }, 1000)
   }
 })
+// 搜索
+const inputSearch = ref('')
+const btnSearch = () => {
+  console.log(inputSearch.value)
+}
 
-// 左上图表渲染 - 这里的代码我觉得放到axios/https/charts.ts里面更好。
+// 图表渲染 - 这里的代码我觉得放到axios/https/charts.ts里面更好。
 // 等后期代码全部写好再进行迁移，防止意外情况。
 const renderLeftTop = async () => {
   const dom = document.querySelector('#content-left-top') as HTMLDivElement
@@ -69,7 +69,6 @@ const renderLeftTop = async () => {
   options.series[1].data = data.series[1].data
   myChart.setOption(myChartIns, options)
 }
-// 左中图表渲染
 const renderLeftMiddle = async () => {
   const dom = document.querySelector('#content-left-middle') as HTMLDivElement
   const myChart = new EchartsInstance(dom)
@@ -139,6 +138,23 @@ const renderRightBottom = async () => {
   options.series[1].data = data.series[1].data
   myChart.setOption(myChartIns, options)
 }
+
+// 点击全屏事件
+const contentLeftTop = ref(null)
+const getBoxPosition = (dom: HTMLDivElement) => {
+  const domRect = dom.getBoundingClientRect()
+  const top = domRect.top
+  const left = domRect.left
+  const width = domRect.width
+  const height = domRect.height
+  return { top, left, width, height }
+}
+const handleFullScreen = () => {
+  const dom = contentLeftTop.value
+  const { left, width } = getBoxPosition(dom as unknown as HTMLDivElement)
+  console.log(left, width)
+}
+
 onMounted(() => {
   renderLeftTop()
   renderLeftMiddle()
