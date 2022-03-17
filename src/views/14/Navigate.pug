@@ -1,5 +1,5 @@
 //- 这里是导航DOM
-.navigate(v-show='showNavBar')
+.navigate(v-show='showNavBar' ref='navigate')
   .header(data-f='navigate')
     el-input.input(v-model='inputSearch' placeholder="请输入检索内容" :prefix-icon="Search")
     el-button.button(type="primary" @click='btnSearch')
