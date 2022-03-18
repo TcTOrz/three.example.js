@@ -1,12 +1,12 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-02-10 10:11:06
- * @LastEditTime: 2022-03-09 09:49:57
+ * @LastEditTime: 2022-03-18 17:02:00
  * @LastEditors: Li Jian
  * @Description: 第一级(地图)程序入口
 -->
 <script setup lang="ts">
-import { onMounted, onUnmounted } from 'vue'
+import { onMounted, onUnmounted, reactive } from 'vue'
 import { CustomMap } from '@shared'
 import HtmlView from '@views/14/Layout.vue'
 
@@ -30,6 +30,14 @@ onMounted(() => {
 onUnmounted(() => {
   maps.dispose() // 销毁
 })
+
+const zoomInOut = (num: number) => {
+  if (num === 1) {
+    maps.zoomIn()
+  } else {
+    maps.zoomOut()
+  }
+}
 </script>
 
 <template lang="pug">
@@ -37,7 +45,7 @@ onUnmounted(() => {
   #canvasContainer
     canvas#c14
     canvas#c14ProvinceName(style="pointer-events:none; z-index: 0; width: 100vw; height: 100vh; position: absolute; top: 0; left: 0;")
-  html-view
+  html-view(@click="zoomInOut")
 //- pippy弹出框
 #popInfo(style="display: inline;")
 // - stats

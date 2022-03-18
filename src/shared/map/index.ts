@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:20:16
- * @LastEditTime: 2022-03-11 16:40:08
+ * @LastEditTime: 2022-03-18 16:37:20
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -518,5 +518,40 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
 
     this.renderer.dispose()
     this.scene.children = []
+  }
+  private zoomMap(vec3: THREE.Vector3) {
+    const playerDirection = new THREE.Vector3()
+    const getForwardVector = () => {
+      this.camera.getWorldDirection(playerDirection)
+      playerDirection.normalize()
+      return playerDirection
+    }
+    const tween = new TWEEN.Tween({
+      camera: _.cloneDeep(this.camera.position),
+      control: _.cloneDeep(this.control.target),
+    })
+    getForwardVector().multiply(vec3)
+    const cameraPosition = _.cloneDeep(this.camera.position)
+    const controlTarget = _.cloneDeep(this.control.target)
+    const newCameraPosition = cameraPosition.add(playerDirection)
+    const newControlTarget = controlTarget.add(playerDirection)
+    tween
+      .to({ camera: newCameraPosition, control: newControlTarget }, 800)
+      .onUpdate(object => {
+        this.camera.position.set(object.camera.x, object.camera.y, object.camera.z)
+        this.control.target.set(object.control.x, object.control.y, object.control.z)
+      })
+      .easing(TWEEN.Easing.Quadratic.In)
+      .start()
+  }
+  zoomIn() {
+    if (this.camera.position.y < -31) {
+      this.zoomMap(new THREE.Vector3(0, 5, 5))
+    }
+  }
+  zoomOut() {
+    if (this.camera.position.y > -43) {
+      this.zoomMap(new THREE.Vector3(0, -5, -5))
+    }
   }
 }

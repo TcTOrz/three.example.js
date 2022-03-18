@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-03-17 11:57:37
- * @LastEditTime: 2022-03-17 14:14:53
+ * @LastEditTime: 2022-03-18 16:59:23
  * @LastEditors: Li Jian
  */
 import { ref } from 'vue'
@@ -14,6 +14,7 @@ export const contentRightTop = ref(null)
 export const contentRightMiddle = ref(null)
 export const contentRightBottom = ref(null)
 export const contentTop = ref(null)
+export const fullScreenClicked = ref(0)
 
 enum ChartPosition {
   TOP,
@@ -60,7 +61,6 @@ const animationFn = (
       }
       break
     case ChartPosition.TOP:
-      console.log(pos)
       if (pos.top > 0) {
         dom.style.animation = 'fadeOutUp 1s'
         setTimeout(() => {
@@ -73,7 +73,14 @@ const animationFn = (
   }
 }
 
+let isContinue = false // 一个标记位，用于判断动画是否还在进行中
 export const handleFullScreen = () => {
+  if (isContinue) return
+  isContinue = true
+  setTimeout(() => {
+    isContinue = false
+  }, 1300)
+  fullScreenClicked.value === 1 ? (fullScreenClicked.value = 0) : (fullScreenClicked.value = 1)
   let dom = contentLeftTop.value
   let pos = getBoxPosition(dom as unknown as HTMLDivElement)
   animationFn(dom as unknown as HTMLDivElement, pos, ChartPosition.LEFT)
