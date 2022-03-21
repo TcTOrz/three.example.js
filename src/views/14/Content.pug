@@ -65,6 +65,15 @@
           | 一次线路总长
   #bottom
     //- 底部栏
+    #siteBar(@click="toggleSite")
+      .leftBottom
+        svg-icon#aIcon(name='u233' width='35px' height='33px')
+      .rightBottom
+        | 特高压变电站
+    #lineBar(@click="toggleCable")
+      .leftBottom
+      .rightBottom
+        | 光缆网
   #toolbar
     //- 工具栏: 全屏, 放大, 缩小
     #full-screen(@click="handleFullScreen")

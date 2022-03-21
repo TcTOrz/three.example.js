@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:20:16
- * @LastEditTime: 2022-03-18 16:37:20
+ * @LastEditTime: 2022-03-21 14:54:24
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -477,6 +477,21 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
     }
     // 扫光特效
     this.insSweepShader && this.insSweepShader.toggle()
+  }
+  toggleSite() {
+    // 切换站点
+    console.log(this.scene)
+    const site = this.scene.getObjectByName('point-group') as THREE.Group
+    site.visible = !site.visible
+    const radar = this.scene.getObjectByName('radar-group') as THREE.Group
+    radar.visible = !radar.visible
+    // const point = this.scene.getObjectByName('point-circle-group') as THREE.Group
+    // point.visible = !point.visible
+  }
+  toggleCable() {
+    // 切换飞线
+    const flyline = this.scene.getObjectByName('fly-line-group') as THREE.Group
+    flyline.visible = !flyline.visible
   }
   dispose() {
     // 销毁

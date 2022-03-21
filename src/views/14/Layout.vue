@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-02-18 10:41:00
- * @LastEditTime: 2022-03-18 17:00:24
+ * @LastEditTime: 2022-03-21 14:28:28
  * @LastEditors: Li Jian
  * @Description: 第一级(地图)程序HTML布局
 -->
@@ -45,13 +45,13 @@ const btnSearch = () => {
 }
 // 放大/缩小
 const emit = defineEmits<{
-  (e: 'click', num: number): void
+  (e: 'click', type: 'zoom' | 'site' | 'cable', num: number): void
 }>()
 const zoomIn = () => {
-  emit('click', 1)
+  emit('click', 'zoom', 1)
 }
 const zoomOut = () => {
-  emit('click', 0)
+  emit('click', 'zoom', 0)
 }
 watchEffect(() => {
   if (fullScreenClicked.value) {
@@ -60,6 +60,13 @@ watchEffect(() => {
     zoomOut()
   }
 })
+// 切换站点/光缆
+const toggleSite = () => {
+  emit('click', 'site', 0)
+}
+const toggleCable = () => {
+  emit('click', 'cable', 0)
+}
 onMounted(() => {
   renderLeftTop()
   renderLeftMiddle()

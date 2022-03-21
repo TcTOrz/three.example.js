@@ -299,11 +299,60 @@ $opacity: 0.9;
       }
     }
     #bottom {
-      width: calc($width - $side-width * 2);
-      height: 100px;
+      // width: calc($width - $side-width * 2);
+      // height: 100px;
       // background-color: white;
-      left: $side-width;
-      top: calc(100vh - 100px);
+      left: $side-width + 40px;
+      top: calc(100vh - 80px);
+      #siteBar {
+        display: flex;
+        align-items: center;
+        user-select: none;
+        cursor: pointer;
+        &:hover {
+          transform: scale(1.1);
+        }
+        &:hover .rightBottom {
+          color: #0ca2e3;
+        }
+        .leftBottom {
+          transform: scale(0.6);
+        }
+        .rightBottom {
+          font-size: xx-small;
+          color: #097baf;
+        }
+      }
+      #lineBar {
+        display: flex;
+        align-items: center;
+        user-select: none;
+        cursor: pointer;
+        &:hover {
+          transform: scale(1.1);
+        }
+        &:hover .rightBottom {
+          color: #0ca2e3;
+        }
+        .leftBottom {
+          width: 26px;
+          height: 8px;
+          background-color: #053d55;
+          display: flex;
+          justify-content: center;
+          margin: 0 5px;
+          &::after {
+            content: '';
+            width: 13px;
+            height: 8px;
+            background-color: #37ec93;
+          }
+        }
+        .rightBottom {
+          font-size: xx-small;
+          color: #097baf;
+        }
+      }
     }
     #toolbar {
       position: absolute;

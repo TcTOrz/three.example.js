@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-02-10 10:11:06
- * @LastEditTime: 2022-03-18 17:02:00
+ * @LastEditTime: 2022-03-21 14:30:29
  * @LastEditors: Li Jian
  * @Description: 第一级(地图)程序入口
 -->
@@ -31,11 +31,17 @@ onUnmounted(() => {
   maps.dispose() // 销毁
 })
 
-const zoomInOut = (num: number) => {
-  if (num === 1) {
-    maps.zoomIn()
-  } else {
-    maps.zoomOut()
+const eventFn = (type: 'zoom' | 'site' | 'cable', num: number) => {
+  if (type === 'zoom') {
+    if (num === 1) {
+      maps.zoomIn()
+    } else {
+      maps.zoomOut()
+    }
+  } else if (type === 'site') {
+    maps.toggleSite()
+  } else if (type === 'cable') {
+    maps.toggleCable()
   }
 }
 </script>
@@ -45,7 +51,7 @@ const zoomInOut = (num: number) => {
   #canvasContainer
     canvas#c14
     canvas#c14ProvinceName(style="pointer-events:none; z-index: 0; width: 100vw; height: 100vh; position: absolute; top: 0; left: 0;")
-  html-view(@click="zoomInOut")
+  html-view(@click="eventFn")
 //- pippy弹出框
 #popInfo(style="display: inline;")
 // - stats
