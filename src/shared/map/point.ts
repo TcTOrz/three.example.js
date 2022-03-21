@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-14 09:39:47
- * @LastEditTime: 2022-03-11 15:02:42
+ * @LastEditTime: 2022-03-21 16:06:27
  * @LastEditors: Li Jian
  * @description: 点UI
  */
@@ -10,6 +10,8 @@ import _ from 'lodash'
 import * as THREE from 'three'
 import TWEEN from '@tweenjs/tween.js'
 import { PointInterface, MapInterface } from './type'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+import SiteUrl from '/blender/Icon/ESicon.gltf?url'
 
 export default class Point implements PointInterface {
   scene: THREE.Scene
@@ -17,7 +19,27 @@ export default class Point implements PointInterface {
   constructor(ins: MapInterface, data: any[]) {
     this.scene = ins.scene
     this.data = data
+    this.loadModel()
     this.draw()
+  }
+  loadModel() {
+    const loader = new GLTFLoader()
+    loader.load(SiteUrl, gltf => {
+      const model = gltf.scene
+      model.scale.set(20, 20, 20)
+      model.position.set(0, 0, 2.21)
+      model.rotateX(Math.PI / 2)
+      model.traverse(child => {
+        if (child instanceof THREE.Mesh) {
+          child.material.emissive = new THREE.Color(0xff0000)
+        }
+      })
+      this.scene.add(model)
+      let model1 = gltf.scene.clone()
+      model1.scale.set(20, 20, 20)
+      model1.position.set(10, 10, 2.21)
+      this.scene.add(model1)
+    })
   }
   draw() {
     const data = _.cloneDeep(this.data)
