@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-14 09:39:47
- * @LastEditTime: 2022-03-22 15:56:26
+ * @LastEditTime: 2022-03-22 16:03:24
  * @LastEditors: Li Jian
  * @description: 点UI
  */
@@ -64,6 +64,8 @@ export default class Point implements PointInterface {
         group.add(g)
         this.createTweenFromCone(position, g, height)
       })
+      group.name = 'point-group'
+      this.scene.add(group)
     })
     // data.map((elem: any) => {
     //   const pos = mercator(elem.position)
@@ -88,8 +90,8 @@ export default class Point implements PointInterface {
     //   group.add(mesh)
     //   this.createTweenFromCone(position, mesh, height)
     // })
-    group.name = 'point-group'
-    this.scene.add(group)
+    // group.name = 'point-group'
+    // this.scene.add(group)
     // 画圆环
     group = new THREE.Group()
     data.map((elem: any) => {
