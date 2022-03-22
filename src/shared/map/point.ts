@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-14 09:39:47
- * @LastEditTime: 2022-03-21 16:06:27
+ * @LastEditTime: 2022-03-22 15:56:26
  * @LastEditors: Li Jian
  * @description: 点UI
  */
@@ -19,56 +19,75 @@ export default class Point implements PointInterface {
   constructor(ins: MapInterface, data: any[]) {
     this.scene = ins.scene
     this.data = data
-    this.loadModel()
     this.draw()
-  }
-  loadModel() {
-    const loader = new GLTFLoader()
-    loader.load(SiteUrl, gltf => {
-      const model = gltf.scene
-      model.scale.set(20, 20, 20)
-      model.position.set(0, 0, 2.21)
-      model.rotateX(Math.PI / 2)
-      model.traverse(child => {
-        if (child instanceof THREE.Mesh) {
-          child.material.emissive = new THREE.Color(0xff0000)
-        }
-      })
-      this.scene.add(model)
-      let model1 = gltf.scene.clone()
-      model1.scale.set(20, 20, 20)
-      model1.position.set(10, 10, 2.21)
-      this.scene.add(model1)
-    })
   }
   draw() {
     const data = _.cloneDeep(this.data)
     const mercator = geoMercator()
     // 画锥形体
     let group = new THREE.Group()
-    data.map((elem: any) => {
-      const pos = mercator(elem.position)
-      const height = 1.5 // 3
-      const position = {
-        x: pos[0],
-        y: -pos[1],
-        z: 2.21 + height / 2,
-      } as THREE.Vector3
-      const radius = 0.5 // 1
-      const radialSegments = 32
-      const geometry = new THREE.ConeBufferGeometry(radius, height, radialSegments)
-      const material = new THREE.MeshPhongMaterial({
-        color: elem.color, // 0x90e0ef,
-        shininess: 50,
+    const loader = new GLTFLoader()
+    const height = 1.5
+    loader.load(SiteUrl, gltf => {
+      const model = gltf.scene
+      model.scale.set(15, 15, 15)
+      model.rotateX(Math.PI / 2)
+      data.map((elem: any) => {
+        const pos = mercator(elem.position)
+        // const g = model.clone() as THREE.Group
+        const g = model.clone() as THREE.Group
+        const position = {
+          x: pos[0],
+          y: -pos[1],
+          z: 2.21 + height / 2,
+        } as THREE.Vector3
+        g.position.set(position.x, position.y, position.z)
+        const color = elem.color
+        g.children.map((child: any, idx: number) => {
+          if (child.material) {
+            // note: 这里材质也需要clone一份，否则会导致材质问题。
+            // @ts-ignore
+            // child.material = model.children[idx].material.clone()
+            // child.material.emissive = new THREE.Color(color)
+            child.material = new THREE.MeshPhongMaterial({
+              side: THREE.DoubleSide,
+              color,
+              emissive: new THREE.Color(color),
+              emissiveIntensity: 0.2,
+              shininess: 50,
+            })
+          }
+        })
+        // @ts-ignore
+        g.type = 'point'
+        g.userData = elem
+        group.add(g)
+        this.createTweenFromCone(position, g, height)
       })
-      const mesh = new THREE.Mesh(geometry, material)
-      mesh.position.set(position.x, position.y, position.z)
-      mesh.rotateX(-Math.PI / 2)
-      mesh.type = 'point'
-      mesh.userData = elem
-      group.add(mesh)
-      this.createTweenFromCone(position, mesh, height)
     })
+    // data.map((elem: any) => {
+    //   const pos = mercator(elem.position)
+    //   const height = 1.5 // 3
+    //   const position = {
+    //     x: pos[0],
+    //     y: -pos[1],
+    //     z: 2.21 + height / 2,
+    //   } as THREE.Vector3
+    //   const radius = 0.5 // 1
+    //   const radialSegments = 32
+    //   const geometry = new THREE.ConeBufferGeometry(radius, height, radialSegments)
+    //   const material = new THREE.MeshPhongMaterial({
+    //     color: elem.color, // 0x90e0ef,
+    //     shininess: 50,
+    //   })
+    //   const mesh = new THREE.Mesh(geometry, material)
+    //   mesh.position.set(position.x, position.y, position.z)
+    //   mesh.rotateX(-Math.PI / 2)
+    //   mesh.type = 'point'
+    //   mesh.userData = elem
+    //   group.add(mesh)
+    //   this.createTweenFromCone(position, mesh, height)
+    // })
     group.name = 'point-group'
     this.scene.add(group)
     // 画圆环
@@ -106,7 +125,7 @@ export default class Point implements PointInterface {
     group.name = 'point-circle-group'
     this.scene.add(group)
   }
-  createTweenFromCone(position: THREE.Vector3, mesh: THREE.Mesh, height: number) {
+  createTweenFromCone(position: THREE.Vector3, mesh: THREE.Mesh | THREE.Group, height: number) {
     new TWEEN.Tween({
       x: position.x,
       y: position.y,

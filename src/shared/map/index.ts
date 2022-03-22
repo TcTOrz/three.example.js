@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:20:16
- * @LastEditTime: 2022-03-21 14:54:24
+ * @LastEditTime: 2022-03-22 15:55:56
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -419,13 +419,15 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
         }
         if (currentObj && currentObj.type === 'point') {
           event.path[0].style.cursor = 'pointer'
-          currentObj.userData.point = {
-            color: currentObj.material.color.getHex(),
+          if (currentObj instanceof THREE.Mesh) {
+            currentObj.userData.point = {
+              color: currentObj.material.color.getHex(),
+            }
+            this.addRecoverState(currentObj, () => {
+              currentObj.material.color.setHex(currentObj.userData.point.color)
+            })
+            currentObj.material.color = new THREE.Color('#00796a')
           }
-          this.addRecoverState(currentObj, () => {
-            currentObj.material.color.setHex(currentObj.userData.point.color)
-          })
-          currentObj.material.color = new THREE.Color('#00796a')
         }
       },
       0
