@@ -1,14 +1,14 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-02-10 10:11:06
- * @LastEditTime: 2022-03-23 09:34:50
+ * @LastEditTime: 2022-03-23 16:49:19
  * @LastEditors: Li Jian
  * @Description: 第一级(地图)程序入口
 -->
 <script setup lang="ts">
 import { onMounted, onUnmounted, reactive } from 'vue'
 import { CustomMap } from '@shared'
-import HtmlView from '@views/14/Layout.vue'
+import HtmlView from '@views/map/Layout.vue'
 
 let title = '首页-电力通信数字孪生智能辅助决策系统      '
 document.title = title

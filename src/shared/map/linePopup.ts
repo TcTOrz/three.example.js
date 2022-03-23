@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-21 15:09:08
- * @LastEditTime: 2022-03-23 09:15:31
+ * @LastEditTime: 2022-03-23 16:51:06
  * @LastEditors: Li Jian
  */
 import { AddPointPopup as PointPopup } from '@shared'
@@ -49,6 +49,6 @@ export default class LinePopup extends PointPopup implements LinePopupInterface 
   jump() {
     // this.instance.dispose()
     // router.push('/16') // fiber
-    window.open(router.resolve('/16').href)
+    window.open(router.resolve('/fiber').href)
   }
 }

@@ -1,37 +1,41 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-02-18 14:05:43
- * @LastEditTime: 2022-03-23 09:36:34
+ * @LastEditTime: 2022-03-23 16:49:48
  * @LastEditors: Li Jian
- * @Description: 第二三级光缆程序入口
+ * @Description: 第二三级站点程序入口
 -->
 <script setup lang="ts">
-import { onMounted } from 'vue'
-import Fiber from '@shared/fiber'
-import HtmlView from '@views/16/Layout.vue'
+import { onMounted, reactive, watchEffect } from 'vue'
+import { Site } from '@shared'
+import HtmlView from '@views/site/Layout.vue'
 import router from '@router'
 
-let title = '光缆-电力通信数字孪生智能辅助决策系统      '
+let title = '站点-电力通信数字孪生智能辅助决策系统      '
 document.title = title
 setInterval(() => {
   title = title.substring(1) + title[0]
   document.title = title
 }, 500)
 
-let ins: Fiber<HTMLCanvasElement>
+let ins: Site<HTMLCanvasElement>
 const toIndex = () => {
   ins.dispose()
-  router.push('/14')
+  router.push('/map')
 }
 onMounted(() => {
-  const canvas = document.querySelector('#c16') as HTMLCanvasElement
-  ins = new Fiber(canvas)
+  const canvas = document.querySelector('#c15') as HTMLCanvasElement
+  ins = new Site(canvas)
+  watchEffect(() => {
+    ins.move()
+  })
 })
 </script>
 <template lang="pug">
-#fiberLevel
+#siteLevel
   #canvasContainer
-    canvas#c16
+    canvas#c15
+    #labels
   #loading
     .progress
       .url
@@ -39,10 +43,11 @@ onMounted(() => {
         .progressbar
         .progress-number
   html-view.btnClass(v-on:jumpBack="toIndex")
+    | 返 回
 </template>
 
 <style lang="scss">
-#fiberLevel {
+#siteLevel {
   width: 100vw;
   height: 100vh;
   position: relative;
@@ -50,11 +55,32 @@ onMounted(() => {
   #canvasContainer {
     width: inherit;
     height: inherit;
-    #c16 {
+    #c15 {
       width: inherit;
       height: inherit;
       display: block;
       position: relative;
+    }
+    #labels {
+      position: absolute;
+      z-index: 0;
+      top: 0;
+      left: 0;
+      color: white;
+      & > div {
+        position: absolute; /* let us position them inside the container */
+        left: 0; /* make their default position the top left of the container */
+        top: 0;
+        cursor: pointer; /* change the cursor to a hand when over us */
+        font-size: large;
+        user-select: none; /* don't let the text get selected */
+        text-shadow:         /* create a black outline */ -1px -1px 0 #000, 0 -1px 0 #000,
+          1px -1px 0 #000, 1px 0 0 #000, 1px 1px 0 #000, 0 1px 0 #000, -1px 1px 0 #000,
+          -1px 0 0 #000;
+        &:hover {
+          color: red;
+        }
+      }
     }
   }
   #loading {
