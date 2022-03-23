@@ -1,10 +1,11 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-03-17 11:57:37
- * @LastEditTime: 2022-03-18 16:59:23
+ * @LastEditTime: 2022-03-23 14:55:58
  * @LastEditors: Li Jian
  */
 import { ref } from 'vue'
+import { animateCss } from '@shared/animateCss'
 
 // dom
 export const contentLeftTop = ref(null)
@@ -32,7 +33,7 @@ const getBoxPosition = (dom: HTMLDivElement) => {
   return { top, left, width, height }
 }
 
-const animationFn = (
+const animationFn = async (
   dom: HTMLDivElement,
   pos: { left: number; top: number; width: number; height: number },
   position: ChartPosition
@@ -40,35 +41,29 @@ const animationFn = (
   switch (position) {
     case ChartPosition.LEFT:
       if (pos.left > 0 || pos.left + pos.width > 0) {
-        dom.style.animation = 'fadeOutLeft 1s'
-        setTimeout(() => {
-          dom.style.left = `${-(pos.left + pos.width)}px`
-        }, 1000)
+        await animateCss(dom, 'fadeOutLeft', 1)
+        dom.style.left = `${-(pos.left + pos.width)}px`
       } else {
         dom.style.left = '0'
-        dom.style.animation = 'fadeInLeft 1s'
+        await animateCss(dom, 'fadeInLeft', 1)
       }
       break
     case ChartPosition.RIGHT:
       if (pos.left > 0 || pos.left + pos.width > 0) {
-        dom.style.animation = 'fadeOutRight 1s'
-        setTimeout(() => {
-          dom.style.left = `${-(pos.left + pos.width)}px`
-        }, 1000)
+        await animateCss(dom, 'fadeOutRight', 1)
+        dom.style.left = `${-(pos.left + pos.width)}px`
       } else {
         dom.style.left = '0'
-        dom.style.animation = 'fadeInRight 1s'
+        await animateCss(dom, 'fadeInRight', 1)
       }
       break
     case ChartPosition.TOP:
       if (pos.top > 0) {
-        dom.style.animation = 'fadeOutUp 1s'
-        setTimeout(() => {
-          dom.style.top = `${-pos.height}px`
-        }, 1000)
+        await animateCss(dom, 'fadeOutUp', 1)
+        dom.style.top = `${-pos.height}px`
       } else {
         dom.style.top = `70px`
-        dom.style.animation = 'fadeInDown 1s'
+        await animateCss(dom, 'fadeInDown', 1)
       }
   }
 }
