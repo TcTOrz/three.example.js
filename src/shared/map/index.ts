@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:20:16
- * @LastEditTime: 2022-03-22 15:55:56
+ * @LastEditTime: 2022-03-23 09:00:41
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -522,9 +522,11 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
     })
     // 销毁点
     this.scene.getObjectByName('point-group')?.children.forEach((child: any) => {
-      child.geometry.dispose()
-      child.material.dispose()
-      child.parent && child.parent.remove(child)
+      if (child instanceof THREE.Mesh) {
+        child.geometry.dispose()
+        child.material.dispose()
+        child.parent && child.parent.remove(child)
+      }
     })
     // 销毁省名
     this.scene.getObjectByName('province-name')?.children.forEach((child: any) => {

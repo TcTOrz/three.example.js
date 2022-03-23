@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-14 14:10:21
- * @LastEditTime: 2022-03-14 10:37:55
+ * @LastEditTime: 2022-03-23 09:15:33
  * @LastEditors: Li Jian
  * @description: point弹出框
  */
@@ -177,8 +177,9 @@ export default class PointPopup implements PointPopInterface {
     return canvas
   }
   jump() {
-    this.instance.dispose()
-    router.push('/15') // point
+    // this.instance.dispose()
+    // router.push('/15') // point
+    window.open(router.resolve('/15').href)
   }
   close(ins: MapInterface, uuid: any) {
     let object3D = this.scene.getObjectByProperty('uuid', uuid) as THREE.Object3D

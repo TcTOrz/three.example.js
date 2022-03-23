@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-02-18 14:05:43
- * @LastEditTime: 2022-03-09 14:21:33
+ * @LastEditTime: 2022-03-23 09:36:34
  * @LastEditors: Li Jian
  * @Description: 第二三级光缆程序入口
 -->
@@ -10,6 +10,13 @@ import { onMounted } from 'vue'
 import Fiber from '@shared/fiber'
 import HtmlView from '@views/16/Layout.vue'
 import router from '@router'
+
+let title = '光缆-电力通信数字孪生智能辅助决策系统      '
+document.title = title
+setInterval(() => {
+  title = title.substring(1) + title[0]
+  document.title = title
+}, 500)
 
 let ins: Fiber<HTMLCanvasElement>
 const toIndex = () => {
