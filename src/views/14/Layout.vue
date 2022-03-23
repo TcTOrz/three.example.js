@@ -1,13 +1,12 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-02-18 10:41:00
- * @LastEditTime: 2022-03-21 14:28:28
+ * @LastEditTime: 2022-03-23 16:07:40
  * @LastEditors: Li Jian
  * @Description: 第一级(地图)程序HTML布局
 -->
 <script setup lang="ts">
 import { onMounted, reactive, ref, watchEffect } from 'vue'
-import { Search } from '@element-plus/icons-vue'
 import {
   renderLeftTop,
   renderLeftMiddle,
@@ -27,7 +26,6 @@ import {
   contentTop,
   fullScreenClicked,
 } from './handleFullScreen' // 全屏控制
-import { toggleNavBar, navigate, showNavBar } from './handleNavigate' // 导航栏控制
 
 // 实时获取页面宽度, 响应式布局
 const theme = reactive({
@@ -36,13 +34,7 @@ const theme = reactive({
 window.addEventListener('resize', () => {
   theme.width = `${document.body.clientWidth}px`
 })
-// 昵称
-const nickname = ref('张三')
-// 搜索
-const inputSearch = ref('')
-const btnSearch = () => {
-  console.log(inputSearch.value)
-}
+
 // 放大/缩小
 const emit = defineEmits<{
   (e: 'click', type: 'zoom' | 'site' | 'cable', num: number): void
@@ -78,14 +70,9 @@ onMounted(() => {
 </script>
 <template lang="pug">
 .layout
-  //- 此处有一个bug，在开发环境中，无法触发.pug文件的热更新。
-  //- 目前无法锁定是vite bug(github issue未找到有人提这个bug), 还是其他原因。
-  include ./Header
   //- 定义一个空白区域
   include ./Gap
   include ./Content
-  //- 导航栏
-  include ./Navigate
 </template>
 
 <style lang="scss" scoped>

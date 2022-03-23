@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-03-17 11:57:37
- * @LastEditTime: 2022-03-23 14:55:58
+ * @LastEditTime: 2022-03-23 16:13:00
  * @LastEditors: Li Jian
  */
 import { ref } from 'vue'
@@ -60,9 +60,9 @@ const animationFn = async (
     case ChartPosition.TOP:
       if (pos.top > 0) {
         await animateCss(dom, 'fadeOutUp', 1)
-        dom.style.top = `${-pos.height}px`
+        dom.style.top = `${-pos.height - 70}px`
       } else {
-        dom.style.top = `70px`
+        dom.style.top = '0'
         await animateCss(dom, 'fadeInDown', 1)
       }
   }
