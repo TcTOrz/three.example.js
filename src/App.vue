@@ -1,11 +1,11 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-01-04 20:06:27
- * @LastEditTime: 2022-03-23 16:08:28
+ * @LastEditTime: 2022-03-24 15:11:05
  * @LastEditors: Li Jian
 -->
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { onBeforeMount, reactive, ref, getCurrentInstance } from 'vue'
 import { Search } from '@element-plus/icons-vue'
 import { toggleNavBar, navigate, showNavBar } from './views/handleNavigate' // 导航栏控制
 // 实时获取页面宽度, 响应式布局
@@ -22,6 +22,13 @@ const inputSearch = ref('')
 const btnSearch = () => {
   console.log(inputSearch.value)
 }
+// onBeforeMount(() => {
+//   console.log(router.currentRoute.value)
+//   if (router.currentRoute.value.path === '/map') {
+//     const internalInstance = getCurrentInstance()
+//     internalInstance?.appContext.config.globalProperties.$loading.show()
+//   }
+// })
 </script>
 <template lang="pug">
 .layout

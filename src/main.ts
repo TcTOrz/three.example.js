@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-01-05 08:50:19
- * @LastEditTime: 2022-03-10 14:07:41
+ * @LastEditTime: 2022-03-24 11:06:51
  * @LastEditors: Li Jian
  */
 import { createApp } from 'vue'
@@ -12,6 +12,7 @@ import ElementPlus from './element-plus'
 import svgIcon from '@components/SvgIcon.vue'
 import 'animate.css'
 import '@axios'
+import Load from './loading'
 
 const app = createApp(App)
 
@@ -19,6 +20,7 @@ app.component('svg-icon', svgIcon)
 app.use(router)
 app.use(store)
 app.use(ElementPlus)
+app.use(Load)
 
 app.config.errorHandler = (err, vm, info) => {
   console.log('from errorHandler', err, vm, info)

@@ -1,12 +1,12 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-02-10 10:11:06
- * @LastEditTime: 2022-03-23 16:49:19
+ * @LastEditTime: 2022-03-24 15:08:42
  * @LastEditors: Li Jian
  * @Description: 第一级(地图)程序入口
 -->
 <script setup lang="ts">
-import { onMounted, onUnmounted, reactive } from 'vue'
+import { onMounted, onUnmounted, getCurrentInstance } from 'vue'
 import { CustomMap } from '@shared'
 import HtmlView from '@views/map/Layout.vue'
 
@@ -16,9 +16,10 @@ setInterval(() => {
   title = title.substring(1) + title[0]
   document.title = title
 }, 500)
-
 let maps: CustomMap<HTMLCanvasElement, HTMLDivElement>
 onMounted(() => {
+  // const internalInstance = getCurrentInstance()
+  // internalInstance?.appContext.config.globalProperties.$loading.hide()
   const canvas: HTMLCanvasElement = document.querySelector('#c14') as HTMLCanvasElement
   if (!canvas) return
   const provinceCvs: HTMLCanvasElement = document.querySelector(
@@ -39,6 +40,7 @@ onUnmounted(() => {
 })
 
 const eventFn = (type: 'zoom' | 'site' | 'cable', num: number) => {
+  if (!maps) return
   if (type === 'zoom') {
     if (num === 1) {
       maps.zoomIn()
