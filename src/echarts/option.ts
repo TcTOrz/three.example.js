@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-03-15 11:46:09
- * @LastEditTime: 2022-03-16 16:24:31
+ * @LastEditTime: 2022-03-24 09:54:52
  * @LastEditors: Li Jian
  */
 // import * as echarts from 'echarts'
@@ -23,9 +23,10 @@ const commonOptions: EchartsOption = {
   },
   grid: {
     top: '30%',
-    left: '20%',
-    right: '20%',
-    bottom: '15%',
+    left: '5%',
+    right: '5%',
+    bottom: '5%',
+    containLabel: true,
   },
   tooltip: {
     trigger: 'axis',

@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-03-10 09:58:10
- * @LastEditTime: 2022-03-16 16:21:25
+ * @LastEditTime: 2022-03-24 09:48:42
  * @LastEditors: Li Jian
  */
 import { MockMethod } from 'vite-plugin-mock'
@@ -405,7 +405,7 @@ export default [
         type: 'success',
         data: {
           text: '通信光缆',
-          xAxis: ['OPGW', 'ADSS', '普通光缆'],
+          xAxis: ['ADSS', '普通光缆', 'OPGW'],
           yAxis: [
             {
               name: '单位: 千米',
@@ -416,10 +416,10 @@ export default [
           ],
           series: [
             {
-              data: [25000, 35000, 18000],
+              data: [883662, 493389, 155639],
             },
             {
-              data: [500, 800, 600],
+              data: [17345, 10938, 2892],
             },
           ],
         },
@@ -439,15 +439,15 @@ export default [
           series: {
             data: [
               {
-                value: 1025,
+                value: 103121,
                 name: '传输设备',
               },
               {
-                value: 234,
+                value: 88448,
                 name: '支撑网设备',
               },
               {
-                value: 567,
+                value: 130678,
                 name: '业务网设备',
               },
             ],
@@ -465,7 +465,7 @@ export default [
         message: 'ok',
         type: 'success',
         data: {
-          text: '通信光缆',
+          text: '通信业务通道',
           xAxis: ['继电保护', '安全自动装置', '自动化'],
           yAxis: [
             {
@@ -475,11 +475,11 @@ export default [
           series: [
             {
               name: '单通道',
-              data: [25000, 35000, 18000],
+              data: [51425, 6934, 99234],
             },
             {
               name: '双通道',
-              data: [24000, 25000, 28000],
+              data: [4298, 2513, 40000],
             },
           ],
         },
@@ -495,21 +495,21 @@ export default [
         message: 'ok',
         type: 'success',
         data: {
-          text: '通信光缆',
-          xAxis: ['西北', '西南', '华北', '华东', '华中', '东北'],
+          text: '通信站',
+          xAxis: ['变电站/换流站', '中心站', '独立通信站', '其他', '电厂'],
           yAxis: [
             {
-              name: '单位: 条',
+              name: '单位: 座',
             },
           ],
           series: [
             {
-              name: '根告警数',
-              data: [25000, 35000, 18000, 20000, 30000, 40000],
+              // name: '根告警数',
+              data: [42264, 1705, 2756, 32199, 8281],
             },
             {
-              name: '告警确认数',
-              data: [24000, 25000, 28000, 30000, 40000, 50000],
+              //   name: '告警确认数',
+              //   data: [24000, 25000, 28000, 30000, 40000, 50000],
             },
           ],
         },
@@ -525,20 +525,20 @@ export default [
         message: 'ok',
         type: 'success',
         data: {
-          text: '通信设备',
+          text: '通信业务',
           series: {
             data: [
               {
-                value: 1023,
-                name: '传输设备',
+                value: 56778,
+                name: '通信业务',
               },
               {
-                value: 234,
-                name: '支撑网设备',
+                value: 9176,
+                name: '安全自动装置',
               },
               {
-                value: 567,
-                name: '业务网设备',
+                value: 139263,
+                name: '自动化',
               },
             ],
           },
@@ -555,22 +555,19 @@ export default [
         message: 'ok',
         type: 'success',
         data: {
-          text: '通信光缆',
-          xAxis: ['OPGW', 'ADSS', '普通光缆'],
+          text: '通信电源',
+          xAxis: ['蓄电池', 'UPS设备', '整流设备', '太阳能'],
           yAxis: [
             {
-              name: '单位: 千米',
-            },
-            {
-              name: '单位: 条',
+              name: '单位: 台',
             },
           ],
           series: [
             {
-              data: [25200, 15300, 18400],
+              data: [38474, 6003, 42982, 28],
             },
             {
-              data: [510, 430, 620],
+              // data: [],
             },
           ],
         },

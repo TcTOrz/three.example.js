@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-03-17 09:24:40
- * @LastEditTime: 2022-03-17 09:31:59
+ * @LastEditTime: 2022-03-24 09:49:31
  * @LastEditors: Li Jian
  * @Description: 存放echarts数据处理的api
  */
@@ -82,13 +82,14 @@ export const renderRightBottom = async () => {
   const dom = document.querySelector('#content-right-bottom') as HTMLDivElement
   const myChart = new EchartsInstance(dom)
   const myChartIns = myChart.registerChartInstance()
-  const options = _.cloneDeep(barLineOptions)
+  const options = _.cloneDeep(stackBarOptions)
   const res = await httpCharts.getRightBottomChartData()
   let data = res.data
   options.title.text = data.text
   options.xAxis.data = data.xAxis
-  options.yAxis[0].name = data.yAxis[0].name
-  options.yAxis[1].name = data.yAxis[1].name
+  options.yAxis.name = data.yAxis[0].name
+  options.series[0].name = data.series[0].name
+  options.series[1].name = data.series[1].name
   options.series[0].data = data.series[0].data
   options.series[1].data = data.series[1].data
   myChart.setOption(myChartIns, options)
