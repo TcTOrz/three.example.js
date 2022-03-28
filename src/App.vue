@@ -1,13 +1,33 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-01-04 20:06:27
- * @LastEditTime: 2022-03-24 15:11:05
+ * @LastEditTime: 2022-03-28 16:57:22
  * @LastEditors: Li Jian
 -->
 <script setup lang="ts">
-import { onBeforeMount, reactive, ref, getCurrentInstance } from 'vue'
+import { reactive, ref } from 'vue'
 import { Search } from '@element-plus/icons-vue'
 import { toggleNavBar, navigate, showNavBar } from './views/handleNavigate' // 导航栏控制
+import { useTitle, useIntervalFn } from '@vueuse/core'
+import router from '@router'
+
+const pauseTitle = ref()
+// const resumeTitle = ref()
+const isActiveTitle = ref()
+router.afterEach(to => {
+  if (isActiveTitle.value) {
+    pauseTitle.value()
+  }
+  const title = useTitle(`${to.meta.title}-电力通信数字孪生智能辅助决策系统      `)
+  const fn = () => {
+    title.value = title.value?.substring(1) + (title.value as string)[0]
+  }
+  const { pause, resume, isActive } = useIntervalFn(fn, 500)
+  pauseTitle.value = pause
+  // resumeTitle.value = resume
+  isActiveTitle.value = isActive.value
+})
+
 // 实时获取页面宽度, 响应式布局
 const theme = reactive({
   width: `${document.body.clientWidth}px`,

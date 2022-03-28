@@ -1,22 +1,15 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-02-18 14:05:43
- * @LastEditTime: 2022-03-23 16:49:48
+ * @LastEditTime: 2022-03-28 16:23:32
  * @LastEditors: Li Jian
  * @Description: 第二三级站点程序入口
 -->
 <script setup lang="ts">
-import { onMounted, reactive, watchEffect } from 'vue'
+import { onMounted, watchEffect } from 'vue'
 import { Site } from '@shared'
 import HtmlView from '@views/site/Layout.vue'
 import router from '@router'
-
-let title = '站点-电力通信数字孪生智能辅助决策系统      '
-document.title = title
-setInterval(() => {
-  title = title.substring(1) + title[0]
-  document.title = title
-}, 500)
 
 let ins: Site<HTMLCanvasElement>
 const toIndex = () => {
@@ -42,15 +35,18 @@ onMounted(() => {
       .img
         .progressbar
         .progress-number
-  html-view.btnClass(v-on:jumpBack="toIndex")
-    | 返 回
+  html-view
+  //- .btnClass(v-on:jumpBack="toIndex")
+    //- | 返 回
 </template>
 
 <style lang="scss">
 #siteLevel {
-  width: 100vw;
-  height: 100vh;
-  position: relative;
+  // width: 100vw;
+  // height: 100vh;
+  // position: relative;
+  width: inherit;
+  height: inherit;
   overflow: hidden;
   #canvasContainer {
     width: inherit;
@@ -124,10 +120,10 @@ onMounted(() => {
       color: green;
     }
   }
-  .btnClass {
-    position: absolute;
-    left: 5px;
-    top: 5px;
-  }
+  // .btnClass {
+  //   position: absolute;
+  //   left: 5px;
+  //   top: 5px;
+  // }
 }
 </style>

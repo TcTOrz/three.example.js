@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-02-10 10:11:06
- * @LastEditTime: 2022-03-24 15:08:42
+ * @LastEditTime: 2022-03-28 16:23:54
  * @LastEditors: Li Jian
  * @Description: 第一级(地图)程序入口
 -->
@@ -10,12 +10,6 @@ import { onMounted, onUnmounted, getCurrentInstance } from 'vue'
 import { CustomMap } from '@shared'
 import HtmlView from '@views/map/Layout.vue'
 
-let title = '首页-电力通信数字孪生智能辅助决策系统      '
-document.title = title
-setInterval(() => {
-  title = title.substring(1) + title[0]
-  document.title = title
-}, 500)
 let maps: CustomMap<HTMLCanvasElement, HTMLDivElement>
 onMounted(() => {
   // const internalInstance = getCurrentInstance()
