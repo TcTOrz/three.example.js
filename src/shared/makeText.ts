@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-01-12 14:29:42
- * @LastEditTime: 2022-01-14 14:12:02
+ * @LastEditTime: 2022-03-30 15:12:25
  * @LastEditors: Li Jian
  * @Description: 渲染点击文字
  */
@@ -20,7 +20,7 @@ export const makeText = (
     // this method is awesome!
     mesh = scene.getObjectByName('房间外面点') as THREE.Group
   } else if (elem.dataset.flag === 'leave') {
-    mesh = scene.getObjectByName('房间里面点') as THREE.Group
+    mesh = scene.getObjectByName('房间里面点001') as THREE.Group
   }
   if (!mesh) return
   mesh.visible = false

@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-01-13 09:31:45
- * @LastEditTime: 2022-03-02 15:47:37
+ * @LastEditTime: 2022-03-30 09:47:14
  * @LastEditors: Li Jian
  */
 
@@ -86,7 +86,7 @@ export const eventFn = (
   cameraPosition: THREE.Vector3Tuple
 ) => {
   return function (e: Event) {
-    const group = scene.getObjectByName('ElectricHut') as THREE.Group
+    const group = scene.getObjectByName('home001') as THREE.Group
     const oldPos = new THREE.Vector3()
     camera.getWorldPosition(oldPos)
     if ((e.target as HTMLInputElement).dataset.flag === 'enter') {
