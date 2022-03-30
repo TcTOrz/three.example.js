@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 14:17:30
- * @LastEditTime: 2022-03-04 10:10:54
+ * @LastEditTime: 2022-03-30 15:51:23
  * @LastEditors: Li Jian
  */
 import { geoMercator } from '@shared'
@@ -38,14 +38,14 @@ export default class ProvinceName implements ProvinceNameInterface {
     const canvas = document.createElement('canvas')
     const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
     ctx.clearRect(0, 0, document.body.clientWidth, document.body.clientHeight)
-    const textWidth = ctx.measureText(text).width
-    const fontSize = 12
+    const textWidth = ctx.measureText(text).width * 1.4
+    const fontSize = 14 //12
     canvas.width = textWidth
     canvas.height = fontSize * 2
     ctx.fillStyle = 'rgba(44, 68, 139, 0)'
     ctx.fillRect(0, 0, document.body.clientWidth, document.body.clientHeight)
     ctx.fillStyle = '#eee'
-    ctx.font = `${fontSize}px`
+    ctx.font = `${fontSize}px Arial`
     // center居中: (canvas.width - textWidth)/2 right靠右:(canvas.width - textWidth)
     // ctx.fillText(text, (canvas.width - textWidth) / 2, fontSize + 20)
     ctx.fillText(text, (canvas.width - textWidth) / 2, fontSize)
