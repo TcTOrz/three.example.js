@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:20:16
- * @LastEditTime: 2022-03-23 09:00:41
+ * @LastEditTime: 2022-04-01 08:51:58
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -168,6 +168,8 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
     control.minAzimuthAngle = -Math.PI / 4
   }
   async load() {
+    // await this.asyncNewMap()
+    // return
     await this.asyncMap() // 加载地图
     // 后期可能重写: 参照 - https://threejs.org/manual/#en/align-html-elements-to-3d
     this.asyncProvinceName() // 加载省份名称
@@ -274,6 +276,18 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
   }
   private asyncProvinceName() {
     new AddProvinceName(this)
+  }
+  private asyncNewMap() {
+    const MapInstance = import('@shared/map/drawNewMap')
+    const ChinaJson = import('@assets/json/feat/china.json')
+    // const ChinaMap = import('@assets/json/feat/chinaMap.json')
+    // console.log(performance.now())
+    return Promise.all([MapInstance, ChinaJson /*, ChinaMap*/]).then(res => {
+      const [Map, chinaJson /*, chinaMap*/] = res
+      // console.log(performance.now())
+      const map = new Map.default(this.scene, chinaJson /*, chinaMap*/)
+      // this.scene.add(map)
+    })
   }
   private asyncMap() {
     const MapInstance = import('@shared/map/drawMap')

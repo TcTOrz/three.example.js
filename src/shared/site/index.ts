@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-18 14:18:57
- * @LastEditTime: 2022-03-09 14:24:45
+ * @LastEditTime: 2022-03-31 09:31:12
  * @LastEditors: Li Jian
  * @Description: 站点
  */
@@ -23,6 +23,7 @@ import siteBg from '@assets/image/site-bg.jpg?url'
 import ElectricStation from '/blender/场景/ElectricStation.gltf?url'
 import Cabinet from '/blender/柜子/scene.gltf?url'
 import { SiteInterface } from './type'
+// import './testRxjs'
 
 export default class Site<T extends HTMLCanvasElement> implements SiteInterface {
   canvas: T

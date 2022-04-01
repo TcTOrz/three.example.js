@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 11:11:10
- * @LastEditTime: 2022-02-28 09:51:43
+ * @LastEditTime: 2022-03-31 09:29:31
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -101,6 +101,7 @@ export default class DrawMap implements DrawMapInterface {
       const { geometry, properties } = feature
       const { coordinates } = geometry
       const ret: never[] = []
+      // 经纬度转换成墨卡托
       this.recursionProvince(coordinates, mercatorTrans, ret)
       this.drawProvince(ret, properties, province)
       province.type = 'province'
