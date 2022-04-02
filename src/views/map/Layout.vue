@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-02-18 10:41:00
- * @LastEditTime: 2022-03-24 14:58:14
+ * @LastEditTime: 2022-04-02 11:21:56
  * @LastEditors: Li Jian
  * @Description: 第一级(地图)程序HTML布局
 -->
@@ -26,6 +26,7 @@ import {
   contentTop,
   fullScreenClicked,
 } from './handleFullScreen' // 全屏控制
+import './smoke' // 烟雾控制
 
 // 实时获取页面宽度, 响应式布局
 const theme = reactive({
@@ -73,6 +74,8 @@ onMounted(() => {
   //- 定义一个空白区域
   include ./Gap
   include ./Content
+  //- smoke svg特效
+  svg-icon(name='smoke')
 </template>
 
 <style lang="scss" scoped>

@@ -1,4 +1,9 @@
 @import '../App.scss';
+@property --per {
+  syntax: '<percentage>';
+  inherits: false;
+  initial-value: 22%;
+}
 .layout {
   top: $header-height + $gap-height;
   left: 0;
@@ -25,6 +30,39 @@
       left: -51%;
       position: absolute;
     }
+    @mixin smoke($scaleX) {
+      overflow: hidden;
+      // &::after {
+      //   content: "THESHY";
+      //   position: absolute;
+      //   bottom: 10px;
+      //   left: 10px;
+      //   color: #fff;
+      //   font-size: 18px;
+      // }
+      &::before {
+        content: '';
+        position: absolute;
+        left: -20px;
+        top: -10px;
+        right: -20px;
+        bottom: -20px;
+        background: linear-gradient(
+          -45deg,
+          #ff0020,
+          rgba(229, 23, 49, 0.9) var(--per),
+          transparent calc(var(--per) + 8%)
+        );
+        transform: scaleX($scaleX);
+        animation: change 2s infinite ease-out;
+        filter: url(#smoke);
+      }
+      @keyframes change {
+        50% {
+          --per: 18%;
+        }
+      }
+    }
     // top: $header-height;
     $padding: 10px;
     $card-width: 31%;
@@ -44,36 +82,37 @@
         background-image: url('@assets/image/u8.png');
         background-repeat: no-repeat;
         background-size: 100% 100%;
-        .border-flash-top {
-          @include flash-top;
-        }
-        .border-flash-left {
-          @include flash-left;
-        }
+        // .border-flash-top {
+        //   @include flash-top;
+        // }
+        // .border-flash-left {
+        //   @include flash-left;
+        // }
+        @include smoke(-1);
       }
       #content-left-middle {
         height: $card-width;
         background-image: url('@assets/image/u8.png');
         background-repeat: no-repeat;
         background-size: 100% 100%;
-        .border-flash-top {
-          @include flash-top;
-        }
-        .border-flash-left {
-          @include flash-left;
-        }
+        // .border-flash-top {
+        //   @include flash-top;
+        // }
+        // .border-flash-left {
+        //   @include flash-left;
+        // }
       }
       #content-left-bottom {
         height: $card-width;
         background-image: url('@assets/image/u8.png');
         background-repeat: no-repeat;
         background-size: 100% 100%;
-        .border-flash-top {
-          @include flash-top;
-        }
-        .border-flash-left {
-          @include flash-left;
-        }
+        // .border-flash-top {
+        //   @include flash-top;
+        // }
+        // .border-flash-left {
+        //   @include flash-left;
+        // }
       }
     }
     #right {
@@ -90,36 +129,37 @@
         background-image: url('@assets/image/u8.png');
         background-repeat: no-repeat;
         background-size: 100% 100%;
-        .border-flash-top {
-          @include flash-top;
-        }
-        .border-flash-left {
-          @include flash-left;
-        }
+        // .border-flash-top {
+        //   @include flash-top;
+        // }
+        // .border-flash-left {
+        //   @include flash-left;
+        // }
+        @include smoke(1);
       }
       #content-right-middle {
         height: $card-width;
         background-image: url('@assets/image/u8.png');
         background-repeat: no-repeat;
         background-size: 100% 100%;
-        .border-flash-top {
-          @include flash-top;
-        }
-        .border-flash-left {
-          @include flash-left;
-        }
+        // .border-flash-top {
+        //   @include flash-top;
+        // }
+        // .border-flash-left {
+        //   @include flash-left;
+        // }
       }
       #content-right-bottom {
         height: $card-width;
         background-image: url('@assets/image/u8.png');
         background-repeat: no-repeat;
         background-size: 100% 100%;
-        .border-flash-top {
-          @include flash-top;
-        }
-        .border-flash-left {
-          @include flash-left;
-        }
+        // .border-flash-top {
+        //   @include flash-top;
+        // }
+        // .border-flash-left {
+        //   @include flash-left;
+        // }
       }
     }
     #top {
