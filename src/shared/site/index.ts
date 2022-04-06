@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-18 14:18:57
- * @LastEditTime: 2022-04-06 14:30:16
+ * @LastEditTime: 2022-04-06 16:16:19
  * @LastEditors: Li Jian
  * @Description: 站点
  */
@@ -18,6 +18,7 @@ import {
   eventFn,
   makeText,
   eventKeyDown,
+  compass,
 } from '@/shared'
 import siteBg from '@assets/image/site-bg.jpg?url'
 import ElectricStation from '/blender/场景/ElectricStation.gltf?url'
@@ -172,6 +173,8 @@ export default class Site<T extends HTMLCanvasElement> implements SiteInterface 
     makeText(this.canvas, this.camera, this.scene, this.elemEnter)
     makeText(this.canvas, this.camera, this.scene, this.elemLeave)
     TWEEN.update()
+    // 获取角度，指南针
+    compass(this.camera)
     this.control.update()
     this.renderer.render(this.scene, this.camera)
     // this.renderer.sortObjects = true

@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-01-07 10:39:37
- * @LastEditTime: 2022-03-01 15:06:41
+ * @LastEditTime: 2022-04-06 16:17:58
  * @LastEditors: Li Jian
  */
 import resizeRendererToDisplaySize from './resizeRendererToDisplaySize'
@@ -15,6 +15,7 @@ import { makeDom } from './makeDom'
 import { makeEvent, eventFn, eventKeyDown } from './makeEvent'
 import FlyLine from './flyLine'
 import RadarController from './radar'
+import { compass, deg } from './compass'
 
 // ---map
 // class
@@ -75,4 +76,6 @@ export {
   Site,
   AddLinePopup,
   SweepEffectShader,
+  compass,
+  deg,
 }
