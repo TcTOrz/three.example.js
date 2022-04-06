@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-01-04 20:06:27
- * @LastEditTime: 2022-03-31 09:11:25
+ * @LastEditTime: 2022-04-06 15:37:04
  * @LastEditors: Li Jian
 -->
 <script setup lang="ts">
@@ -9,14 +9,8 @@ import { reactive, ref } from 'vue'
 import { Search } from '@element-plus/icons-vue'
 import { toggleNavBar, navigate, showNavBar } from './views/handleNavigate' // 导航栏控制
 import './views/handleTitle' // 标签标题名控制
+import { theme } from './views/handleTheme' // 主题控制
 
-// 实时获取页面宽度, 响应式布局
-const theme = reactive({
-  width: `${document.body.clientWidth}px`,
-})
-window.addEventListener('resize', () => {
-  theme.width = `${document.body.clientWidth}px`
-})
 // 昵称
 const nickname = ref('张三')
 // 搜索

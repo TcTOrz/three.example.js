@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-18 14:18:57
- * @LastEditTime: 2022-04-02 16:56:51
+ * @LastEditTime: 2022-04-06 14:30:16
  * @LastEditors: Li Jian
  * @Description: 站点
  */
@@ -40,7 +40,7 @@ export default class Site<T extends HTMLCanvasElement> implements SiteInterface 
   removeEvent3!: Function
   // 标志位, 用于判断是否在房间内部
   isInRoom: Ref<Boolean> = ref(false)
-  cameraPosition: THREE.Vector3Tuple = [-10, 5, 5]
+  cameraPosition: THREE.Vector3Tuple = [40, 30, 0]
   elemEnter!: HTMLDivElement
   elemLeave!: HTMLDivElement
   constructor(canvas: T) {
@@ -49,7 +49,12 @@ export default class Site<T extends HTMLCanvasElement> implements SiteInterface 
     this.load()
     this.event()
     this.render()
+    import.meta.env.PROD ? undefined : this.addHelper()
     return this
+  }
+  addHelper() {
+    const axesHelper = new THREE.AxesHelper(30)
+    this.scene.add(axesHelper)
   }
   init() {
     this.initRenderer()
