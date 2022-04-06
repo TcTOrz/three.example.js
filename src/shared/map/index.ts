@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:20:16
- * @LastEditTime: 2022-04-01 08:51:58
+ * @LastEditTime: 2022-04-02 15:30:23
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -512,6 +512,7 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
   dispose() {
     // 销毁
     this.events.forEach(f => f()) // 销毁事件
+    this.events = []
     // 销毁飞线
     flyLines.forEach(flyline => {
       flyline.dispose()

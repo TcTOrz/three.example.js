@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-18 14:18:57
- * @LastEditTime: 2022-03-31 09:31:12
+ * @LastEditTime: 2022-04-02 16:56:51
  * @LastEditors: Li Jian
  * @Description: 站点
  */
@@ -23,6 +23,7 @@ import siteBg from '@assets/image/site-bg.jpg?url'
 import ElectricStation from '/blender/场景/ElectricStation.gltf?url'
 import Cabinet from '/blender/柜子/scene.gltf?url'
 import { SiteInterface } from './type'
+import _ from 'lodash'
 // import './testRxjs'
 
 export default class Site<T extends HTMLCanvasElement> implements SiteInterface {
@@ -33,8 +34,9 @@ export default class Site<T extends HTMLCanvasElement> implements SiteInterface 
   control!: OrbitControls
   textureLoader: THREE.TextureLoader = new THREE.TextureLoader()
   // 自定义事件变量
-  removeEvent!: Function
-  removeEvent2!: Function
+  events: Array<Function> = []
+  // removeEvent!: Function
+  // removeEvent2!: Function
   removeEvent3!: Function
   // 标志位, 用于判断是否在房间内部
   isInRoom: Ref<Boolean> = ref(false)
@@ -98,6 +100,35 @@ export default class Site<T extends HTMLCanvasElement> implements SiteInterface 
     await loadGltfModel(this.scene, ElectricStation)
     await loadGltfModel(this.scene, Cabinet)
   }
+  private getIntersectedObjects(raycaster: THREE.Raycaster, mouse: THREE.Vector2, event: any) {
+    mouse.x = (event.clientX / this.canvas.clientWidth) * 2 - 1
+    mouse.y = -(event.clientY / this.canvas.clientHeight) * 2 + 1
+    raycaster.setFromCamera(mouse, this.camera)
+    const intersectedObjects = raycaster.intersectObjects(this.scene.children)
+    return intersectedObjects
+  }
+  private onMouseMove(raycaster: THREE.Raycaster, mouse: THREE.Vector2) {
+    return _.debounce(event => {
+      const currentObj = this.getIntersectedObjects(raycaster, mouse, event)
+      if (currentObj.length && currentObj[0].object.name === '房顶1001') {
+        console.log(currentObj)
+        // console.log('房顶')
+        // ;(currentObj[0].object as any).material.emissive.setHex(0xffffff)
+        ;(currentObj[0].object as any).material.transparent = true
+        ;(currentObj[0].object as any).material.alphaTest = 0.1
+        // ;(currentObj[0].object as any).material.depthWrite = false
+        ;(currentObj[0].object as any).material.opacity = 0.1
+        // ;(currentObj[0].object as any).position.y = 5
+        // ;(currentObj[0].object as any).material.visible = false
+        // ;(currentObj[1].object as any).material.transparent = true
+        // ;(currentObj[1].object as any).material.opacity = 0.15
+        // ;(currentObj[2].object as any).material.transparent = true
+        // ;(currentObj[2].object as any).material.opacity = 0.15
+        // ;(currentObj[3].object as any).material.transparent = true
+        // ;(currentObj[3].object as any).material.opacity = 0.15
+      }
+    }, 0)
+  }
   event() {
     this.elemEnter = makeDom({ textContent: '进入', flag: 'enter' })
     this.elemLeave = makeDom({ textContent: '离开', flag: 'leave' })
@@ -105,16 +136,26 @@ export default class Site<T extends HTMLCanvasElement> implements SiteInterface 
     // 否则静态刷新无法获取到值从而影响事件的卸载。
     // <应该只影响开发环境>
     // use removeEvent() to remove event
-    this.removeEvent = makeEvent(
+    const removeEvent = makeEvent(
       this.elemEnter,
       'click',
       eventFn(this.isInRoom, this.scene, this.camera, this.control, this.cameraPosition)
     )
-    this.removeEvent2 = makeEvent(
+    const removeEvent2 = makeEvent(
       this.elemLeave,
       'click',
       eventFn(this.isInRoom, this.scene, this.camera, this.control, this.cameraPosition)
     )
+    this.events.push(removeEvent, removeEvent2)
+
+    const raycaster = new THREE.Raycaster()
+    const mouse = new THREE.Vector2()
+    const removeMouseMoveEvent = makeEvent(
+      this.canvas,
+      'mousemove',
+      this.onMouseMove(raycaster, mouse)
+    )
+    this.events.push(removeMouseMoveEvent)
   }
   render() {
     requestAnimationFrame(this.render.bind(this))
@@ -128,6 +169,7 @@ export default class Site<T extends HTMLCanvasElement> implements SiteInterface 
     TWEEN.update()
     this.control.update()
     this.renderer.render(this.scene, this.camera)
+    // this.renderer.sortObjects = true
   }
   move() {
     if (this.isInRoom.value) {
@@ -140,8 +182,10 @@ export default class Site<T extends HTMLCanvasElement> implements SiteInterface 
     }
   }
   dispose() {
-    this.removeEvent && this.removeEvent()
-    this.removeEvent2 && this.removeEvent2()
+    // this.removeEvent && this.removeEvent()
+    // this.removeEvent2 && this.removeEvent2()
+    this.events.forEach(fn => fn())
+    this.events = []
     this.removeEvent3 && this.removeEvent3()
     this.renderer.dispose()
     this.scene.children = []
