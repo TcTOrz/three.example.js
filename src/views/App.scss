@@ -1,4 +1,5 @@
-$header-height: 50px;
+$header-height: 35px;
+$tab-height: 40px;
 $gap-height: 20px;
 $nav-height: 300px;
 $side-width: 260px;
@@ -103,9 +104,10 @@ $opacity: 0.9;
     z-index: 1;
     width: $width;
     height: $header-height;
-    background-image: url('@assets/image/u6.png');
+    background-image: url('@assets/image/u250.png');
     background-repeat: no-repeat;
     background-size: 100% 100%;
+    border-bottom: 1px solid #29597b;
   }
   .navigate {
     position: fixed;
@@ -136,6 +138,63 @@ $opacity: 0.9;
       display: flex;
       justify-content: center;
       align-items: center;
+    }
+  }
+  .el-tabs {
+    position: absolute;
+    top: $header-height;
+    z-index: 1;
+    width: $width;
+    height: $tab-height;
+    background: linear-gradient(180deg, rgba(41, 93, 129, 1) 0%, rgba(40, 92, 128, 1) 100%);
+    & > :deep(.el-tabs__header) {
+      border-bottom: 0px;
+      margin: 10px 0 0 0;
+      .el-tabs__nav {
+        border: 0px;
+        .el-tabs__item {
+          padding: 0 10px 0 20px;
+          border: 1px solid white;
+          border-bottom: 0px;
+          border-radius: 4px 4px 0 0;
+          margin-left: 10px;
+          height: 26px;
+          line-height: 26px;
+          color: white;
+          font-size: 13px;
+          font-family: 'Arial Normal', 'Arial', sans-serif;
+          font-weight: 400;
+          font-style: normal;
+          letter-spacing: normal;
+          .el-icon {
+            &:hover {
+              background-color: transparent;
+            }
+          }
+          &::before {
+            content: '';
+            position: absolute;
+            width: 7px;
+            height: 7px;
+            border-radius: 7px;
+            top: 8px;
+            left: 6px;
+            background-color: white;
+          }
+        }
+        .is-active {
+          border: 1px solid yellow;
+          border-top: 5px solid yellow;
+          height: 30px;
+          border-bottom: 0px;
+          // &::before {
+          //   background-color: yellow;
+          // }
+        }
+        .is-icon-close {
+          width: 14px;
+        }
+      }
     }
   }
 }

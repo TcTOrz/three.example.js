@@ -5,7 +5,7 @@
   initial-value: 22%;
 }
 .layout {
-  top: $header-height + $gap-height;
+  top: $header-height + $gap-height + $tab-height;
   left: 0;
   .gap {
     height: $gap-height;
@@ -71,7 +71,7 @@
     }
     #left {
       width: $side-width;
-      height: calc(100vh - $header-height - $gap-height);
+      height: calc(100vh - $header-height - $gap-height - $tab-height);
       left: $padding;
       display: flex;
       flex-direction: column;
@@ -117,7 +117,7 @@
     }
     #right {
       width: $side-width;
-      height: calc(100vh - $header-height - $gap-height);
+      height: calc(100vh - $header-height - $gap-height - $tab-height);
       left: calc($width - $side-width - $padding);
       display: flex;
       flex-direction: column;
@@ -241,7 +241,7 @@
       // height: 100px;
       // background-color: white;
       left: $side-width + 40px;
-      top: calc(100vh - 80px - 70px);
+      top: calc(100vh - 80px - 100px);
       #siteBar {
         display: flex;
         align-items: center;

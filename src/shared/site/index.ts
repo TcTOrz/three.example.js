@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-18 14:18:57
- * @LastEditTime: 2022-04-06 16:16:19
+ * @LastEditTime: 2022-04-07 09:06:57
  * @LastEditors: Li Jian
  * @Description: 站点
  */
@@ -101,6 +101,7 @@ export default class Site<T extends HTMLCanvasElement> implements SiteInterface 
     control.target.set(0, 0, 0)
     control.enableDamping = true
     control.dampingFactor = 0.05
+    // control.enablePan = false
   }
   async load() {
     await loadGltfModel(this.scene, ElectricStation)
