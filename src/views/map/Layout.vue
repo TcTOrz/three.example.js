@@ -1,12 +1,12 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-02-18 10:41:00
- * @LastEditTime: 2022-04-06 15:35:34
+ * @LastEditTime: 2022-04-08 16:08:43
  * @LastEditors: Li Jian
  * @Description: 第一级(地图)程序HTML布局
 -->
 <script setup lang="ts">
-import { onMounted, reactive, watchEffect } from 'vue'
+import { onMounted, watchEffect } from 'vue'
 import {
   renderLeftTop,
   renderLeftMiddle,
@@ -28,6 +28,7 @@ import {
 } from './handleFullScreen' // 全屏控制
 import './smoke' // 烟雾控制
 import { theme } from '../handleTheme' // 主题控制
+import { contentMiddle, leftArrowClick, rightArrowClick } from './handleBtn' // 按钮控制
 
 // 放大/缩小
 const emit = defineEmits<{

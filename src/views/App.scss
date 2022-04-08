@@ -1,6 +1,6 @@
 $header-height: 35px;
 $tab-height: 40px;
-$gap-height: 20px;
+$gap-height: 0px;
 $nav-height: 300px;
 $side-width: 260px;
 $opacity: 0.9;
@@ -142,7 +142,7 @@ $opacity: 0.9;
   }
   .el-tabs {
     position: absolute;
-    top: $header-height;
+    top: calc($header-height - 1px);
     z-index: 1;
     width: $width;
     height: $tab-height;

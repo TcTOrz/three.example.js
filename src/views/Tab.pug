@@ -1,0 +1,2 @@
+el-tabs.el-tabs(v-model="activeName" @tab-click="handleTabClick" type="card" closable @tab-remove="removeTab")
+  el-tab-pane(v-for="item in editableTabs" :key="item.name" :label="item.label" :name="item.name")

@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-01-05 10:03:52
- * @LastEditTime: 2022-03-28 16:34:30
+ * @LastEditTime: 2022-04-08 09:38:10
  * @LastEditors: Li Jian
  */
 import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router'
@@ -12,6 +12,7 @@ const routes: any = [
     redirect: '/map',
     meta: {
       title: '首页',
+      needTab: false,
     },
   },
   {
@@ -19,6 +20,7 @@ const routes: any = [
     name: 'map',
     meta: {
       title: '首页',
+      needTab: true,
     },
     component: () => import(/* webpackChunkName: "map" */ '@views/map.threejs.vue'),
   },
@@ -27,6 +29,7 @@ const routes: any = [
     name: 'site',
     meta: {
       title: '站点',
+      needTab: false,
     },
     component: () => import(/* webpackChunkName: "site" */ '@views/site.threejs.vue'),
   },
@@ -35,6 +38,7 @@ const routes: any = [
     name: 'fiber',
     meta: {
       title: '光缆',
+      needTab: false,
     },
     component: () => import(/* webpackChunkName: "fiber" */ '@views/fiber.threejs.vue'),
   },

@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-01-04 20:06:27
- * @LastEditTime: 2022-04-07 16:12:12
+ * @LastEditTime: 2022-04-08 11:03:58
  * @LastEditors: Li Jian
 -->
 <script setup lang="ts">
@@ -33,8 +33,8 @@ const btnSearch = () => {
   //- 此处有一个bug，在开发环境中，无法触发.pug文件的热更新。
   //- 目前无法锁定是vite bug(github issue未找到有人提这个bug), 还是其他原因。
   include ./views/Header
-  el-tabs.el-tabs(v-model="activeName" @tab-click="handleTabClick" type="card" closable @tab-remove="removeTab")
-    el-tab-pane(v-for="item in editableTabs" :key="item.name" :label="item.label" :name="item.name")
+  include ./views/Tab
+  //- keep-alive
   router-view
   //- 导航栏
   include ./views/Navigate

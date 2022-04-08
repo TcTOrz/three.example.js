@@ -27,42 +27,55 @@
       //- .border-flash-left
   #top(ref="contentTop")
     //- 顶部栏
-    #top0
-      .top-left
-      .top-right
-        .top-right-top
-          | 2000
-          span
-            | 座
-        .top-right-bottom
-          | 特高压变电站
-    #top1
-      .top-left
-      .top-right
-        .top-right-top
-          | 4500
-          span
-            | 个
-        .top-right-bottom
-          | 特高压杆塔
-    #top2
-      .top-left
-      .top-right
-        .top-right-top
-          | 45000
-          span
-            | 千米
-        .top-right-bottom
-          | 光缆段总长
-    #top3
-      .top-left
-      .top-right
-        .top-right-top
-          | 45000
-          span
-            | 千米
-        .top-right-bottom
-          | 一次线路总长
+    .left-arrow(@click="leftArrowClick")
+    .middle-content(ref="contentMiddle")
+      .btn
+        | 资源概况
+      .btn
+        | 告警联判
+      .btn
+        | 故障诊断
+      .btn
+        | 检修风险
+      .btn
+        | 通信隐患
+    .right-arrow(@click="rightArrowClick")
+    //- #top0
+    //-   .top-left
+    //-   .top-right
+    //-     .top-right-top
+    //-       | 2000
+    //-       span
+    //-         | 座
+    //-     .top-right-bottom
+    //-       | 特高压变电站
+    //- #top1
+    //-   .top-left
+    //-   .top-right
+    //-     .top-right-top
+    //-       | 4500
+    //-       span
+    //-         | 个
+    //-     .top-right-bottom
+    //-       | 特高压杆塔
+    //- #top2
+    //-   .top-left
+    //-   .top-right
+    //-     .top-right-top
+    //-       | 45000
+    //-       span
+    //-         | 千米
+    //-     .top-right-bottom
+    //-       | 光缆段总长
+    //- #top3
+    //-   .top-left
+    //-   .top-right
+    //-     .top-right-top
+    //-       | 45000
+    //-       span
+    //-         | 千米
+    //-     .top-right-bottom
+    //-       | 一次线路总长
   #bottom
     //- 底部栏
     #siteBar(@click="toggleSite")
