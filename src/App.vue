@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-01-04 20:06:27
- * @LastEditTime: 2022-04-08 11:03:58
+ * @LastEditTime: 2022-04-12 08:59:26
  * @LastEditors: Li Jian
 -->
 <script setup lang="ts">
@@ -10,7 +10,6 @@ import { Search } from '@element-plus/icons-vue'
 import { toggleNavBar, navigate, showNavBar } from './views/handleNavigate' // 导航栏控制
 import './views/handleTitle' // 标签标题名控制
 import { theme } from './views/handleTheme' // 主题控制
-import type { TabsPaneContext } from 'element-plus'
 import { activeName, handleTabClick, removeTab, editableTabs } from './views/handleTabs' // 标签页控制
 
 // 昵称
@@ -34,8 +33,7 @@ const btnSearch = () => {
   //- 目前无法锁定是vite bug(github issue未找到有人提这个bug), 还是其他原因。
   include ./views/Header
   include ./views/Tab
-  //- keep-alive
-  router-view
+  include ./views/router
   //- 导航栏
   include ./views/Navigate
 </template>

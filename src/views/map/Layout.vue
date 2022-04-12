@@ -1,7 +1,7 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-02-18 10:41:00
- * @LastEditTime: 2022-04-08 16:08:43
+ * @LastEditTime: 2022-04-08 16:45:17
  * @LastEditors: Li Jian
  * @Description: 第一级(地图)程序HTML布局
 -->
@@ -28,7 +28,7 @@ import {
 } from './handleFullScreen' // 全屏控制
 import './smoke' // 烟雾控制
 import { theme } from '../handleTheme' // 主题控制
-import { contentMiddle, leftArrowClick, rightArrowClick } from './handleBtn' // 按钮控制
+import { contentMiddle, leftArrowClick, rightArrowClick, arrowMousemove } from './handleBtn' // 按钮控制
 
 // 放大/缩小
 const emit = defineEmits<{
@@ -61,6 +61,7 @@ onMounted(() => {
   renderRightTop()
   renderRightMiddle()
   renderRightBottom()
+  arrowMousemove()
 })
 </script>
 <template lang="pug">

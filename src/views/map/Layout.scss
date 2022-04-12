@@ -189,7 +189,7 @@
         background-image: url('@assets/image/u223.png');
         background-repeat: no-repeat;
         background-size: 100% 100%;
-        transform: scale(0.8);
+        transform: scale(0.6);
       }
       .middle-content {
         color: white;
@@ -217,7 +217,7 @@
         background-image: url('@assets/image/u223.png');
         background-repeat: no-repeat;
         background-size: 100% 100%;
-        transform: scale(-0.8); // skillll: scale(0.8) rotate(180deg)
+        transform: scale(-0.6); // skillll: scale(0.8) rotate(180deg)
       }
       // & > div:not(:last-child) {
       //   border-right: 1px solid #729cec;
