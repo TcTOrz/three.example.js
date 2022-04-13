@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:47:23
- * @LastEditTime: 2022-03-21 14:30:26
+ * @LastEditTime: 2022-04-12 10:30:09
  * @LastEditors: Li Jian
  */
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
@@ -104,7 +104,7 @@ export class PointPopInterface {
   ): THREE.Mesh
   drawCloseButton(): HTMLCanvasElement
   drawJumpButton(): HTMLCanvasElement
-  drawBody(): HTMLCanvasElement
+  drawBody(): Promise<HTMLCanvasElement>
   jump(): void
   close(ins: MapInterface, uuid: any): void
 }

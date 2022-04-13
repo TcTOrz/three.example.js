@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-10 10:20:16
- * @LastEditTime: 2022-04-02 15:30:23
+ * @LastEditTime: 2022-04-13 15:34:03
  * @LastEditors: Li Jian
  */
 import * as THREE from 'three'
@@ -85,6 +85,9 @@ export default class CustomMap<T extends HTMLCanvasElement, Q extends HTMLDivEle
       canvas: this.canvas,
       antialias: true, // 抗锯齿
       alpha: true, // 透明缓冲区
+      // 这里不加会出现Unable to clone WebGL context as it has preserveDrawingBuffer=false的警告
+      // 可能是由于html2canvas引起，暂未验证。
+      preserveDrawingBuffer: true, // 保存绘图缓冲区
     })
   }
   initScene() {

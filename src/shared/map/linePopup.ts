@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-21 15:09:08
- * @LastEditTime: 2022-04-07 16:22:56
+ * @LastEditTime: 2022-04-12 14:05:47
  * @LastEditors: Li Jian
  */
 import { AddPointPopup as PointPopup } from '@shared'
@@ -14,7 +14,7 @@ export default class LinePopup extends PointPopup implements LinePopupInterface 
     super(ins, currentObject)
     this.instance = ins
   }
-  drawBody() {
+  async drawBody() {
     const canvas = document.createElement('canvas') as HTMLCanvasElement
     canvas.width = 256
     canvas.height = 256
