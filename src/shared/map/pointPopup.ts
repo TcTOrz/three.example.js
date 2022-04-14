@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-14 14:10:21
- * @LastEditTime: 2022-04-13 16:04:15
+ * @LastEditTime: 2022-04-14 09:45:26
  * @LastEditors: Li Jian
  * @description: point弹出框
  */
@@ -72,12 +72,22 @@ export default class PointPopup implements PointPopInterface {
     // )
     // object3D.add(mesh)
     // 关闭按钮
-    canvas = this.drawCloseBtn()
+    canvas = this.drawVirtual()
+    // 下面的数值目前都是写死的，这样做并不好，需要改进(6.5, 3, 1, 1)
     mesh = this.drawMesh(
       canvas,
-      [position[0] + 3, position[1] - 0.001, position[2] - 2],
-      [width - 2, height - 3],
+      [position[0] + 6.5, position[1] - 0.001, position[2] + 3], // 位置
+      [1, 1], // 宽高
       'pointOrLinePopup-close-button'
+    )
+    object3D.add(mesh)
+    // 大标题跳转按钮
+    canvas = this.drawVirtual()
+    mesh = this.drawMesh(
+      canvas,
+      [position[0] - 3, position[1] - 0.001, position[2] + 2.5], // 位置
+      [7, 1], // 宽高
+      'pointOrLinePopup-jump-button'
     )
     object3D.add(mesh)
     this.scene.add(object3D)
@@ -108,15 +118,15 @@ export default class PointPopup implements PointPopInterface {
     panelMesh.userData.instance = this
     return panelMesh
   }
-  drawCloseBtn() {
+  drawVirtual() {
     const canvas = document.createElement('canvas') as HTMLCanvasElement
-    const btnWidth = 35
-    const btnHeight = 25
-    canvas.width = btnWidth
-    canvas.height = btnHeight
-    const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
-    ctx.fillStyle = 'rgba(255,255,255,0.2)'
-    ctx.fillRect(0, 0, btnWidth, btnHeight)
+    // const width = 1
+    // const height = 1
+    // canvas.width = width
+    // canvas.height = height
+    // const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
+    // ctx.fillStyle = 'rgba(255,255,255,0.4)'
+    // ctx.fillRect(0, 0, width, height)
     return canvas
   }
   drawCloseButton() {
