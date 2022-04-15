@@ -62,9 +62,109 @@ $compass-height: 60px;
   }
   // 左边信息栏
   & > .l-info {
+    left: 10px;
+    top: $header-height + $tab-height + 75px;
+    width: 100px;
+    height: 300px;
+    background-image: url('@assets/image/u810.png');
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: white;
+    padding: 5px 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    & > :nth-child(2n) {
+      border-bottom: 1px white dashed;
+    }
+    & > div {
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
+      & > .l-info-image-0 {
+        background-image: url('@assets/image/u844.png');
+        width: 30px;
+        height: 20px;
+        background-size: 100% 100%;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+      & > .l-info-image-1 {
+        background-image: url('@assets/image/u837.png');
+        width: 30px;
+        height: 20px;
+        background-size: 100% 100%;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+      & > .l-info-image-2 {
+        background-image: url('@assets/image/u838.png');
+        width: 30px;
+        height: 30px;
+        background-size: 100% 100%;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+      & > .l-info-image-3 {
+        background-image: url('@assets/image/u839.png');
+        width: 30px;
+        height: 20px;
+        background-size: 100% 100%;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+      & > .l-info-name {
+        width: 40px;
+        height: 60px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        & > .l-info-name-title {
+          font-size: xx-small;
+          display: flex;
+          align-items: flex-end;
+          justify-content: space-around;
+          & > .l-info-name-title-number {
+            font-size: large;
+            text-decoration: underline;
+          }
+        }
+        & > .l-info-name-subtitle {
+          font-size: xx-small;
+        }
+      }
+    }
+    & > :nth-child(2n + 1):hover {
+      cursor: pointer;
+      background-color: yellowgreen;
+      // opacity: 0.2;
+      border: 3px solid yellow;
+      border-radius: 5px;
+    }
   }
   // 右边折叠栏
   & > .r-fold {
+    right: 10px;
+    top: $header-height + $tab-height + 20px;
+    height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    & > div {
+      width: 100px;
+      height: 25px;
+      background: inherit;
+      background-color: rgba(102, 150, 185, 1);
+      border: none;
+      border-radius: 5px;
+    }
+    & > .base-info {
+    }
+    & > .manager-info {
+    }
+    & > .business-info {
+    }
   }
   // 指南针
   & > .compass {
