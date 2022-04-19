@@ -147,7 +147,6 @@ $compass-height: 60px;
   & > .r-fold {
     right: 10px;
     top: $header-height + $tab-height + 20px;
-    height: 120px;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
@@ -160,10 +159,84 @@ $compass-height: 60px;
       border-radius: 5px;
     }
     & > .base-info {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      cursor: pointer;
+      & > .base-info-icon {
+        background-image: url('@assets/image/u848.png');
+        width: 20px;
+        height: 20px;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 50%;
+      }
+      & > .base-info-title {
+        font-size: xx-small;
+        color: white;
+      }
+      & > .base-info-arrow {
+        background-image: url('@assets/image/u796.png');
+        width: 20px;
+        height: 20px;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 50%;
+      }
     }
     & > .manager-info {
+      cursor: pointer;
+      margin-top: 8px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      & > .base-info-icon {
+        background-image: url('@assets/image/u795.png');
+        width: 20px;
+        height: 20px;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 80%;
+      }
+      & > .base-info-title {
+        font-size: xx-small;
+        color: white;
+      }
+      & > .base-info-arrow {
+        background-image: url('@assets/image/u796.png');
+        width: 20px;
+        height: 20px;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 50%;
+      }
     }
     & > .business-info {
+      cursor: pointer;
+      margin-top: 8px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      & > .base-info-icon {
+        background-image: url('@assets/image/u848.png');
+        width: 20px;
+        height: 20px;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 50%;
+      }
+      & > .base-info-title {
+        font-size: xx-small;
+        color: white;
+      }
+      & > .base-info-arrow {
+        background-image: url('@assets/image/u796.png');
+        width: 20px;
+        height: 20px;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 50%;
+      }
     }
   }
   // 指南针

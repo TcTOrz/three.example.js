@@ -1,12 +1,20 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-02-21 16:05:30
- * @LastEditTime: 2022-04-15 15:39:04
+ * @LastEditTime: 2022-04-19 16:43:46
  * @LastEditors: Li Jian
 -->
 <script setup lang="ts">
 import { theme } from '../handleTheme'
 import { newDeg } from './compass'
+import { ref } from 'vue'
+
+const baseInfo = ref(null)
+const baseInfoClick = () => {
+  console.log('aaa')
+}
+const managerInfoClick = () => {}
+const businessInfoClick = () => {}
 </script>
 <template lang="pug">
 .layout
@@ -71,17 +79,17 @@ import { newDeg } from './compass'
           | 沟道
   //- 右边折叠栏
   .r-fold
-    .base-info
+    .base-info(@click="baseInfoClick" ref="baseInfo")
       .base-info-icon
       .base-info-title
         | 基本信息
       .base-info-arrow
-    .manager-info
+    .manager-info(@click="managerInfoClick")
       .base-info-icon
       .base-info-title
         | 管理信息
       .base-info-arrow
-    .business-info
+    .business-info(@click="businessInfoClick")
       .base-info-icon
       .base-info-title
         | 业务信息
