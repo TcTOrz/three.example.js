@@ -135,11 +135,10 @@ $compass-height: 60px;
         }
       }
     }
-    & > :nth-child(2n + 1):hover {
+    & > div:hover {
+      background-color: rgba($color: #ffdd27, $alpha: 0.39);
+      border: 2px solid yellow;
       cursor: pointer;
-      background-color: yellowgreen;
-      // opacity: 0.2;
-      border: 3px solid yellow;
       border-radius: 5px;
     }
   }

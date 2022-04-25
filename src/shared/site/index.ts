@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-18 14:18:57
- * @LastEditTime: 2022-04-22 16:02:24
+ * @LastEditTime: 2022-04-25 15:24:18
  * @LastEditors: Li Jian
  * @Description: 站点
  */
@@ -26,6 +26,7 @@ import Cabinet from '/blender/柜子/scene.gltf?url'
 import { SiteInterface } from './type'
 import _ from 'lodash'
 // import './testRxjs'
+import rainBg from '@assets/image/background.jpg'
 
 export default class Site<T extends HTMLCanvasElement> implements SiteInterface {
   canvas: T
@@ -148,6 +149,21 @@ export default class Site<T extends HTMLCanvasElement> implements SiteInterface 
         // )
         // currentObj[0].object.add(line)
         // ----
+        // 高亮
+        // const material = new THREE.MeshBasicMaterial({
+        //   color: 0xffff00,
+        // })
+        // ;(currentObj[0].object as any).material = material
+        // this.reductionStack.push(currentObj[0].object as THREE.Mesh)
+        // 材质
+        // const texture = this.textureLoader.load(rainBg)
+        // const material = new THREE.MeshPhongMaterial({
+        //   map: texture,
+        // })
+        // ;(currentObj[0].object as any).material = material
+        // this.reductionStack.push(currentObj[0].object as THREE.Mesh)
+        // ----
+        // ----
         // let center = new THREE.Box3().setFromObject(currentObj[0].object)
         // const group = new THREE.Group()
         // group.add(currentObj[0].object.clone())
@@ -164,21 +180,23 @@ export default class Site<T extends HTMLCanvasElement> implements SiteInterface 
         // currentObj[0].object.translateZ((center.max.z - center.min.z) / 2)
         // console.log(currentObj[0].object, center)
         // currentObj[0].object.position.set(-7.203174591064453, 0, -7.856262683868408)
-        new TWEEN.Tween({
-          x: currentObj[0].object.rotation.x,
-        })
-          .to(
-            {
-              x: Math.PI / 2,
-            },
-            1000
-          )
-          .onUpdate(({ x }) => {
-            currentObj[0].object.rotation.x = x
-            // group.children[0].rotation.x = x
-          })
-          .easing(TWEEN.Easing.Cubic.InOut)
-          .start()
+        // 移动
+        // new TWEEN.Tween({
+        //   x: currentObj[0].object.rotation.x,
+        // })
+        //   .to(
+        //     {
+        //       x: Math.PI / 2,
+        //     },
+        //     1000
+        //   )
+        //   .onUpdate(({ x }) => {
+        //     currentObj[0].object.rotation.x = x
+        //     // group.children[0].rotation.x = x
+        //   })
+        //   .easing(TWEEN.Easing.Cubic.InOut)
+        //   .start()
+        // ----
       }
     }, 0)
   }
