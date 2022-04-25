@@ -145,14 +145,14 @@ $compass-height: 60px;
   }
   // 右边折叠栏
   & > .r-fold {
+    width: 100px;
     right: 10px;
     top: $header-height + $tab-height + 20px;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
     & > div {
-      width: 100px;
-      height: 25px;
+      padding: 3px;
       background: inherit;
       background-color: rgba(102, 150, 185, 1);
       border: none;
@@ -182,6 +182,12 @@ $compass-height: 60px;
         background-repeat: no-repeat;
         background-position: center;
         background-size: 50%;
+      }
+      &-expand {
+        width: 120px;
+        height: 200px;
+        margin-left: -20px;
+        display: none;
       }
     }
     & > .manager-info {

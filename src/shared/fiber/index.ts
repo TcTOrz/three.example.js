@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-21 09:30:39
- * @LastEditTime: 2022-03-09 14:19:58
+ * @LastEditTime: 2022-04-25 10:48:28
  * @LastEditors: Li Jian
  */
 import { FiberInterface } from './type'
@@ -16,6 +16,8 @@ import {
 } from '@/shared'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import Tower from '/blender/塔杆/corset-power-transmission-tower.gltf?url'
+import MountainsAndRivers from '/blender/山川河流/山川河流.gltf?url'
+import SmallSite from '/blender/homeicon/homeicon.gltf?url'
 
 export default class Fiber<T extends HTMLCanvasElement> implements FiberInterface {
   canvas: T
@@ -89,8 +91,10 @@ export default class Fiber<T extends HTMLCanvasElement> implements FiberInterfac
     // controls.screenSpacePanning = true // 允许平移
   }
   async load() {
-    this.loadPlatform()
+    // this.loadPlatform()
+    this.loadPlatformNew()
     await this.loadTower()
+    await this.loadSmallSite()
   }
   loadTower() {
     const towers = [
@@ -98,7 +102,7 @@ export default class Fiber<T extends HTMLCanvasElement> implements FiberInterfac
       {
         id: 1, // 杆塔id
         name: '杆塔1', // 杆塔名称
-        position: [-50, 0, 0], // 杆塔位置
+        position: [-50, 10, 30], // 杆塔位置
         // rotation: [0, 0, 0], // 杆塔旋转角度
         // scale: [1, 1, 1], // 杆塔缩放比例
         fiber: {
@@ -110,7 +114,7 @@ export default class Fiber<T extends HTMLCanvasElement> implements FiberInterfac
       {
         id: 2,
         name: '杆塔2',
-        position: [0, 10, 0],
+        position: [0, 7, 30],
         fiber: {
           from: [1, 1, 1, 1, 1, 1],
           to: [3, 3, 3, 3, 3, 3],
@@ -119,7 +123,7 @@ export default class Fiber<T extends HTMLCanvasElement> implements FiberInterfac
       {
         id: 3,
         name: '杆塔3',
-        position: [50, 0, 0],
+        position: [50, 8, 30],
         fiber: {
           from: [2, 2, 2, 2, 2, 2],
           to: [],
@@ -127,6 +131,12 @@ export default class Fiber<T extends HTMLCanvasElement> implements FiberInterfac
       },
     ]
     loadGltfModel(this.scene, Tower, towers)
+  }
+  private loadSmallSite() {
+    loadGltfModel(this.scene, SmallSite)
+  }
+  private loadPlatformNew() {
+    loadGltfModel(this.scene, MountainsAndRivers)
   }
   private loadPlatform() {
     const width = 300

@@ -1,0 +1,205 @@
+{
+    "asset" : {
+        "generator" : "Khronos glTF Blender I/O v1.7.33",
+        "version" : "2.0"
+    },
+    "scene" : 0,
+    "scenes" : [
+        {
+            "name" : "Scene",
+            "nodes" : [
+                1,
+                2
+            ]
+        }
+    ],
+    "nodes" : [
+        {
+            "camera" : 0,
+            "name" : "Camera_Orientation",
+            "rotation" : [
+                -0.7071067690849304,
+                0,
+                0,
+                0.7071067690849304
+            ]
+        },
+        {
+            "children" : [
+                0
+            ],
+            "name" : "Camera",
+            "rotation" : [
+                0.483536034822464,
+                0.33687159419059753,
+                -0.20870360732078552,
+                0.7804827094078064
+            ],
+            "translation" : [
+                5.039206504821777,
+                4.021329402923584,
+                10.731260299682617
+            ]
+        },
+        {
+            "extras" : {
+                "scatter5" : {},
+                "lod_original" : {},
+                "ant_landscape" : {}
+            },
+            "mesh" : 0,
+            "name" : "Berg 3 Wide Variation 6.001",
+            "scale" : [
+                5.000000953674316,
+                5.000000953674316,
+                5.000000953674316
+            ],
+            "translation" : [
+                -1.0521316528320312,
+                0.44951289892196655,
+                -0.5782909393310547
+            ]
+        }
+    ],
+    "cameras" : [
+        {
+            "name" : "Camera",
+            "perspective" : {
+                "aspectRatio" : 1.7777777777777777,
+                "yfov" : 0.39959652046304894,
+                "zfar" : 100,
+                "znear" : 0.10000000149011612
+            },
+            "type" : "perspective"
+        }
+    ],
+    "materials" : [
+        {
+            "doubleSided" : true,
+            "emissiveFactor" : [
+                0.15744468569755554,
+                0.15744468569755554,
+                0.15744468569755554
+            ],
+            "name" : "Berg 3 Wide Variation 6",
+            "pbrMetallicRoughness" : {
+                "baseColorTexture" : {
+                    "index" : 0
+                },
+                "metallicFactor" : 0,
+                "roughnessFactor" : 0.6304347515106201
+            }
+        }
+    ],
+    "meshes" : [
+        {
+            "name" : "Plane.001",
+            "primitives" : [
+                {
+                    "attributes" : {
+                        "POSITION" : 0,
+                        "NORMAL" : 1,
+                        "TANGENT" : 2,
+                        "TEXCOORD_0" : 3
+                    },
+                    "indices" : 4,
+                    "material" : 0
+                }
+            ]
+        }
+    ],
+    "textures" : [
+        {
+            "sampler" : 0,
+            "source" : 0
+        }
+    ],
+    "images" : [
+        {
+            "mimeType" : "image/png",
+            "name" : "\u8349\u5730",
+            "uri" : "textures/%E8%8D%89%E5%9C%B0.png"
+        }
+    ],
+    "accessors" : [
+        {
+            "bufferView" : 0,
+            "componentType" : 5126,
+            "count" : 48583,
+            "max" : [
+                1.0000003576278687,
+                0.0887172669172287,
+                2.0000007152557373
+            ],
+            "min" : [
+                -1.0000003576278687,
+                -0.08990256488323212,
+                -2.0000007152557373
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 1,
+            "componentType" : 5126,
+            "count" : 48583,
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 2,
+            "componentType" : 5126,
+            "count" : 48583,
+            "type" : "VEC4"
+        },
+        {
+            "bufferView" : 3,
+            "componentType" : 5126,
+            "count" : 48583,
+            "type" : "VEC2"
+        },
+        {
+            "bufferView" : 4,
+            "componentType" : 5123,
+            "count" : 196608,
+            "type" : "SCALAR"
+        }
+    ],
+    "bufferViews" : [
+        {
+            "buffer" : 0,
+            "byteLength" : 582996,
+            "byteOffset" : 0
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 582996,
+            "byteOffset" : 582996
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 777328,
+            "byteOffset" : 1165992
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 388664,
+            "byteOffset" : 1943320
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 393216,
+            "byteOffset" : 2331984
+        }
+    ],
+    "samplers" : [
+        {
+            "magFilter" : 9729,
+            "minFilter" : 9987
+        }
+    ],
+    "buffers" : [
+        {
+            "byteLength" : 2725200,
+            "uri" : "\u5c71\u5ddd\u6cb3\u6d41.bin"
+        }
+    ]
+}

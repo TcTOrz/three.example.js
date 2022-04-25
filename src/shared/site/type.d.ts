@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-21 08:46:24
- * @LastEditTime: 2022-04-02 15:28:11
+ * @LastEditTime: 2022-04-22 09:24:02
  * @LastEditors: Li Jian
  */
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
@@ -24,6 +24,7 @@ export class SiteInterface {
   cameraPosition: THREE.Vector3Tuple
   elemEnter: HTMLDivElement
   elemLeave: HTMLDivElement
+  reductionStack: Array<THREE.Mesh>
   constructor(canvas: HTMLCanvasElement)
   move(): void
   dispose(): void

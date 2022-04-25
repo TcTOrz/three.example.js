@@ -1,20 +1,23 @@
 <!--
  * @Author: Li Jian
  * @Date: 2022-02-21 16:05:30
- * @LastEditTime: 2022-04-19 16:43:46
+ * @LastEditTime: 2022-04-21 16:08:08
  * @LastEditors: Li Jian
 -->
 <script setup lang="ts">
 import { theme } from '../handleTheme'
 import { newDeg } from './compass'
-import { ref } from 'vue'
-
-const baseInfo = ref(null)
-const baseInfoClick = () => {
-  console.log('aaa')
-}
-const managerInfoClick = () => {}
-const businessInfoClick = () => {}
+import {
+  baseInfo,
+  baseInfoIcon,
+  baseInfoTitle,
+  baseInfoArrow,
+  managerInfo,
+  businessInfo,
+  baseInfoClick,
+  managerInfoClick,
+  businessInfoClick,
+} from './rightFold' // 右侧折叠面板
 </script>
 <template lang="pug">
 .layout
@@ -80,16 +83,18 @@ const businessInfoClick = () => {}
   //- 右边折叠栏
   .r-fold
     .base-info(@click="baseInfoClick" ref="baseInfo")
-      .base-info-icon
-      .base-info-title
+      .base-info-icon(ref="baseInfoIcon")
+      .base-info-title(ref="baseInfoTitle")
         | 基本信息
-      .base-info-arrow
-    .manager-info(@click="managerInfoClick")
+      .base-info-arrow(ref="baseInfoArrow")
+    .base-info-expand(ref="baseInfoExpand")
+      | expand
+    .manager-info(@click="managerInfoClick" ref="managerInfo")
       .base-info-icon
       .base-info-title
         | 管理信息
       .base-info-arrow
-    .business-info(@click="businessInfoClick")
+    .business-info(@click="businessInfoClick" ref="businessInfo")
       .base-info-icon
       .base-info-title
         | 业务信息

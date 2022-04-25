@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-01-07 16:17:58
- * @LastEditTime: 2022-02-21 11:31:52
+ * @LastEditTime: 2022-04-25 10:49:00
  * @LastEditors: Li Jian
  */
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
@@ -79,7 +79,7 @@ export const loadGltfModel = (scene: THREE.Scene, url: String, rest?: any) => {
                   if (child.isMesh) {
                     child.material = new THREE.MeshStandardMaterial({
                       color: 0xffffff,
-                      metalness: 0.5,
+                      metalness: 1,
                       roughness: 0.5,
                       emissive: 0xffffff,
                       emissiveIntensity: 0.3,
@@ -110,6 +110,21 @@ export const loadGltfModel = (scene: THREE.Scene, url: String, rest?: any) => {
           towerScenes.map(group => {
             makeFiber(scene, towerScenes, group)
           })
+        }
+        // 山川河流
+        if (name === '山川河流') {
+          gltf.scene.scale.set(15, 15, 15)
+          gltf.scene.rotation.set(0, Math.PI / 2, 0)
+        }
+        // 小站
+        if (name === 'homeicon') {
+          const homeicon = gltf.scene
+          homeicon.scale.set(80, 80, 80)
+          homeicon.position.set(-100, 10, 30)
+          gltf.scene.rotation.set(0, Math.PI, 0)
+          const copy = homeicon.clone()
+          copy.position.set(100, 15, 30)
+          scene.add(copy)
         }
         scene.add(gltf.scene)
       },

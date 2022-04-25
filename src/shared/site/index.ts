@@ -1,7 +1,7 @@
 /*
  * @Author: Li Jian
  * @Date: 2022-02-18 14:18:57
- * @LastEditTime: 2022-04-07 09:06:57
+ * @LastEditTime: 2022-04-22 16:02:24
  * @LastEditors: Li Jian
  * @Description: 站点
  */
@@ -44,6 +44,7 @@ export default class Site<T extends HTMLCanvasElement> implements SiteInterface 
   cameraPosition: THREE.Vector3Tuple = [40, 30, 0]
   elemEnter!: HTMLDivElement
   elemLeave!: HTMLDivElement
+  reductionStack: Array<THREE.Mesh> = []
   constructor(canvas: T) {
     this.canvas = canvas
     this.init()
@@ -114,28 +115,85 @@ export default class Site<T extends HTMLCanvasElement> implements SiteInterface 
     const intersectedObjects = raycaster.intersectObjects(this.scene.children)
     return intersectedObjects
   }
+  //通过x,y,z指定旋转中心，obj是要旋转的对象
+  changePivot(x: number, y: number, z: number, obj: THREE.Object3D<THREE.Event>) {
+    let wrapper = new THREE.Object3D()
+    wrapper.position.set(x, y, z)
+    wrapper.add(obj)
+    obj.position.set(-x, -y, -z)
+    return wrapper
+  }
   private onMouseMove(raycaster: THREE.Raycaster, mouse: THREE.Vector2) {
     return _.debounce(event => {
+      this.reductionStack.forEach(mesh => {
+        mesh.material = (mesh as any).oldMaterial.clone()
+      })
       const currentObj = this.getIntersectedObjects(raycaster, mouse, event)
       if (currentObj.length && currentObj[0].object.name === '房顶1001') {
-        console.log(currentObj)
-        // console.log('房顶')
-        // ;(currentObj[0].object as any).material.emissive.setHex(0xffffff)
-        ;(currentObj[0].object as any).material.transparent = true
-        ;(currentObj[0].object as any).material.alphaTest = 0.1
-        // ;(currentObj[0].object as any).material.depthWrite = false
-        ;(currentObj[0].object as any).material.opacity = 0.1
-        // ;(currentObj[0].object as any).position.y = 5
-        // ;(currentObj[0].object as any).material.visible = false
-        // ;(currentObj[1].object as any).material.transparent = true
-        // ;(currentObj[1].object as any).material.opacity = 0.15
-        // ;(currentObj[2].object as any).material.transparent = true
-        // ;(currentObj[2].object as any).material.opacity = 0.15
-        // ;(currentObj[3].object as any).material.transparent = true
-        // ;(currentObj[3].object as any).material.opacity = 0.15
+        ;(currentObj[0].object as any).oldMaterial = (currentObj[0].object as any).material.clone()
+        // 透明
+        const material = new THREE.MeshBasicMaterial({
+          color: 0xffffff,
+          transparent: true,
+          opacity: 0.5,
+        })
+        ;(currentObj[0].object as any).material = material
+        this.reductionStack.push(currentObj[0].object as THREE.Mesh)
+        // ----
+        // 边框
+        // const edge = new THREE.EdgesGeometry(currentObj[0].object.geometry)
+        // const line = new THREE.LineSegments(
+        //   edge,
+        //   new THREE.LineBasicMaterial({ color: 0xff0000, linewidth: 2 })
+        // )
+        // currentObj[0].object.add(line)
+        // ----
+        // let center = new THREE.Box3().setFromObject(currentObj[0].object)
+        // const group = new THREE.Group()
+        // group.add(currentObj[0].object.clone())
+        // currentObj[0].object = group
+        // this.scene.add(group)
+        // this.scene.add(group)
+        // currentObj[0].object.children.push(group)
+        console.log(currentObj[0].object)
+        // currentObj[0].object.add(group)
+        // currentObj[0].object.parent?.children.push(group)
+        // currentObj[0].object.parent?.add(group)
+        // currentObj[0].parent.add(group)
+        // currentObj[0].object.translateY((center.max.y - center.min.y) / 2)
+        // currentObj[0].object.translateZ((center.max.z - center.min.z) / 2)
+        // console.log(currentObj[0].object, center)
+        // currentObj[0].object.position.set(-7.203174591064453, 0, -7.856262683868408)
+        new TWEEN.Tween({
+          x: currentObj[0].object.rotation.x,
+        })
+          .to(
+            {
+              x: Math.PI / 2,
+            },
+            1000
+          )
+          .onUpdate(({ x }) => {
+            currentObj[0].object.rotation.x = x
+            // group.children[0].rotation.x = x
+          })
+          .easing(TWEEN.Easing.Cubic.InOut)
+          .start()
       }
     }, 0)
   }
+  // private onMouseLeave(raycaster: THREE.Raycaster, mouse: THREE.Vector2) {
+  //   return (event: any) => {
+  //     event.stopPropagation()
+  //     const currentObj = this.getIntersectedObjects(raycaster, mouse, event)
+  //     if (currentObj.length && currentObj[0].object.name === '房顶1001') {
+  //       console.log(currentObj)
+  //       // if (currentObj[0].object.oldMaterial) {
+  //       //   ;(currentObj[0].object as any).material = currentObj[0].object.oldMaterial
+  //       // }
+  //     }
+  //   }
+  // }
   event() {
     this.elemEnter = makeDom({ textContent: '进入', flag: 'enter' })
     this.elemLeave = makeDom({ textContent: '离开', flag: 'leave' })
@@ -163,6 +221,12 @@ export default class Site<T extends HTMLCanvasElement> implements SiteInterface 
       this.onMouseMove(raycaster, mouse)
     )
     this.events.push(removeMouseMoveEvent)
+    // const removeMouseLeaveEvent = makeEvent(
+    //   this.canvas,
+    //   'mouseleave',
+    //   this.onMouseLeave(raycaster, mouse)
+    // )
+    // this.events.push(removeMouseLeaveEvent)
   }
   render() {
     requestAnimationFrame(this.render.bind(this))
